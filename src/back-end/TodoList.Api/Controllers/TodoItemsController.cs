@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MediatR;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
+using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.GetTodoItems;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 
@@ -10,20 +10,12 @@ namespace TodoList.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoItemsController : ControllerBase
+    public class TodoItemsController(IMapper mapper, ISender sender, ILogger<TodoItemsController> logger)
+        : ControllerBase
     {
-        private readonly TodoContext _context;
-        private readonly IMapper _mapper;
-        private readonly ISender _sender;
-        private readonly ILogger<TodoItemsController> _logger;
-
-        public TodoItemsController(TodoContext context, IMapper mapper, ISender sender, ILogger<TodoItemsController> logger)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _sender = sender ?? throw new ArgumentNullException(nameof(sender));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
+        private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        private readonly ISender _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+        private readonly ILogger<TodoItemsController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         [HttpGet]
         public async Task<IActionResult> GetTodoItems(CancellationToken cancellationToken)
@@ -39,6 +31,8 @@ namespace TodoList.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTodoItem(Guid id, CancellationToken cancellation)
         {
+            _logger.LogInformation("Getting todo item");
+
             var result = await _sender
                 .Send(new GetTodoItemQuery(id), cancellation);
 
@@ -48,32 +42,12 @@ namespace TodoList.Api.Controllers
             return Ok(todoItem);
         }
 
-        // PUT: api/TodoItems/... 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTodoItem(Guid id, TodoItem todoItem)
         {
-            if (id != todoItem.Id)
-            {
-                return BadRequest();
-            }
+            _logger.LogInformation("Updating todo item");
 
-            _context.Entry(todoItem).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TodoItemIdExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _sender.Send(new UpdateTodoItemCommand(id, todoItem.Id, todoItem.Description, todoItem.IsCompleted));
 
             return NoContent();
         } 
@@ -81,6 +55,8 @@ namespace TodoList.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> PostTodoItem(TodoItem todoItem)
         {
+            _logger.LogInformation("Creating todo item");
+
             var result = await _sender
                 .Send(new CreateTodoItemCommand(todoItem.Id, todoItem.Description, todoItem.IsCompleted));
 
@@ -89,10 +65,5 @@ namespace TodoList.Api.Controllers
              
             return CreatedAtAction(nameof(GetTodoItem), new { id = createdTodoItem.Id }, createdTodoItem);
         } 
-
-        private bool TodoItemIdExists(Guid id)
-        {
-            return _context.TodoItems.Any(x => x.Id == id);
-        }
     }
 }

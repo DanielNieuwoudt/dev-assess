@@ -13,6 +13,7 @@ namespace TodoList.Api.Filters
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
                 { typeof(TodoItemDuplicateException), HandleDuplicateException },
+                { typeof(TodoItemInvalidException), HandleInvalidException },
                 { typeof(TodoItemNotFoundException), HandleNotFoundException },
                 { typeof(TodoItemValidationException), HandleValidationException }
             };
@@ -100,6 +101,22 @@ namespace TodoList.Api.Filters
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
                 Title = "The provided item is a duplicate.",
+                Detail = exception!.Message
+            };
+
+            context.Result = new UnprocessableEntityObjectResult(problemDetails);
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleInvalidException(ExceptionContext context)
+        {
+            var exception = context.Exception as TodoItemInvalidException;
+
+            var problemDetails = new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                Title = "The provided item is not valid for the request.",
                 Detail = exception!.Message
             };
 

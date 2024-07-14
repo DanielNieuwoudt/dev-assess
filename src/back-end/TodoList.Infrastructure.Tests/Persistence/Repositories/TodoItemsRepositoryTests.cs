@@ -174,6 +174,34 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
                 }
             };
 
+        [Fact]
+        public async Task Given_TodoItem_When_UpdateTodoItem_Then_ReturnsUpdatedTodoItem()
+        {
+            using var scope = _serviceProvider
+                .CreateScope();
+            
+            var dbContext = scope
+                .ServiceProvider
+                .GetRequiredService<TodoListDbContext>();
+
+            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
+            var todoItem = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test", false, DateTimeOffset.Now, DateTimeOffset.Now);
+
+            dbContext.TodoItems.Add(todoItem);
+            await dbContext.SaveChangesAsync();
+
+            todoItem.MarkAsCompleted();
+            await repository
+                .UpdateTodoItemAsync(todoItem, CancellationToken.None);
+
+            var result = await repository
+                .GetTodoItemAsync(todoItem.Id, CancellationToken.None);
+
+            result
+                .Should()
+                .BeEquivalentTo(todoItem);
+        }
+
         public void Dispose()
         {
             _serviceProvider

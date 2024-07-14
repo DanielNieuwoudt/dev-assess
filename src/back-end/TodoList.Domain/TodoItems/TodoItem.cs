@@ -26,6 +26,16 @@ namespace TodoList.Domain.TodoItems
             IsCompleted = true;
         }
 
+        public void MarkAsInCompleted()
+        {
+            IsCompleted = true;
+        }
+
+        public void SetDescription(string description)
+        {
+            Description = description;
+        }
+
         public void SetModified()
         {
             ModifiedAt = DateTimeOffset.Now;

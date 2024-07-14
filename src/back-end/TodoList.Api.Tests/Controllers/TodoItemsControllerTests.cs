@@ -3,8 +3,6 @@ using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using TodoList.Api.Controllers;
@@ -36,7 +34,7 @@ namespace TodoList.Api.Tests.Controllers
         [Fact]
         public void Given_NullSender_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(GetTodoContext(), _mapper, null!, _nullLogger);
+            var action = () => new TodoItemsController(_mapper, null!, _nullLogger);
 
             action
                 .Should()
@@ -46,7 +44,7 @@ namespace TodoList.Api.Tests.Controllers
         [Fact]
         public void Given_NullLogger_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(GetTodoContext(), _mapper, _senderMock.Object, null!);
+            var action = () => new TodoItemsController(_mapper, _senderMock.Object, null!);
 
             action
                 .Should()
@@ -56,17 +54,7 @@ namespace TodoList.Api.Tests.Controllers
         [Fact]
         public void Given_NullMapper_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(GetTodoContext(), null!, _senderMock.Object, _nullLogger);
-
-            action
-                .Should()
-                .Throw<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void Given_NullContext_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
-        {
-            var action = () => new TodoItemsController(null!, _mapper, _senderMock.Object, _nullLogger);
+            var action = () => new TodoItemsController(null!, _senderMock.Object, _nullLogger);
 
             action
                 .Should()
@@ -83,7 +71,7 @@ namespace TodoList.Api.Tests.Controllers
                 .Setup(x => x.Send(It.IsAny<GetTodoItemQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTodoItemResult(domainTodoItem));
 
-            var todoItemController = new TodoItemsController(GetTodoContext(), _mapper, _senderMock.Object, _nullLogger);
+            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
 
             var result = await todoItemController
                 .GetTodoItem(Guid.NewGuid(), CancellationToken.None);
@@ -107,7 +95,7 @@ namespace TodoList.Api.Tests.Controllers
                 .Setup(x => x.Send(It.IsAny<GetTodoItemsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTodoItemsResult(new List<Domain.TodoItems.TodoItem>()));
 
-            var todoItemController = new TodoItemsController(GetTodoContext(), _mapper, _senderMock.Object, _nullLogger);
+            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
 
             var result = await todoItemController
                 .GetTodoItems(CancellationToken.None);
@@ -133,7 +121,7 @@ namespace TodoList.Api.Tests.Controllers
                 .Setup(x => x.Send(It.IsAny<CreateTodoItemCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CreateTodoItemResult(domainTodoItem));
 
-            var todoItemController = new TodoItemsController(GetTodoContext(), _mapper, _senderMock.Object, _nullLogger);
+            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
 
             var result = await todoItemController
                 .PostTodoItem(new TodoItem
@@ -153,13 +141,28 @@ namespace TodoList.Api.Tests.Controllers
                 .BeEquivalentTo(_mapper.Map<Generated.TodoItem>(domainTodoItem));
         }
 
-        private static TodoContext GetTodoContext()
+        [Fact]
+        public async Task Given_PutTodoItem_When_SendUpdateTodoItemCommand_Then_ReturnsNoContent()
         {
-            var serviceCollection = new ServiceCollection()
-                .AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoItemsDB"));
-            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var routeId = Guid.Parse("4a28d173-0c27-4d99-80e8-1aedc9d224a8");
+            var itemId = Guid.Parse("4a28d173-0c27-4d99-80e8-1aedc9d224a8");
+            var todoItem = new TodoItem
+            {
+                Id = itemId,
+                Description = "Description",
+                IsCompleted = false
+            };
 
-            return serviceProvider.GetRequiredService<TodoContext>();
+            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
+
+            var result = await todoItemController
+                .PutTodoItem(routeId, todoItem);
+
+            var noContentResult = result as NoContentResult;
+
+            noContentResult
+                .Should()
+                .NotBeNull();
         }
     }
 }
