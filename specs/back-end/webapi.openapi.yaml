@@ -11,7 +11,7 @@ paths:
   /TodoItems/{id}:
     get:
       tags:
-        - Todo
+        - TodoItems
       operationId: getTodoItem
       parameters:
         - name: id
@@ -44,7 +44,7 @@ paths:
                 traceId: c6b54e63-e576-4c14-8ccd-0315b60a1354
     put:
       tags:
-        - Todo
+        - TodoItems
       operationId: putTodoItem
       parameters:
         - name: id
@@ -54,6 +54,7 @@ paths:
             type: string
             format: uuid
       requestBody:
+        required: true
         content:
           application/json: 
             schema:
@@ -80,7 +81,7 @@ paths:
   /TodoItems:
     get:
       tags:
-        - Todo
+        - TodoItems
       operationId: getTodoItems
       responses:
         '200':
@@ -107,9 +108,10 @@ paths:
 
     post:
       tags:
-        - Todo
+        - TodoItems
       operationId: postTodoItem
       requestBody:
+        required: true
         content:
           application/json: 
             schema:

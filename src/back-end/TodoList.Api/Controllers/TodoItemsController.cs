@@ -5,66 +5,73 @@ using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.GetTodoItems;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
+using TodoList.Api.Generated;
 
 namespace TodoList.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoItemsController(IMapper mapper, ISender sender, ILogger<TodoItemsController> logger)
-        : ControllerBase
+    public class TodoItemsController(IMapper mapper, ISender sender, ILogger<TodoItemsController> logger) : TodoItemsControllerBase
     {
         private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         private readonly ISender _sender = sender ?? throw new ArgumentNullException(nameof(sender));
         private readonly ILogger<TodoItemsController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        [HttpGet]
-        public async Task<IActionResult> GetTodoItems(CancellationToken cancellationToken)
+        public override async Task<ActionResult<ICollection<TodoItem>>> GetTodoItems(CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Getting all todo items");
 
-            var results = await _sender.Send(new GetTodoItemsQuery(), cancellationToken);
+            var results = await _sender
+                .Send(new GetTodoItemsQuery(), cancellationToken);
 
-            var todoItems = _mapper.Map<IEnumerable<Generated.TodoItem>>(results.TodoItems);
+            var todoItems = _mapper
+                .Map<IEnumerable<TodoItem>>(results.TodoItems);
+
+            _logger.LogInformation("Returning all todo items");
 
             return Ok(todoItems);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetTodoItem(Guid id, CancellationToken cancellation)
+        public override async Task<ActionResult<TodoItem>> GetTodoItem(Guid id, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Getting todo item");
 
             var result = await _sender
-                .Send(new GetTodoItemQuery(id), cancellation);
+                .Send(new GetTodoItemQuery(id), cancellationToken);
 
             var todoItem = _mapper
-                .Map<Generated.TodoItem>(result.TodoItem);
+                .Map<TodoItem>(result.TodoItem);
+
+            _logger.LogInformation("Returning todo item");
 
             return Ok(todoItem);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(Guid id, TodoItem todoItem)
+        public override async Task<IActionResult> PutTodoItem(Guid id, TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Updating todo item");
 
-            await _sender.Send(new UpdateTodoItemCommand(id, todoItem.Id, todoItem.Description, todoItem.IsCompleted));
+            await _sender
+                .Send(new UpdateTodoItemCommand(id, body.Id, body.Description, body.IsCompleted), cancellationToken);
 
-            return NoContent();
-        } 
+            _logger.LogInformation("Todo item updated");
 
-        [HttpPost]
-        public async Task<IActionResult> PostTodoItem(TodoItem todoItem)
+            return NoContent();          
+        }
+
+        public override async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Creating todo item");
 
             var result = await _sender
-                .Send(new CreateTodoItemCommand(todoItem.Id, todoItem.Description, todoItem.IsCompleted));
+                .Send(new CreateTodoItemCommand(body.Id, body.Description, body.IsCompleted), cancellationToken);
 
             var createdTodoItem = _mapper
-                .Map<Generated.TodoItem>(result.TodoItem);
-             
+                .Map<TodoItem>(result.TodoItem);
+       
+            _logger.LogInformation("Todo item created");
+
             return CreatedAtAction(nameof(GetTodoItem), new { id = createdTodoItem.Id }, createdTodoItem);
-        } 
+        }
     }
 }
