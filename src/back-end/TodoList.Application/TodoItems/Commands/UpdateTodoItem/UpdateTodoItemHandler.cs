@@ -7,15 +7,15 @@ using TodoList.Domain.TodoItems.ValueObjects;
 
 namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
 {
-    public sealed record UpdateTodoItemResult(bool Updated);
+    public sealed record UpdateTodoItemResult();
 
     public sealed class UpdateTodoItemHandler(ITodoItemsRepository repository, ILogger<UpdateTodoItemHandler> logger)
-        : IRequestHandler<UpdateTodoItemCommand>
+        : IRequestHandler<UpdateTodoItemCommand, UpdateTodoItemResult>
     {
         private readonly ITodoItemsRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         private readonly ILogger<UpdateTodoItemHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public async Task Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateTodoItemResult> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Validating route and todo item id.");
             if (request.RouteId != request.Id)
@@ -49,6 +49,8 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
             await _repository.UpdateTodoItemAsync(todoItem, cancellationToken);
 
             _logger.LogInformation("Todo item updated.");
+
+            return new UpdateTodoItemResult();
         }
     }
 }
