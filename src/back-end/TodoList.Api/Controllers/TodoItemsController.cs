@@ -9,7 +9,6 @@ using TodoList.Api.Generated;
 
 namespace TodoList.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class TodoItemsController(IMapper mapper, ISender sender, ILogger<TodoItemsController> logger) : TodoItemsControllerBase
     {
