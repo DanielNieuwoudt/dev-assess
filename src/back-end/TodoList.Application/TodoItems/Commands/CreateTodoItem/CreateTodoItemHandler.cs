@@ -19,13 +19,13 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
         public async Task<CreateTodoItemResult> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            if ( await _repository.FindDuplicateTodoItem(ti => ti.Id == new TodoItemId(request.Id) && 
+            if ( await _repository.FindDuplicateTodoItemAsync(ti => ti.Id == new TodoItemId(request.Id) && 
                                                                ti.IsCompleted == false, cancellationToken))
             {
                 throw new TodoItemDuplicateException(nameof(request.Id), request.Id);
             }
 
-            if ( await _repository.FindDuplicateTodoItem(ti => ti.Description == request.Description && 
+            if ( await _repository.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && 
                                                                ti.IsCompleted == false, cancellationToken))
             {
                 throw new TodoItemDuplicateException(nameof(request.Description), request.Description);
@@ -39,7 +39,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
                 DateTimeOffset.Now);
             
             var createdTodoItem = await _repository
-                .CreateTodoItem(todoItemToCreate, cancellationToken);
+                .CreateTodoItemAsync(todoItemToCreate, cancellationToken);
 
             return new CreateTodoItemResult(createdTodoItem);
         }

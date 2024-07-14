@@ -123,7 +123,7 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
             var todoItem = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test", false, DateTimeOffset.Now, DateTimeOffset.Now);
 
             var result = await repository
-                .CreateTodoItem(todoItem, CancellationToken.None);
+                .CreateTodoItemAsync(todoItem, CancellationToken.None);
 
             result
                 .Should()
@@ -147,7 +147,7 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
             await dbContext.SaveChangesAsync();
 
             var result = await repository
-                .FindDuplicateTodoItem(expression, CancellationToken.None);
+                .FindDuplicateTodoItemAsync(expression, CancellationToken.None);
 
             result
                 .Should()
