@@ -23,6 +23,7 @@ namespace TodoList.Api.Controllers
             _logger.LogInformation("Getting all todo items");
 
             var results = await _sender.Send(new GetTodoItemsQuery(), cancellationToken);
+
             var todoItems = _mapper.Map<IEnumerable<Generated.TodoItem>>(results.TodoItems);
 
             return Ok(todoItems);

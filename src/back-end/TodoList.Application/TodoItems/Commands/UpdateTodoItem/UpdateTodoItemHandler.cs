@@ -23,7 +23,7 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
                 throw new TodoItemInvalidException(request.RouteId, request.Id);
             }
 
-            _logger.LogInformation("Checking for duplicate descriptions.");
+            _logger.LogInformation("Finding duplicate todo items based in description.");
             if (await _repository.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && 
                                                                     ti.IsCompleted == false, cancellationToken))
             {

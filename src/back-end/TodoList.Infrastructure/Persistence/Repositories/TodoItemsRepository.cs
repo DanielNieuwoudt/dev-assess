@@ -27,7 +27,7 @@ namespace TodoList.Infrastructure.Persistence.Repositories
 
         public async Task<bool> FindDuplicateTodoItemAsync(Expression<Func<TodoItem, bool>> expression, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding duplicate todo items.");
+            _logger.LogInformation("Finding duplicate todo items for expression.");
 
             return await _dbContext.TodoItems.AnyAsync(expression, cancellationToken: cancellationToken);
         }
