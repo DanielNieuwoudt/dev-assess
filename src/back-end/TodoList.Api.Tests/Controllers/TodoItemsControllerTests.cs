@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using TodoList.Api.Controllers;
+using TodoList.Api.Generated;
 using TodoList.Api.Mapping;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.GetTodoItems;
@@ -76,16 +77,15 @@ namespace TodoList.Api.Tests.Controllers
             var result = await todoItemController
                 .GetTodoItem(Guid.NewGuid(), CancellationToken.None);
 
-            var okResult = result as OkObjectResult;
-                
-            okResult
+            result.Result
                 .Should()
                 .NotBeNull();
+            
+            var okObjectResult = result.Result as OkObjectResult;
 
-            okResult!
-                .Value
+            okObjectResult!.Value
                 .Should()
-                .BeEquivalentTo(_mapper.Map<Generated.TodoItem>(domainTodoItem));
+                .BeEquivalentTo(_mapper.Map<TodoItem>(domainTodoItem));
         }
 
         [Fact]
@@ -100,16 +100,16 @@ namespace TodoList.Api.Tests.Controllers
             var result = await todoItemController
                 .GetTodoItems(CancellationToken.None);
 
-            var okResult = result as OkObjectResult;
-            
-            okResult
+            result
                 .Should()
                 .NotBeNull();
 
-            okResult!
+            var okObjectResult = result.Result as OkObjectResult;
+
+            okObjectResult!
                 .Value
                 .Should()
-                .BeEquivalentTo(new List<Generated.TodoItem>());
+                .BeEquivalentTo(new List<TodoItem>());
         }
 
         [Fact]
@@ -131,14 +131,15 @@ namespace TodoList.Api.Tests.Controllers
                     IsCompleted = false
                 });
 
-            var createdResult = result as CreatedAtActionResult;
-
-            createdResult
+            result.Result
                 .Should()
                 .NotBeNull();
 
-            createdResult!.Value.Should()
-                .BeEquivalentTo(_mapper.Map<Generated.TodoItem>(domainTodoItem));
+            var createdResult = result.Result as CreatedAtActionResult;
+
+            createdResult!.Value
+                .Should()
+                .BeEquivalentTo(_mapper.Map<TodoItem>(domainTodoItem));
         }
 
         [Fact]
