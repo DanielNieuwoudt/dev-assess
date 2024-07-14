@@ -3,7 +3,6 @@ import { TodoApi, TodoApiInterface, TodoItem } from "../generated/";
 import { AxiosResponse } from "axios";
 import { config } from "../config/base";
 import { loadApiSpec } from "../utils/Specs";
-import { v4 as uuidv4 } from 'uuid'
 
 describe("Given the backend endpoint",  () => {
     let todoApiInterface: TodoApiInterface;
@@ -48,7 +47,7 @@ describe("Given the backend endpoint",  () => {
             let todoItemDescriptionResponse: AxiosResponse<TodoItem>;
 
             todoItemDescriptionResponse = await todoApiInterface.postTodoItem({
-                id: uuidv4()  ,
+                id: 'bd7be3c5-f5e5-4569-8852-ccd75b5590a8',
                 description: '',
                 isCompleted: false
             });

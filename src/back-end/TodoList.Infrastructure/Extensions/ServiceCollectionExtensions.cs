@@ -13,10 +13,11 @@ namespace TodoList.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddDbContext<TodoListDbContext>(options =>
+            {
                 options.UseSqlServer(configuration.GetConnectionString("SqlServer"),
-                    b => b.MigrationsAssembly(typeof(TodoListDbContext).Assembly.FullName)));
+                    b => b.MigrationsAssembly(typeof(TodoListDbContext).Assembly.FullName));
+            });
 
             services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
 
