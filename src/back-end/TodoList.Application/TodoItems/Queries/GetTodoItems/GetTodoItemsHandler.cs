@@ -17,7 +17,7 @@ namespace TodoList.Application.TodoItems.GetTodoItems
 
         public async Task<GetTodoItemsResult> Handle(GetTodoItemsQuery request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Retrieving todo items.");
+            _logger.LogInformation("Getting todo items.");
 
             var todoItems = await _repository.GetTodoItemsAsync(cancellationToken);
 

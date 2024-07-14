@@ -3,7 +3,6 @@ import { TodoApi, TodoApiInterface, TodoItem } from "../generated/";
 import { AxiosResponse } from "axios";
 import { config } from "../config/base";
 import { loadApiSpec } from "../utils/Specs";
-import { v4 as uuidv4 } from 'uuid'
 
 describe("Given the backend endpoint",  () => {
     let todoApiInterface: TodoApiInterface;
@@ -41,13 +40,6 @@ describe("Given the backend endpoint",  () => {
     });
 
     describe("When creating a todo item", () => {
-        let todoItemId: string | undefined;
-        let todoItem: TodoItem = {
-            id: uuidv4()  ,
-            description: "contract test created todo item.",
-            isCompleted: false
-        }
-
         //TODO: Missing validation for empty GUIDs
         
         test("Then the client should receive a status code of 400 when the description is empty.", async() => {
@@ -55,8 +47,8 @@ describe("Given the backend endpoint",  () => {
             let todoItemDescriptionResponse: AxiosResponse<TodoItem>;
 
             todoItemDescriptionResponse = await todoApiInterface.postTodoItem({
-                id: uuidv4()  ,
-                description: "",
+                id: 'bd7be3c5-f5e5-4569-8852-ccd75b5590a8',
+                description: '',
                 isCompleted: false
             });
 
@@ -67,14 +59,16 @@ describe("Given the backend endpoint",  () => {
 
             let todoItemCreateResponse: AxiosResponse<TodoItem>;
 
-            todoItemCreateResponse = await todoApiInterface.postTodoItem(todoItem);
+            todoItemCreateResponse = await todoApiInterface.postTodoItem({
+                id: '666f86b8-f225-4c11-9267-45416479c334'  ,
+                description: 'create todo item.',
+                isCompleted: false
+            });
            
             expect(todoItemCreateResponse.status).toBe(201);
 
             let todoItemCreateResult: TodoItem = todoItemCreateResponse.data;
 
-            todoItemId = todoItemCreateResult.id;
-            
             loadApiSpec("webapi.openapi.yaml");
             expect(todoItemCreateResult).toSatisfySchemaInApiSpec("TodoItem");
         });
@@ -83,7 +77,7 @@ describe("Given the backend endpoint",  () => {
 
             let todoItemRetrieveResponse: AxiosResponse<TodoItem>;
             
-            todoItemRetrieveResponse = await todoApiInterface.getTodoItem(todoItemId ?? 'default-id');
+            todoItemRetrieveResponse = await todoApiInterface.getTodoItem('666f86b8-f225-4c11-9267-45416479c334');
 
             expect(todoItemRetrieveResponse.status).toBe(200);
 
@@ -93,49 +87,57 @@ describe("Given the backend endpoint",  () => {
             expect(todoItemRetrieveResult).toSatisfySchemaInApiSpec("TodoItem");
         });
 
-        test("Then the client should receive a status code of 400 when creating a todo item with a duplicate description.", async() => {
+        test("Then the client should receive a status code of 422 when creating a todo item with a duplicate description.", async() => {
 
             let todoItemDuplicateResponse: AxiosResponse<TodoItem>;
 
-            todoItemDuplicateResponse = await todoApiInterface.postTodoItem(todoItem);
+            todoItemDuplicateResponse = await todoApiInterface.postTodoItem({
+                id: 'f21c0b60-c60f-49d4-94e6-9d5d3f7070d1',
+                description: 'create todo item.',
+                isCompleted: false
+            });
 
-            expect(todoItemDuplicateResponse.status).toBe(400);
+            expect(todoItemDuplicateResponse.status).toBe(422);
         });
     });
 
     describe("When updating a todo item",  () => {
-        let todoItemId: string | undefined;
-        let todoItem: TodoItem = {
-            id: uuidv4()  ,
-            description: "contract test updated todo item.",
-            isCompleted: false
-        }
-        
         //TODO: Missing validation for empty GUIDs
 
         test("Then the client should receive a status code of 201 when the body is valid JSON.", async () => {
             let todoItemCreateResponse: AxiosResponse<TodoItem>;
-            todoItemCreateResponse = await todoApiInterface.postTodoItem(todoItem);
+            todoItemCreateResponse = await todoApiInterface.postTodoItem({
+                id: 'bdc01204-aed8-4241-9c64-c177901b1976',
+                description: "update todo item.",
+                isCompleted: false
+            });
 
             expect(todoItemCreateResponse.status).toBe(201);
 
             let todoItemCreateResult: TodoItem = todoItemCreateResponse.data;
-            todoItemId = todoItemCreateResult.id;
 
             loadApiSpec("webapi.openapi.yaml");
             expect(todoItemCreateResult).toSatisfySchemaInApiSpec("TodoItem");
         });
 
-        test("Then the client should receive a 400 when the {id} in the path does not match the todo item id.", async () => {
+        test("Then the client should receive a 422 when the {id} in the path does not match the todo item id.", async () => {
             let todoItemUpdateResponse: AxiosResponse<void>;
-            todoItemUpdateResponse = await todoApiInterface.putTodoItem(uuidv4(), todoItem);
+            todoItemUpdateResponse = await todoApiInterface.putTodoItem('6623ed31-cff5-423f-a859-66739310409a', {
+                id: 'bdc01204-aed8-4241-9c64-c177901b1976',
+                description: "update todo item.",
+                isCompleted: false
+            });
 
-            expect(todoItemUpdateResponse.status).toBe(400);
+            expect(todoItemUpdateResponse.status).toBe(422);
         });
 
         test("Then the client should receive a 204 when the {id} in the path matches the todo item id.", async () => {
             let todoItemUpdateResponse: AxiosResponse<void>;
-            todoItemUpdateResponse = await todoApiInterface.putTodoItem(todoItem.id ?? 'default-id', todoItem);
+            todoItemUpdateResponse = await todoApiInterface.putTodoItem('bdc01204-aed8-4241-9c64-c177901b1976', {
+                id: 'bdc01204-aed8-4241-9c64-c177901b1976',
+                description: "update todo item to something else.",
+                isCompleted: false
+            });
 
             expect(todoItemUpdateResponse.status).toBe(204);
         });

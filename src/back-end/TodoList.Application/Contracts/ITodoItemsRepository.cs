@@ -13,5 +13,7 @@ namespace TodoList.Application.Contracts
         Task<TodoItem?> GetTodoItemAsync(TodoItemId todoItemId, CancellationToken cancellationToken);
 
         Task<IEnumerable<TodoItem>> GetTodoItemsAsync(CancellationToken cancellationToken);
+
+        Task UpdateTodoItemAsync(TodoItem todoItem, CancellationToken cancellationToken);
     }
 }

@@ -20,12 +20,14 @@ namespace TodoList.Infrastructure.Persistence.Repositories
             await _dbContext.TodoItems.AddAsync(todoItem, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
+            _logger.LogInformation("Created todo item with id {Id}.", todoItem.Id);
+
             return todoItem;
         }
 
         public async Task<bool> FindDuplicateTodoItemAsync(Expression<Func<TodoItem, bool>> expression, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding duplicate todo items.");
+            _logger.LogInformation("Finding duplicate todo items for expression.");
 
             return await _dbContext.TodoItems.AnyAsync(expression, cancellationToken: cancellationToken);
         }
@@ -34,14 +36,31 @@ namespace TodoList.Infrastructure.Persistence.Repositories
         {
             _logger.LogInformation("Retrieving todo item with id {Id}.", todoItemId);
 
-            return await _dbContext.TodoItems.FindAsync(todoItemId , cancellationToken);
+            return await _dbContext
+                .TodoItems
+                .AsNoTracking()
+                .FirstOrDefaultAsync(ti => ti.Id == todoItemId, cancellationToken);
         }
 
         public async Task<IEnumerable<TodoItem>> GetTodoItemsAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Retrieving todo items.");
 
-            return await _dbContext.TodoItems.ToListAsync(cancellationToken);
+            return await _dbContext
+                .TodoItems
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task UpdateTodoItemAsync(TodoItem todoItem, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Updating todo item with id {Id}.", todoItem.Id);
+
+            _dbContext.Entry(todoItem).State = EntityState.Modified;
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation("Updated todo item with id {Id}.", todoItem.Id);
         }
     }
 }

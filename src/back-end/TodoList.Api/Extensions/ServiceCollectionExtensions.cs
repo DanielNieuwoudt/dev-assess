@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using TodoList.Api.Filters;
 using TodoList.Api.Mapping;
@@ -14,9 +13,6 @@ namespace TodoList.Api.Extensions
         public static IServiceCollection AddApiServices(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<TodoContext>(opt =>
-                opt.UseInMemoryDatabase("TodoItemsDB"));
-            
             services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile(typeof(TodoItemMappingProfile));

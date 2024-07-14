@@ -20,9 +20,9 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
         [Fact]
         public void Given_NullRepository_When_CreateTodoItemHandlerInitialised_ThenThrowsArgumentNullException()
         {
-            var act = () => new CreateTodoItemHandler(null!, _nullLogger);
+            var action = () => new CreateTodoItemHandler(null!, _nullLogger);
 
-            act
+            action
                 .Should()
                 .Throw<ArgumentNullException>();
         }
@@ -30,9 +30,9 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
         [Fact]
         public void Given_NullLogger_When_CreateTodoItemHandlerInitialised_ThenThrowsArgumentNullException()
         {
-            var act = () => new CreateTodoItemHandler(_repositoryMock.Object, null!);
+            var action = () => new CreateTodoItemHandler(_repositoryMock.Object, null!);
 
-            act
+            action
                 .Should()
                 .Throw<ArgumentNullException>();
         }
