@@ -1,6 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
-using TodoList.Api.ExceptionFilters;
 using TodoList.Api.Mapping;
 
 namespace TodoList.Api.Extensions
