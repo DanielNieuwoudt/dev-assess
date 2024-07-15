@@ -9,8 +9,6 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
     {
         public UpdateTodoItemValidator()
         {
-            RuleFor(ti => ti.RouteId)
-                .ValidateId();
             RuleFor(ti => ti.Id)
                 .ValidateId();
             RuleFor(ti => ti.Description)

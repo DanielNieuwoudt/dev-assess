@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using TodoList.Api.ExceptionFilters;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.GetTodoItems;
@@ -31,6 +32,8 @@ namespace TodoList.Api.Controllers
             return Ok(todoItems);
         }
 
+        [TodoItemValidationExceptionFilter]
+        [TodoItemNotFoundExceptionFilter]
         public override async Task<ActionResult<TodoItem>> GetTodoItem(Guid id, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Getting todo item");
@@ -46,18 +49,28 @@ namespace TodoList.Api.Controllers
             return Ok(todoItem);
         }
 
+        [TodoItemValidationExceptionFilter]
+        [TodoItemDuplicateExceptionFilter]
+        [TodoItemNotFoundExceptionFilter]
         public override async Task<IActionResult> PutTodoItem(Guid id, TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
+            _logger.LogInformation("Validating todo item");
+
+            if (id != body.Id)
+                return BadRequest();
+
             _logger.LogInformation("Updating todo item");
 
             await _sender
-                .Send(new UpdateTodoItemCommand(id, body.Id, body.Description, body.IsCompleted), cancellationToken);
+                .Send(new UpdateTodoItemCommand(body.Id, body.Description, body.IsCompleted), cancellationToken);
 
             _logger.LogInformation("Todo item updated");
 
             return NoContent();          
         }
 
+        [TodoItemValidationExceptionFilter]
+        [TodoItemDuplicateExceptionFilter]
         public override async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Creating todo item");

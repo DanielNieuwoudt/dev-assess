@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
-using TodoList.Api.Filters;
+using TodoList.Api.ExceptionFilters;
 using TodoList.Api.Mapping;
 
 namespace TodoList.Api.Extensions
@@ -42,10 +42,7 @@ namespace TodoList.Api.Extensions
                     });
             });
 
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(new ApiExceptionFilterAttribute());
-            });
+            services.AddControllers();
             
             services.AddSwaggerGen(c =>
             {

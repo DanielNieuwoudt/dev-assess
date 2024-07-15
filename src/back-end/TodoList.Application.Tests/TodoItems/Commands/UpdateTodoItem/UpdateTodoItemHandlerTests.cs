@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using TodoList.Application.Common.Exceptions;
@@ -38,26 +37,10 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
         }
 
         [Fact]
-        public async Task Given_PutTodoItem_When_IdsDoNotMatch_Then_ThrowsTodoItemInvalidException()
-        {
-            var handler = new UpdateTodoItemHandler(_repositoryMock.Object, _nullLogger);
-            var request = new UpdateTodoItemCommand(Guid.NewGuid(), Guid.NewGuid(), "Test", false);
-
-            var action = async () => await handler.Handle(request, CancellationToken.None);
-            
-            await action
-                .Should()
-                .ThrowAsync<TodoItemInvalidException>();
-
-            _repositoryMock.Verify(r => r.UpdateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        [Fact]
         public async Task Given_PutTodoItem_When_DuplicateDescription_Then_ThrowsTodoItemDuplicateException()
         {
-            var id = Guid.NewGuid();
             var handler = new UpdateTodoItemHandler(_repositoryMock.Object, _nullLogger);
-            var request = new UpdateTodoItemCommand(id, id, "Test", false);
+            var request = new UpdateTodoItemCommand(Guid.NewGuid(), "Test", false);
 
             _repositoryMock
                 .Setup(r => r.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && ti.IsCompleted == false, It.IsAny<CancellationToken>()))
@@ -76,9 +59,8 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
         [Fact]
         public async Task Given_PutTodoItem_When_TodoItemNotFound_Then_ThrowsTodoItemNotFoundException()
         {
-            var id = Guid.NewGuid();
             var handler = new UpdateTodoItemHandler(_repositoryMock.Object, _nullLogger);
-            var request = new UpdateTodoItemCommand(id, id, "Test", false);
+            var request = new UpdateTodoItemCommand(Guid.NewGuid(), "Test", false);
 
             _repositoryMock
                 .Setup(r => r.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && ti.IsCompleted == false, It.IsAny<CancellationToken>()))
@@ -102,7 +84,7 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
         {
             var id = Guid.NewGuid();
             var handler = new UpdateTodoItemHandler(_repositoryMock.Object, _nullLogger);
-            var request = new UpdateTodoItemCommand(id, id, "Test", false);
+            var request = new UpdateTodoItemCommand(id, "Test", false);
 
             _repositoryMock
                 .Setup(r => r.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && ti.IsCompleted == false, It.IsAny<CancellationToken>()))

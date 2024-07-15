@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using TodoList.Application.Common.Exceptions;
@@ -24,7 +25,10 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
             if ( await _repository.FindDuplicateTodoItemAsync(ti => ti.Id == new TodoItemId(request.Id) && 
                                                                ti.IsCompleted == false, cancellationToken))
             {
-                throw new TodoItemDuplicateException(nameof(request.Id), request.Id);
+                throw new TodoItemDuplicateException(new List<ValidationFailure>
+                {
+                    new (nameof(request.Id), request.Id.ToString())
+                });
             }
 
             _logger.LogInformation("Finding duplicate todo items based in description.");
@@ -32,7 +36,10 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
             if ( await _repository.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && 
                                                                ti.IsCompleted == false, cancellationToken))
             {
-                throw new TodoItemDuplicateException(nameof(request.Description), request.Description);
+                throw new TodoItemDuplicateException(new List<ValidationFailure>
+                {
+                    new (nameof(request.Description), request.Description)
+                });
             }
 
             _logger.LogInformation("Creating todo item.");
