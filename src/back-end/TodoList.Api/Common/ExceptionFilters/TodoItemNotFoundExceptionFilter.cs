@@ -4,7 +4,7 @@ using System.Diagnostics;
 using TodoList.Api.Constants;
 using TodoList.Application.Common.Exceptions;
 
-namespace TodoList.Api.ExceptionFilters
+namespace TodoList.Api.Common.ExceptionFilters
 {
     public class TodoItemNotFoundExceptionFilter : ExceptionFilterAttribute
     {
