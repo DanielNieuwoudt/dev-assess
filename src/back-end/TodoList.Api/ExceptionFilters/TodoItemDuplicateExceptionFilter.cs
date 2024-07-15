@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using TodoList.Api.Constants;
 using TodoList.Application.Common.Exceptions;
@@ -13,16 +15,26 @@ namespace TodoList.Api.ExceptionFilters
         {
             if (context.Exception.GetType() != _exceptionType) return;
 
-            var exception = context.Exception as TodoItemDuplicateException;
+            var validationProblemDetails = new ValidationProblemDetails(context.ModelState);
 
-            var problemDetails = new ProblemDetails
+            if (context.Exception is TodoItemDuplicateException exception)
             {
-                Type = ResponseTypes.BadRequest,
-                Title = "The provided item is a duplicate.",
-                Detail = exception!.Message
-            };
+                foreach (var error in exception.Errors)
+                {
+                    validationProblemDetails.Errors.Add(error.PropertyName, [error.ErrorMessage]);
+                }
+            }
 
-            context.Result = new BadRequestObjectResult(problemDetails);
+            context.Result = new BadRequestObjectResult(new Generated.BadRequest
+            {
+                Title = "The provided property is a duplicate.",
+                Type = ResponseTypes.BadRequest,
+                Status = (int)HttpStatusCode.BadRequest,
+                Errors = validationProblemDetails.Errors.ToDictionary(
+                    kvp => kvp.Key, 
+                    kvp => kvp.Value.ToList()),
+                TraceId = Activity.Current?.Id ?? string.Empty
+            });
 
             context.ExceptionHandled = true;
         }

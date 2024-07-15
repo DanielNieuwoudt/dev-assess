@@ -1,18 +1,27 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace TodoList.Application.Common.Exceptions
 {
     [ExcludeFromCodeCoverage(Justification = "Exception")]
-    public sealed class TodoItemDuplicateException : Exception
+    public sealed class TodoItemDuplicateException : ValidationException
     {
-        public TodoItemDuplicateException() { }
-        public TodoItemDuplicateException(string message) : base(message) { }
-        public TodoItemDuplicateException(string message, Exception innerException) : base(message, innerException)
-        { }
-
-        public TodoItemDuplicateException(string property, object value)
-            : base($"Property \"{property}\" with ({value}) was a duplicate.")
+        public TodoItemDuplicateException(string message) : base(message)
         {
         }
+
+        public TodoItemDuplicateException(string message, IEnumerable<ValidationFailure> errors) : base(message, errors)
+        {
+        }
+
+        public TodoItemDuplicateException(string message, IEnumerable<ValidationFailure> errors, bool appendDefaultMessage) : base(message, errors, appendDefaultMessage)
+        {
+        }
+
+        public TodoItemDuplicateException(IEnumerable<ValidationFailure> errors) : base(errors)
+        {
+        }
+            
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Diagnostics;
 using TodoList.Api.Constants;
 using TodoList.Application.Common.Exceptions;
 
@@ -15,14 +16,14 @@ namespace TodoList.Api.ExceptionFilters
 
             var exception = context.Exception as TodoItemNotFoundException;
 
-            var problemDetails = new ProblemDetails
+            context.Result = new NotFoundObjectResult(new Generated.NotFound
             {
-                Type = ResponseTypes.NotFound,
                 Title = "The specified resource was not found.",
-                Detail = exception!.Message
-            };
-
-            context.Result = new NotFoundObjectResult(problemDetails);
+                Type = ResponseTypes.NotFound,
+                Detail = exception!.Message,
+                Status = (int)System.Net.HttpStatusCode.NotFound,
+                TraceId = Activity.Current?.Id ?? string.Empty
+            });
 
             context.ExceptionHandled = true;
         }

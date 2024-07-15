@@ -42,11 +42,7 @@ namespace TodoList.Api.Extensions
                     });
             });
 
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(new InvalidModelStateExceptionFilter());
-                options.Filters.Add(new UnhandledExceptionFilter());
-            });
+            services.AddControllers();
             
             services.AddSwaggerGen(c =>
             {

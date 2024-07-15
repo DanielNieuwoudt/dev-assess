@@ -50,15 +50,19 @@ namespace TodoList.Api.Controllers
         }
 
         [TodoItemValidationExceptionFilter]
-        [TodoItemInvalidExceptionFilter]
         [TodoItemDuplicateExceptionFilter]
         [TodoItemNotFoundExceptionFilter]
         public override async Task<IActionResult> PutTodoItem(Guid id, TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
+            _logger.LogInformation("Validating todo item");
+
+            if (id != body.Id)
+                return BadRequest();
+
             _logger.LogInformation("Updating todo item");
 
             await _sender
-                .Send(new UpdateTodoItemCommand(id, body.Id, body.Description, body.IsCompleted), cancellationToken);
+                .Send(new UpdateTodoItemCommand(body.Id, body.Description, body.IsCompleted), cancellationToken);
 
             _logger.LogInformation("Todo item updated");
 

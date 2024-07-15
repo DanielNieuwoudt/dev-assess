@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using TodoList.Application.Common.Exceptions;
 using TodoList.Application.Contracts;
@@ -7,7 +8,7 @@ using TodoList.Domain.TodoItems.ValueObjects;
 
 namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
 {
-    public sealed record UpdateTodoItemResult();
+    public sealed record UpdateTodoItemResult;
 
     public sealed class UpdateTodoItemHandler(ITodoItemsRepository repository, ILogger<UpdateTodoItemHandler> logger)
         : IRequestHandler<UpdateTodoItemCommand, UpdateTodoItemResult>
@@ -17,17 +18,14 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
 
         public async Task<UpdateTodoItemResult> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Validating route and todo item id.");
-            if (request.RouteId != request.Id)
-            {
-                throw new TodoItemInvalidException(request.RouteId, request.Id);
-            }
-
             _logger.LogInformation("Finding duplicate todo items based in description.");
             if (await _repository.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && 
                                                                     ti.IsCompleted == false, cancellationToken))
             {
-                throw new TodoItemDuplicateException(nameof(request.Description), request.Description);
+                throw new TodoItemDuplicateException(new List<ValidationFailure>
+                {
+                    new (nameof(request.Description), request.Description)
+                });
             }
 
             _logger.LogInformation("Getting todo item.");
