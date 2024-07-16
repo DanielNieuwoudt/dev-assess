@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace TodoList.Api.Mapping
+namespace TodoList.Api.Common.Mapping
 {
     public class TodoItemMappingProfile : Profile
     {

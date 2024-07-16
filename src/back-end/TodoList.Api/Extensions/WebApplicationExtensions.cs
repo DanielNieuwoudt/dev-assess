@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using TodoList.Api.Common.Middleware;
 using TodoList.Api.Startup;
 
 namespace TodoList.Api.Extensions
@@ -22,9 +23,9 @@ namespace TodoList.Api.Extensions
             app.UseCors("AllowAllHeaders");
 
             //TODO: Security Headers Middleware
-            //TODO: Validation Exception Middleware
-            //TODO: Authorization Exception Middleware
-
+            
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

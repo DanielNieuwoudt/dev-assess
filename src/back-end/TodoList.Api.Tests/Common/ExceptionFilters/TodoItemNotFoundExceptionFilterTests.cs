@@ -8,7 +8,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Routing;
 using TodoList.Api.Common.ExceptionFilters;
-using TodoList.Api.Constants;
+using TodoList.Api.Common.Constants;
 using TodoList.Application.Common.Exceptions;
 using Xunit;
 

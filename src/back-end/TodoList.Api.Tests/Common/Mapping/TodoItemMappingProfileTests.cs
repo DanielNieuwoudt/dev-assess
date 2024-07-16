@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using FluentAssertions;
-using TodoList.Api.Mapping;
+using TodoList.Api.Common.Mapping;
 using TodoList.Domain.TodoItems.ValueObjects;
 using Xunit;
 
-namespace TodoList.Api.Tests.Mapping
+namespace TodoList.Api.Tests.Common.Mapping
 {
     [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class TodoItemMappingProfileTests

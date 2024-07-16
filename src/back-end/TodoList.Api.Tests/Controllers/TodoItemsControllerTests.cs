@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using TodoList.Api.Controllers;
 using TodoList.Api.Generated;
-using TodoList.Api.Mapping;
+using TodoList.Api.Common.Mapping;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.GetTodoItems;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
