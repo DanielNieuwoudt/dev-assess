@@ -471,7 +471,5 @@ From the `/tests/contract` directory uinsg a bash terminal
 
 | Item | Description
 |----------| -----------
-| Generated Controller | Once refactor is completed, inherit from the generated controller |
-| ExceptionFilters | Split ApiExceptionFilterAttribute into individual filters and test them. |
 | Serilog | Implement Serilog  |
 | Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation|
