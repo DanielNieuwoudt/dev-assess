@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using TodoList.Api.Common.ExceptionFilters;
-using TodoList.Api.Constants;
+using TodoList.Api.Common.Constants;
 using TodoList.Application.Common.Exceptions;
 using Xunit;
 
@@ -38,7 +38,7 @@ namespace TodoList.Api.Tests.Common.ExceptionFilters
         [Fact]
         public void Given_Exception_When_ExceptionMatches_Then_ShouldSetResultAndHandle()
         {
-            var validationFailures = new List<ValidationFailure>()
+            var validationFailures = new List<ValidationFailure>
             {
                 new ("Id", "Should not be empty.")
             };

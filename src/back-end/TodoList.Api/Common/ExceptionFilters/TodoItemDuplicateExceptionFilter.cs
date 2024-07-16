@@ -2,7 +2,8 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using TodoList.Api.Constants;
+using TodoList.Api.Common.Features;
+using TodoList.Api.Common.Constants;
 using TodoList.Application.Common.Exceptions;
 
 namespace TodoList.Api.Common.ExceptionFilters
@@ -16,6 +17,11 @@ namespace TodoList.Api.Common.ExceptionFilters
             if (context.Exception.GetType() != _exceptionType) return;
 
             var validationProblemDetails = new ValidationProblemDetails(context.ModelState);
+
+            context.HttpContext.Features.Set<IExceptionContextFeature>(new ExceptionContextFeature
+            {
+                ExceptionContext = context
+            });
 
             if (context.Exception is TodoItemDuplicateException exception)
             {

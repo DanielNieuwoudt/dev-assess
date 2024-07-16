@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
-using TodoList.Api.Mapping;
+using TodoList.Api.Common.Middleware;
+using TodoList.Api.Common.Mapping;
 
 namespace TodoList.Api.Extensions
 {
@@ -12,11 +13,30 @@ namespace TodoList.Api.Extensions
         public static IServiceCollection AddApiServices(this IServiceCollection services,
             IConfiguration configuration)
         {
+
+            services.ConfigureAutoMapper();
+            services.ConfigureHealthChecks(configuration);
+            services.ConfigureCors();
+            services.ConfigureSwagger();
+            services.ConfigureMiddleware();
+
+            services.AddControllers();
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureAutoMapper(this IServiceCollection services)
+        {
             services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile(typeof(TodoItemMappingProfile));
             });
 
+            return services;
+        }
+
+        public static IServiceCollection ConfigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
             services.AddHealthChecks()
                 .AddSqlServer(
                     connectionString: configuration.GetConnectionString("SqlServer")!,
@@ -29,7 +49,12 @@ namespace TodoList.Api.Extensions
                     name: "RedisCache",
                     tags: Dependency
                 );
+            
+            return services;
+        }
 
+        public static IServiceCollection ConfigureCors(this IServiceCollection services)
+        {
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllHeaders",
@@ -41,12 +66,22 @@ namespace TodoList.Api.Extensions
                     });
             });
 
-            services.AddControllers();
-            
+            return services;
+        }
+
+        public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
+        {
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoList.Api", Version = "v1" });
             });
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureMiddleware(this IServiceCollection services)
+        {
+            services.AddTransient<ExceptionHandlingMiddleware>();
 
             return services;
         }
