@@ -12,12 +12,15 @@ RUN dotnet tool install --global dotnet-ef
 COPY . .
 RUN dotnet ef migrations bundle --configuration release --project TodoList.Infrastructure --startup-project TodoList.Api --context TodoList.Infrastructure.Persistence.TodoListDbContext --self-contained -o ./TodoList.Infrastructure/efbundle
 
-COPY ./run-bundle.sh ./TodoList.Infrastructure/run-bundle.sh
-
-# Assign read-write-execute permissions to the user ower and 
-# read-execute permissions to group owner and others.
-RUN chmod 755 ./run-bundle.sh
-
 WORKDIR /etc/app/src/TodoList.Infrastructure
 
-ENTRYPOINT ["./run-bundle.sh"]
+# Set the entry point directly in the Dockerfile
+ENTRYPOINT ["sh", "-c", "set -e; \
+    if [ \"$APPLY_MIGRATION\" = \"true\" ]; then \
+        CONNECTION_STR=\"${CONNECTION_STR}\"; \
+        echo \"Starting Bundled Migration.\"; \
+        ./efbundle --connection \"${CONNECTION_STR}\"; \
+        echo \"Completed Bundled Migration.\"; \
+    else \
+        echo \"Skipping Bundled Migration\"; \
+    fi"]
