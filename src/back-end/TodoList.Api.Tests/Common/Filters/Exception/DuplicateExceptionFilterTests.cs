@@ -1,28 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using FluentAssertions;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
-using TodoList.Api.Common.ExceptionFilters;
 using TodoList.Api.Common.Constants;
+using TodoList.Api.Common.Filters.Exception;
 using TodoList.Application.Common.Exceptions;
 using Xunit;
 
-namespace TodoList.Api.Tests.Common.ExceptionFilters
+namespace TodoList.Api.Tests.Common.Filters.Exception
 {
     [ExcludeFromCodeCoverage(Justification = "Tests")]
-    public class TodoItemValidationExceptionFilterTests
+    public class DuplicateExceptionFilterTests
     {
-               [Fact]
+        [Fact]
         public void Given_Exception_When_ExceptionDoesNotMatch_Then_ShouldNotSetResult()
         {
-            var context = CreateExceptionContext(new Exception(""));
-            var filter = new TodoItemValidationExceptionFilter();
+            var context = CreateExceptionContext(new System.Exception(""));
+            var filter = new DuplicateExceptionFilter();
             
             filter.OnException(context);
 
@@ -45,9 +45,9 @@ namespace TodoList.Api.Tests.Common.ExceptionFilters
 
             var badRequest = new Generated.BadRequest
             {
-                Title = "One or more validation errors occurred.",
+                Title = "The provided property is a duplicate.",
                 Type = ResponseTypes.BadRequest,
-                Status = (int)HttpStatusCode.BadRequest,
+                Status = StatusCodes.Status400BadRequest,
                 Errors = new Dictionary<string, List<string>>
                 {
                     { "Id", ["Should not be empty."] }
@@ -55,8 +55,8 @@ namespace TodoList.Api.Tests.Common.ExceptionFilters
                 TraceId = Activity.Current?.Id ?? string.Empty
             };
 
-            var context = CreateExceptionContext(new TodoItemValidationException(validationFailures));
-            var filter = new TodoItemValidationExceptionFilter();
+            var context = CreateExceptionContext(new TodoItemDuplicateException(validationFailures));
+            var filter = new DuplicateExceptionFilter();
             
             filter.OnException(context);
 
@@ -81,10 +81,10 @@ namespace TodoList.Api.Tests.Common.ExceptionFilters
 
             badRequestObjectResult.StatusCode
                 .Should()
-                .Be((int)HttpStatusCode.BadRequest);
+                .Be(StatusCodes.Status400BadRequest);
         }
 
-        private ExceptionContext CreateExceptionContext(Exception exception)
+        private ExceptionContext CreateExceptionContext(System.Exception exception)
         {
             var actionContext = new ActionContext
             {

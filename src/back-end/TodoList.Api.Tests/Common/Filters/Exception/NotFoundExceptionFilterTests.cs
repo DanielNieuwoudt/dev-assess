@@ -1,27 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
-using TodoList.Api.Common.ExceptionFilters;
 using TodoList.Api.Common.Constants;
+using TodoList.Api.Common.Filters.Exception;
 using TodoList.Application.Common.Exceptions;
 using Xunit;
 
-namespace TodoList.Api.Tests.Common.ExceptionFilters
+namespace TodoList.Api.Tests.Common.Filters.Exception
 {
     [ExcludeFromCodeCoverage(Justification = "Tests")]
-    public class TodoItemNotFoundExceptionFilterTests
+    public class NotFoundExceptionFilterTests
     {
                 [Fact]
         public void Given_Exception_When_ExceptionDoesNotMatch_Then_ShouldNotSetResult()
         {
-            var context = CreateExceptionContext(new Exception(""));
-            var filter = new TodoItemNotFoundExceptionFilter();
+            var context = CreateExceptionContext(new System.Exception(""));
+            var filter = new NotFoundExceptionFilter();
             
             filter.OnException(context);
 
@@ -42,12 +42,12 @@ namespace TodoList.Api.Tests.Common.ExceptionFilters
                 Title = "The specified resource was not found.",
                 Type = ResponseTypes.NotFound,
                 Detail = "Entity \"TodoItem\" with (1) was not found.",
-                Status = (int)HttpStatusCode.NotFound,
+                Status = StatusCodes.Status404NotFound,
                 TraceId = Activity.Current?.Id ?? string.Empty
             };
 
             var context = CreateExceptionContext(new TodoItemNotFoundException("TodoItem", "1"));
-            var filter = new TodoItemNotFoundExceptionFilter();
+            var filter = new NotFoundExceptionFilter();
             
             filter.OnException(context);
 
@@ -72,10 +72,10 @@ namespace TodoList.Api.Tests.Common.ExceptionFilters
 
             notFoundObjectResult.StatusCode
                 .Should()
-                .Be((int)HttpStatusCode.NotFound);
+                .Be(StatusCodes.Status404NotFound);
         }
 
-        private ExceptionContext CreateExceptionContext(Exception exception)
+        private ExceptionContext CreateExceptionContext(System.Exception exception)
         {
             var actionContext = new ActionContext
             {
