@@ -1,26 +1,27 @@
-// src/components/TodoItems.js
-import React, { useEffect } from 'react'
+import React, { useEffect, FC } from 'react'
 import { Table, Button } from 'react-bootstrap'
 import axios from 'axios'
 
-const TodoItems = ({ items, setItems }) => {
-  const fetchItems = async () => {
-    try {
-      // const response = await axios.get('/api/todos')
-      // setItems(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+interface TodoItem {
+  id: number;
+  description: string;
+  completed?: boolean;
+}
 
+interface TodoItemsProps {
+  items: TodoItem[];
+  fetchItems: () => void;
+}
+
+const TodoItems: FC<TodoItemsProps> = ({ items, fetchItems }) => {
   useEffect(() => {
     fetchItems()
-  }, [])
+  }, [fetchItems])
 
-  const markAsComplete = async (item) => {
+  const markAsComplete = async (item: TodoItem) => {
     try {
-      // await axios.put(`/api/todos/${item.id}`, { ...item, completed: true })
-      // fetchItems()
+      await axios.put(`/api/todos/${item.id}`, { ...item, completed: true })
+      fetchItems()
     } catch (error) {
       console.error(error)
     }

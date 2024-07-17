@@ -1,20 +1,22 @@
-// src/components/AddTodoItem.js
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent, FC } from 'react'
 import { Container, Row, Col, Form, Button, Stack } from 'react-bootstrap'
 import axios from 'axios'
 
-const AddTodoItem = ({ fetchItems }) => {
-  
-    const [description, setDescription] = useState('')
+interface AddTodoItemProps {
+  fetchItems: () => void;
+}
 
-  const handleDescriptionChange = (event) => {
+const AddTodoItem: FC<AddTodoItemProps> = ({ fetchItems }) => {
+  const [description, setDescription] = useState<string>('')
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value)
   }
 
   const handleAdd = async () => {
     try {
-      // await axios.post('/api/todos', { description })
-      // setDescription('')
+      await axios.post('/api/todos', { description })
+      setDescription('')
       fetchItems()
     } catch (error) {
       console.error(error)

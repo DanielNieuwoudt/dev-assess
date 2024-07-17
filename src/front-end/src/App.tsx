@@ -1,18 +1,23 @@
 import './App.css'
 import { Image, Alert, Container, Row, Col } from 'react-bootstrap'
-import React, { useState } from 'react'
+import React, { useState, FC } from 'react'
 import AddTodoItem from './components/AddTodoItem'
 import TodoItems from './components/TodoItems'
+import axios from 'axios'
 
-const axios = require('axios')
+interface TodoItem {
+  id: number;
+  description: string;
+  completed?: boolean;
+}
 
-const App = () => {
-  const [items, setItems] = useState([])
+const App: FC = () => {
+  const [items, setItems] = useState<TodoItem[]>([])
 
   const fetchItems = async () => {
     try {
-      // const response = await axios.get('/api/todos')
-      // setItems(response.data)
+      const response = await axios.get('/api/todos')
+      setItems(response.data)
     } catch (error) {
       console.error(error)
     }
@@ -57,7 +62,7 @@ const App = () => {
         <br />
         <Row>
           <Col>
-            <TodoItems items={items} setItems={setItems} />
+            <TodoItems items={items} fetchItems={fetchItems} />
           </Col>
         </Row>
       </Container>
