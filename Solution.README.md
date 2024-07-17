@@ -476,4 +476,5 @@ From the `/tests/contract` directory uinsg a bash terminal
 | Item | Description
 |----------| -----------
 | Serilog | Implement Serilog  |
+| Versioning | Decide on a versioning strategy.  |
 | Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation|
