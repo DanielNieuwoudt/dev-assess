@@ -1,9 +1,11 @@
 // src/components/AddTodoItem.js
 import React, { useState } from 'react'
 import { Container, Row, Col, Form, Button, Stack } from 'react-bootstrap'
+import axios from 'axios'
 
-const AddTodoItem = ({ addItem }) => {
-  const [description, setDescription] = useState('')
+const AddTodoItem = ({ fetchItems }) => {
+  
+    const [description, setDescription] = useState('')
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value)
@@ -11,8 +13,9 @@ const AddTodoItem = ({ addItem }) => {
 
   const handleAdd = async () => {
     try {
-      await addItem(description)
-      setDescription('')
+      // await axios.post('/api/todos', { description })
+      // setDescription('')
+      fetchItems()
     } catch (error) {
       console.error(error)
     }

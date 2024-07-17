@@ -4,40 +4,8 @@ import React, { useState } from 'react'
 import AddTodoItem from './components/AddTodoItem'
 import TodoItems from './components/TodoItems'
 
-const axios = require('axios')
-
 const App = () => {
   const [items, setItems] = useState([])
-
-  const fetchItems = async () => {
-    try {
-      // Replace this with actual API call
-      // const response = await axios.get('/api/todos')
-      // setItems(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const addItem = async (description) => {
-    try {
-      // Replace this with actual API call
-      // await axios.post('/api/todos', { description })
-      // fetchItems()
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const markAsComplete = async (item) => {
-    try {
-      // Replace this with actual API call
-      // await axios.put(`/api/todos/${item.id}`, { ...item, completed: true })
-      // fetchItems()
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   return (
     <div className="App">
@@ -72,13 +40,13 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-            <AddTodoItem addItem={addItem} />
+            <AddTodoItem fetchItems={() => fetchItems()} />
           </Col>
         </Row>
         <br />
         <Row>
           <Col>
-            <TodoItems items={items} fetchItems={fetchItems} markAsComplete={markAsComplete} />
+            <TodoItems items={items} setItems={setItems} />
           </Col>
         </Row>
       </Container>
