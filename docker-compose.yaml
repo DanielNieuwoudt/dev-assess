@@ -6,7 +6,7 @@ services:
   backend:
     container_name: backend
     build:
-      context: /src/back-end
+      context: ./src/back-end
       dockerfile: ./Backend.dockerfile
     environment:
       # These values are VERBATIM, do not include quotes unless they are needed in the actual value
@@ -29,7 +29,7 @@ services:
   frontend:
     container_name: frontend
     build:
-      context: /src/front-end
+      context: ./src/front-end
       dockerfile: ./Dockerfile
     ports:
       - "3000:3000"
