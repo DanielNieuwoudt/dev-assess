@@ -4,8 +4,19 @@ import React, { useState } from 'react'
 import AddTodoItem from './components/AddTodoItem'
 import TodoItems from './components/TodoItems'
 
+const axios = require('axios')
+
 const App = () => {
   const [items, setItems] = useState([])
+
+  const fetchItems = async () => {
+    try {
+      // const response = await axios.get('/api/todos')
+      // setItems(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div className="App">
@@ -40,7 +51,7 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-            <AddTodoItem fetchItems={() => fetchItems()} />
+            <AddTodoItem fetchItems={fetchItems} />
           </Col>
         </Row>
         <br />
