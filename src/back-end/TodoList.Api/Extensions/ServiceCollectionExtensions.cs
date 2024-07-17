@@ -1,5 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
+using TodoList.Api.Common.Filters.Action;
+using TodoList.Api.Common.Filters.Exception;
 using TodoList.Api.Common.Middleware;
 using TodoList.Api.Common.Mapping;
 
@@ -19,9 +21,9 @@ namespace TodoList.Api.Extensions
             services.ConfigureCors();
             services.ConfigureSwagger();
             services.ConfigureMiddleware();
-
-            services.AddControllers();
-
+            services.ConfigureFilters();
+            services.ConfigureControllers();
+            
             return services;
         }
 
@@ -31,6 +33,20 @@ namespace TodoList.Api.Extensions
             {
                 cfg.AddProfile(typeof(TodoItemMappingProfile));
             });
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureControllers(this IServiceCollection services)
+        {
+            services.AddControllers();
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureFilters(this IServiceCollection services)
+        {
+            services.AddScoped<ValidateTodoItemIdFilter>();
 
             return services;
         }

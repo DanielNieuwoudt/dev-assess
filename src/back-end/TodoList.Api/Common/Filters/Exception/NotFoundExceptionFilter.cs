@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Diagnostics;
-using TodoList.Api.Common.Features;
 using TodoList.Api.Common.Constants;
+using TodoList.Api.Common.Features;
 using TodoList.Application.Common.Exceptions;
 
-namespace TodoList.Api.Common.ExceptionFilters
+namespace TodoList.Api.Common.Filters.Exception
 {
-    public class TodoItemNotFoundExceptionFilter : ExceptionFilterAttribute
+    public class NotFoundExceptionFilter : ExceptionFilterAttribute
     {
         private readonly Type _exceptionType = typeof(TodoItemNotFoundException);
 
@@ -27,7 +27,7 @@ namespace TodoList.Api.Common.ExceptionFilters
                 Title = "The specified resource was not found.",
                 Type = ResponseTypes.NotFound,
                 Detail = exception!.Message,
-                Status = (int)System.Net.HttpStatusCode.NotFound,
+                Status = StatusCodes.Status404NotFound,
                 TraceId = Activity.Current?.Id ?? string.Empty
             });
 

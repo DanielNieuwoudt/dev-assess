@@ -43,13 +43,13 @@ namespace TodoList.Api.Common.Middleware
                     // TODO: We may want to return a more specific response for Unauthorised
                     // TODO: We may want to return a more specific response for Forbidden
                     default:
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
                         var internalServerError = new Generated.InternalServerError
                         {
                             Title = "An error occurred.",
                             Type = ResponseTypes.InternalServerError,
-                            Status = (int)HttpStatusCode.InternalServerError,
+                            Status = StatusCodes.Status500InternalServerError,
                             Detail = "An error occurred processing your request.", // We do not return the exception message as it may contain sensitive information.
                             TraceId = Activity.Current?.Id ?? context.TraceIdentifier
                         };

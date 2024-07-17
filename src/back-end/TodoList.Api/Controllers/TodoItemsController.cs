@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using TodoList.Api.Common.ExceptionFilters;
+using TodoList.Api.Common.Filters.Action;
+using TodoList.Api.Common.Filters.Exception;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.GetTodoItems;
@@ -32,8 +33,8 @@ namespace TodoList.Api.Controllers
             return Ok(todoItems);
         }
 
-        [TodoItemValidationExceptionFilter]
-        [TodoItemNotFoundExceptionFilter]
+        [ValidationExceptionFilter]
+        [NotFoundExceptionFilter]
         public override async Task<ActionResult<TodoItem>> GetTodoItem(Guid id, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Getting todo item");
@@ -48,16 +49,11 @@ namespace TodoList.Api.Controllers
 
             return Ok(todoItem);
         }
-
-        [TodoItemValidationExceptionFilter]
-        [TodoItemNotFoundExceptionFilter]
+        [ServiceFilter(typeof(ValidateTodoItemIdFilter))]
+        [ValidationExceptionFilter]
+        [NotFoundExceptionFilter]
         public override async Task<IActionResult> PutTodoItem(Guid id, TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger.LogInformation("Validating todo item");
-
-            if (id != body.Id)
-                return BadRequest();
-
             _logger.LogInformation("Updating todo item");
 
             await _sender
@@ -68,8 +64,8 @@ namespace TodoList.Api.Controllers
             return NoContent();          
         }
 
-        [TodoItemValidationExceptionFilter]
-        [TodoItemDuplicateExceptionFilter]
+        [ValidationExceptionFilter]
+        [DuplicateExceptionFilter]
         public override async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Creating todo item");

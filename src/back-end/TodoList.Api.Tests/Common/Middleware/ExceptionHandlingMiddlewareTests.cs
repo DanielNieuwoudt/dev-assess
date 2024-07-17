@@ -1,21 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using System.Linq.Expressions;
+using System.Net;
+using System.Net.Mime;
+using System.Text.Json;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
+using TodoList.Api.Common.Constants;
 using TodoList.Api.Common.Features;
 using TodoList.Api.Common.Middleware;
-using Xunit;
-using System.Linq.Expressions;
-using System.Net;
-using System.Net.Mime;
-using FluentAssertions;
-using TodoList.Api.Common.Constants;
 using TodoList.Api.Generated;
+using Xunit;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using System.Text.Json;
+
+namespace TodoList.Api.Tests.Common.Middleware;
 
 public class ExceptionHandlingMiddlewareTests
 {
@@ -72,7 +74,7 @@ public class ExceptionHandlingMiddlewareTests
         {
             Title = "An error occurred.",
             Type = ResponseTypes.InternalServerError,
-            Status = (int)HttpStatusCode.InternalServerError,
+            Status = StatusCodes.Status500InternalServerError,
             Detail = "An error occurred processing your request."
         };
 
@@ -86,7 +88,7 @@ public class ExceptionHandlingMiddlewareTests
 
         exceptionContext.HttpContext.Response.StatusCode
             .Should()
-            .Be((int)HttpStatusCode.InternalServerError);
+            .Be(StatusCodes.Status500InternalServerError);
 
         exceptionContext.HttpContext
             .Response
