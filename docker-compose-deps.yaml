@@ -33,7 +33,7 @@ services:
     container_name: migrations
     image: migrations
     build:
-      context: /src/back-end
+      context: ./src/back-end
       dockerfile: ./Migrations.dockerfile
     deploy:
       restart_policy:
