@@ -478,3 +478,14 @@ From the `/tests/contract` directory uinsg a bash terminal
 | Serilog | Implement Serilog  |
 | Versioning | Decide on a versioning strategy.  |
 | Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation|
+
+# Cool Finds
+
+Along the way, we encounter tools, libraries, patterns, and practices that we may not have the opportunity to explore every day. 
+
+Below is a table of the ones I came across that I found helpful or interesting.
+
+| Item | Description
+|----------| -----------
+| [Centralizing .NET Project Configurations](https://blog.ndepend.com/directory-build-props/) | Centralise your package and version management. Useful for solutions with a lot of projects. |
+| [Mermaid](https://www.mermaidchart.com/) | Easily create complex diagrams from markdown-style code and collaborate with team members in real-time. |
