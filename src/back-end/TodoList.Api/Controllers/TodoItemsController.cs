@@ -50,7 +50,6 @@ namespace TodoList.Api.Controllers
         }
 
         [TodoItemValidationExceptionFilter]
-        [TodoItemDuplicateExceptionFilter]
         [TodoItemNotFoundExceptionFilter]
         public override async Task<IActionResult> PutTodoItem(Guid id, TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
