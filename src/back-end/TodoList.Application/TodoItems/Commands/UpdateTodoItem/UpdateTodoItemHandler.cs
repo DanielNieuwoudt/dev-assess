@@ -18,16 +18,6 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
 
         public async Task<UpdateTodoItemResult> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding duplicate todo items based in description.");
-            if (await _repository.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && 
-                                                                    ti.IsCompleted == false, cancellationToken))
-            {
-                throw new TodoItemDuplicateException(new List<ValidationFailure>
-                {
-                    new (nameof(request.Description), request.Description)
-                });
-            }
-
             _logger.LogInformation("Getting todo item.");
             var todoItem = await _repository.GetTodoItemAsync(new TodoItemId(request.Id), cancellationToken);
             if (todoItem is null)

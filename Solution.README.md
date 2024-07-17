@@ -198,9 +198,13 @@ In collaboration with other members of the team, we ensure:
 
 ### Contract Tests
 
+We aim to minimise duplication between contract and unit tests, keeping the test pyramid in mind. 
+
 Contract testing ensures that interactions between the front end and back end adhere to our predefined contract, reducing the risks of integration issues. 
 
 During development, it allows the team to detect breaking changes early in the development cycle, improving reliability and increasing the overall stability of our solution. 
+
+>Our main goal is to catch breaking changes early and ensure that the implementation of our API adheres to the contract, as that is what consumers will expect. 
 
 ## Front End 
 
