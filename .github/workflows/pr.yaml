@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - 'feature/*' # Adjust this to match your branch naming convention
 
 jobs:
   build-and-test:
