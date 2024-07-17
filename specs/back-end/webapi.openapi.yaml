@@ -6,12 +6,14 @@ info:
 servers:
   - url: 'http://localhost/api'
 security:
-  - bearerAuth: [ ]
+  - bearerAuth: []
 paths:
   /TodoItems/{id}:
     get:
       tags:
         - TodoItems
+      summary: Retrieve a TodoItem by ID
+      description: Get the details of a specific TodoItem using its ID.
       operationId: getTodoItem
       parameters:
         - name: id
@@ -34,9 +36,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadRequest"
         '401':
-          description: Unauthorized
+          description: Unauthenticated
         '403':
-          description: Forbidden
+          description: Unauthorized
         '404':
           description: Not Found
           content:
@@ -53,6 +55,8 @@ paths:
     put:
       tags:
         - TodoItems
+      summary: Update a TodoItem by ID
+      description: Update the details of a specific TodoItem using its ID.
       operationId: putTodoItem
       parameters:
         - name: id
@@ -64,7 +68,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json: 
+          application/json:
             schema:
               $ref: '#/components/schemas/TodoItem'
       responses:
@@ -77,9 +81,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadRequest"
         '401':
-          description: Unauthorized
+          description: Unauthenticated
         '403':
-          description: Forbidden
+          description: Unauthorized
         '404':
           description: Not Found
           content:
@@ -97,6 +101,8 @@ paths:
     get:
       tags:
         - TodoItems
+      summary: Retrieve all TodoItems
+      description: Get a list of all TodoItems.
       operationId: getTodoItems
       responses:
         '200':
@@ -106,9 +112,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/TodoItems'
         '401':
-          description: Unauthorized
+          description: Unauthenticated
         '403':
-          description: Forbidden
+          description: Unauthorized
         '5XX':
           description: Internal server error
           content:
@@ -119,16 +125,18 @@ paths:
     post:
       tags:
         - TodoItems
+      summary: Create a new TodoItem
+      description: Add a new TodoItem to the list.
       operationId: postTodoItem
       requestBody:
         required: true
         content:
-          application/json: 
+          application/json:
             schema:
               $ref: '#/components/schemas/TodoItem'
       responses:
         '201':
-          description: Success
+          description: Created
           content:
             application/json:
               schema:
@@ -140,9 +148,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadRequest"
         '401':
-          description: Unauthorized
+          description: Unauthenticated
         '403':
-          description: Forbidden
+          description: Unauthorized
         '5XX':
           description: Internal server error
           content:
@@ -248,6 +256,10 @@ components:
         isCompleted:
           type: boolean
       additionalProperties: false
+      example:
+        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        description: "Sample TodoItem"
+        isCompleted: false
     TodoItems:
       type: array
       items:

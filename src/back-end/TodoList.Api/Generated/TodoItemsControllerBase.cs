@@ -27,19 +27,43 @@ namespace TodoList.Api.Generated
 
     public abstract class TodoItemsControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
     {
+        /// <summary>
+        /// Retrieve a TodoItem by ID
+        /// </summary>
+        /// <remarks>
+        /// Get the details of a specific TodoItem using its ID.
+        /// </remarks>
         /// <returns>Success</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("TodoItems/{id}")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<TodoItem>> GetTodoItem([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
+        /// <summary>
+        /// Update a TodoItem by ID
+        /// </summary>
+        /// <remarks>
+        /// Update the details of a specific TodoItem using its ID.
+        /// </remarks>
         /// <returns>No Content</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("TodoItems/{id}")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> PutTodoItem([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid id, [Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] TodoItem body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
+        /// <summary>
+        /// Retrieve all TodoItems
+        /// </summary>
+        /// <remarks>
+        /// Get a list of all TodoItems.
+        /// </remarks>
         /// <returns>Success</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("TodoItems")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<TodoItem>>> GetTodoItems(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
-        /// <returns>Success</returns>
+        /// <summary>
+        /// Create a new TodoItem
+        /// </summary>
+        /// <remarks>
+        /// Add a new TodoItem to the list.
+        /// </remarks>
+        /// <returns>Created</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("TodoItems")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<TodoItem>> PostTodoItem([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] TodoItem body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
