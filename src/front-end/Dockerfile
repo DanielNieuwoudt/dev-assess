@@ -13,6 +13,9 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
+# Run the tests
+RUN npm run test -- --watchAll=false
+
 # Build the React app for production
 RUN npm run build
 
