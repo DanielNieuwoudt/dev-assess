@@ -1,46 +1,39 @@
 import './App.css'
 import { Image, Alert, Container, Row, Col } from 'react-bootstrap'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import AddTodoItem from './components/AddTodoItem'
 import TodoItems from './components/TodoItems'
 
 const axios = require('axios')
 
 const App = () => {
-  const [description, setDescription] = useState('')
   const [items, setItems] = useState([])
 
-  useEffect(() => {
-    // todo
-  }, [])
-
-  const handleDescriptionChange = (event) => {
-    // todo
-  }
-
-  async function getItems() {
+  const fetchItems = async () => {
     try {
-      alert('todo')
+      // Replace this with actual API call
+      // const response = await axios.get('/api/todos')
+      // setItems(response.data)
     } catch (error) {
       console.error(error)
     }
   }
 
-  async function handleAdd() {
+  const addItem = async (description) => {
     try {
-      alert('todo')
+      // Replace this with actual API call
+      // await axios.post('/api/todos', { description })
+      // fetchItems()
     } catch (error) {
       console.error(error)
     }
   }
 
-  function handleClear() {
-    setDescription('')
-  }
-
-  async function handleMarkAsComplete(item) {
+  const markAsComplete = async (item) => {
     try {
-      alert('todo')
+      // Replace this with actual API call
+      // await axios.put(`/api/todos/${item.id}`, { ...item, completed: true })
+      // fetchItems()
     } catch (error) {
       console.error(error)
     }
@@ -79,18 +72,13 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-            <AddTodoItem
-              description={description}
-              handleDescriptionChange={handleDescriptionChange}
-              handleAdd={handleAdd}
-              handleClear={handleClear}
-            />
+            <AddTodoItem addItem={addItem} />
           </Col>
         </Row>
         <br />
         <Row>
           <Col>
-            <TodoItems items={items} getItems={getItems} handleMarkAsComplete={handleMarkAsComplete} />
+            <TodoItems items={items} fetchItems={fetchItems} markAsComplete={markAsComplete} />
           </Col>
         </Row>
       </Container>

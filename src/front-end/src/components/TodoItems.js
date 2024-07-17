@@ -1,13 +1,17 @@
 // src/components/TodoItems.js
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Table, Button } from 'react-bootstrap'
 
-const TodoItems = ({ items, getItems, handleMarkAsComplete }) => {
+const TodoItems = ({ items, fetchItems, markAsComplete }) => {
+  useEffect(() => {
+    fetchItems()
+  }, [fetchItems])
+
   return (
     <>
       <h1>
         Showing {items.length} Item(s){' '}
-        <Button variant="primary" className="pull-right" onClick={() => getItems()}>
+        <Button variant="primary" className="pull-right" onClick={fetchItems}>
           Refresh
         </Button>
       </h1>
@@ -26,7 +30,7 @@ const TodoItems = ({ items, getItems, handleMarkAsComplete }) => {
               <td>{item.id}</td>
               <td>{item.description}</td>
               <td>
-                <Button variant="warning" size="sm" onClick={() => handleMarkAsComplete(item)}>
+                <Button variant="warning" size="sm" onClick={() => markAsComplete(item)}>
                   Mark as completed
                 </Button>
               </td>

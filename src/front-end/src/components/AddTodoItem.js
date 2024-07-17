@@ -1,7 +1,27 @@
-import React from 'react'
+// src/components/AddTodoItem.js
+import React, { useState } from 'react'
 import { Container, Row, Col, Form, Button, Stack } from 'react-bootstrap'
 
-const AddTodoItem = ({ description, handleDescriptionChange, handleAdd, handleClear }) => {
+const AddTodoItem = ({ addItem }) => {
+  const [description, setDescription] = useState('')
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value)
+  }
+
+  const handleAdd = async () => {
+    try {
+      await addItem(description)
+      setDescription('')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleClear = () => {
+    setDescription('')
+  }
+
   return (
     <Container>
       <h1>Add Item</h1>
@@ -20,10 +40,10 @@ const AddTodoItem = ({ description, handleDescriptionChange, handleAdd, handleCl
       </Form.Group>
       <Form.Group as={Row} className="mb-3 offset-md-2" controlId="formAddTodoItem">
         <Stack direction="horizontal" gap={2}>
-          <Button variant="primary" onClick={() => handleAdd()}>
+          <Button variant="primary" onClick={handleAdd}>
             Add Item
           </Button>
-          <Button variant="secondary" onClick={() => handleClear()}>
+          <Button variant="secondary" onClick={handleClear}>
             Clear
           </Button>
         </Stack>
