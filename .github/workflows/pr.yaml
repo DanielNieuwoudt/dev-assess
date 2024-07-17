@@ -20,17 +20,17 @@ jobs:
 
       # Build Docker Compose services
       - name: Build services
-        run: docker-compose -f ./docker-compose-tests.yaml build
+        run: docker compose -f docker-compose-tests.yaml build
 
       # Run Docker Compose services
       - name: Run services
-        run: docker-compose -f ./docker-compose.yaml up -d
+        run: docker compose -f docker-compose.yaml up -d
 
       # Run tests
       - name: Run tests
-        run: docker-compose -f ./docker-compose-tests.yaml run contracts
+        run: docker compose -f docker-compose-tests.yaml run contracts
 
       # Tear down Docker Compose services
       - name: Tear down services
         if: always()
-        run: docker-compose -f ./docker-compose-tests.yaml down
+        run: docker compose -f docker-compose-tests.yaml down
