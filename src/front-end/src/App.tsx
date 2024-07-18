@@ -17,9 +17,15 @@ const App: FC = () => {
   const fetchItems = async () => {
     try {
       const response = await axios.get('/api/todos')
-      setItems(response.data)
+      if (Array.isArray(response.data)) {
+        setItems(response.data)
+      } else {
+        console.error('API response is not an array:', response.data)
+        setItems([])
+      }
     } catch (error) {
       console.error(error)
+      setItems([])
     }
   }
 
