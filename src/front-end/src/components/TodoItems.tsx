@@ -15,7 +15,7 @@ const TodoItems: FC<TodoItemsProps> = ({ items, fetchItems }) => {
   const markAsComplete = async (item: TodoItem) => {
     try {
       // TODO: Call the api
-      fetchItems()
+      await fetchItems()
     } catch (error) {
       console.error(error)
     }

@@ -10,7 +10,7 @@ export function createApiClient(): AxiosInstance {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
         agent = axios.create({
             httpsAgent: new https.Agent({
-                rejectUnauthorized: false
+               rejectUnauthorized: false
             })
         });
     }

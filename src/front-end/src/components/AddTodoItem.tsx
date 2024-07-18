@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button, Stack } from 'react-bootstrap'
 import { TodoItem } from '../services/generated';
 
 interface AddTodoItemProps {
-  fetchItems: () =>Promise<TodoItem[]>;
+  fetchItems: () => Promise<TodoItem[]>;
 }
 
 const AddTodoItem: FC<AddTodoItemProps> = ({ fetchItems }) => {
@@ -17,7 +17,7 @@ const AddTodoItem: FC<AddTodoItemProps> = ({ fetchItems }) => {
     try {
       // TODO: Call the api
       setDescription('')
-      fetchItems()
+      await fetchItems()
     } catch (error) {
       console.error(error)
     }
