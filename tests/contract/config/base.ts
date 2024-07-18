@@ -1,8 +1,8 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 export class BaseConfig implements IConfig {
-  backendBaseUrl: string = "";
+  backendBaseUrl: string = '';
   isAuthenticationEnabled: boolean = false;
 }
 
@@ -15,10 +15,10 @@ export interface IConfig{
 }
 export let config: IConfig;
 (async () => {
-  let environment = process.env.ENVIRONMENT_NAME || "local";
+  let environment = process.env.ENVIRONMENT_NAME || 'local';
 
   const configEnvOverridesFile = `./config.${environment}`;
-  if (!fs.existsSync(path.join(__dirname, configEnvOverridesFile + ".ts"))) {
+  if (!fs.existsSync(path.join(__dirname, configEnvOverridesFile + '.ts'))) {
     throw new Error(
       `No environment specific configuration for environment name '${environment}'`
     );

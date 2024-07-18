@@ -1,25 +1,27 @@
 import { createApiClient } from '../utils/Agent'
-import { createNewTodo } from "../utils/Todo";
-import { TodoApi, TodoApiInterface, TodoItem } from "../generated/";
-import { AxiosResponse } from "axios";
-import { config } from "../config/base";
-import { loadApiSpec } from "../utils/Specs";
+import { createNewTodo } from '../utils/Todo';
+import { TodoItemsApi, TodoItemsApiInterface, TodoItem } from '../generated/';
+import { AxiosResponse } from 'axios';
+import { config } from '../config/base';
+import { loadApiSpec } from '../utils/Specs';
 import { v4 as uuidv4 } from 'uuid';
 
-describe("Given the backend endpoint",  () => {
-    let todoApiInterface: TodoApiInterface;
+describe('Given the backend endpoint',  () => {
+    let todoApiInterface: TodoItemsApiInterface;
+    let openApiSpecFile: string = 'todoitems.openapi.yaml'
+    
     beforeEach(async () => {
-        todoApiInterface = new TodoApi(undefined, config.backendBaseUrl, createApiClient());
+        todoApiInterface = new TodoItemsApi(undefined, config.backendBaseUrl, createApiClient());
     });
 
-    describe("When creating a todo item",  () => {
+    describe('When creating a todo item',  () => {
         
         // We generate a uuid for the todoItem id.
         let todoItemId: string = uuidv4();
         // We generate a uuid as a random description.
         let todoItemDescription: string = uuidv4();
         
-        test("Then the client should receive a status code of 201 when the todo item is created.", async() => {
+        test('Then the client should receive a status code of 201 when the todo item is created.', async() => {
             let todoItemCreateResponse: AxiosResponse<TodoItem>;
             
             todoItemCreateResponse = await todoApiInterface
@@ -29,11 +31,11 @@ describe("Given the backend endpoint",  () => {
 
             let todoItemCreateResult: TodoItem = todoItemCreateResponse.data;
 
-            loadApiSpec("webapi.openapi.yaml");
-            expect(todoItemCreateResult).toSatisfySchemaInApiSpec("TodoItem");
+            loadApiSpec(openApiSpecFile);
+            expect(todoItemCreateResult).toSatisfySchemaInApiSpec('TodoItem');
         });
 
-        test("Then the client should receive a status code of 400 when the {id} is a duplicate", async() => {
+        test('Then the client should receive a status code of 400 when the {id} is a duplicate', async() => {
 
             let todoItemCreateResponse: AxiosResponse<TodoItem>;
 
@@ -44,11 +46,11 @@ describe("Given the backend endpoint",  () => {
 
             let todoItemCreateResult: TodoItem = todoItemCreateResponse.data;
 
-            loadApiSpec("webapi.openapi.yaml");
-            expect(todoItemCreateResult).toSatisfySchemaInApiSpec("BadRequest");
+            loadApiSpec(openApiSpecFile);
+            expect(todoItemCreateResult).toSatisfySchemaInApiSpec('BadRequest');
         });
 
-        test("Then the client should receive a status code of 400 when the {description} is a duplicate", async() => {
+        test('Then the client should receive a status code of 400 when the {description} is a duplicate', async() => {
 
             let todoItemCreateResponse: AxiosResponse<TodoItem>;
 
@@ -59,8 +61,8 @@ describe("Given the backend endpoint",  () => {
 
             let todoItemCreateResult: TodoItem = todoItemCreateResponse.data;
 
-            loadApiSpec("webapi.openapi.yaml");
-            expect(todoItemCreateResult).toSatisfySchemaInApiSpec("BadRequest");
+            loadApiSpec(openApiSpecFile);
+            expect(todoItemCreateResult).toSatisfySchemaInApiSpec('BadRequest');
         });
     });
 });

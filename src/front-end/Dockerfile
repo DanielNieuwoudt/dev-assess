@@ -19,11 +19,8 @@ RUN npm run test -- --watchAll=false
 # Build the React app for production
 RUN npm run build
 
-# Install serve to serve the build folder
-RUN npm install -g serve
-
 # Expose port 3000 to the outside world
 EXPOSE 3000
 
 # Command to run the app
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD ["npm", "run", "start:env"]

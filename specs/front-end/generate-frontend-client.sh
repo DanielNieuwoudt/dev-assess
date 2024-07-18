@@ -3,9 +3,6 @@
 export MSYS_NO_PATHCONV=1
 set -e
 
-# Temporary file for code generation
-cp ../todoitems.openapi.yaml ./webapi.openapi.yaml
-
 scriptPath=$(dirname "$0")
 
 echo "starting current path is $(pwd)"
@@ -21,8 +18,11 @@ generatorName="typescript-axios"
 apiSpecFile="webapi.openapi.yaml"
 packageName=""
 apiSpecFileInput="$(pwd)" #static spec for the meanwhile here
-clientOutput="$(pwd)/../../tests/contract/generated"
+clientOutput="$(pwd)/../../src/front-end/src/services/generated"
 additionalProperties="typescriptThreePlus=true,supportsES6=true,withInterfaces=true"
+
+# Temporary file for code generation
+cp ../todoitems.openapi.yaml ./webapi.openapi.yaml
 
 docker pull openapitools/openapi-generator-cli:$openApiVersion
 

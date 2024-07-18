@@ -31,6 +31,9 @@ services:
     build:
       context: ./src/front-end
       dockerfile: ./Dockerfile
+    environment:
+      # These values are VERBATIM, do not include quotes unless they are needed in the actual value
+      - ENVIRONMENT_NAME=development
     ports:
       - "3000:3000"
     depends_on:

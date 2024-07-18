@@ -1,9 +1,9 @@
-import React, { useState, ChangeEvent, FC } from 'react'
+import { useState, ChangeEvent, FC } from 'react'
 import { Container, Row, Col, Form, Button, Stack } from 'react-bootstrap'
-import axios from 'axios'
+import { TodoItem } from '../services/generated';
 
 interface AddTodoItemProps {
-  fetchItems: () => void;
+  fetchItems: () =>Promise<TodoItem[]>;
 }
 
 const AddTodoItem: FC<AddTodoItemProps> = ({ fetchItems }) => {
@@ -15,7 +15,7 @@ const AddTodoItem: FC<AddTodoItemProps> = ({ fetchItems }) => {
 
   const handleAdd = async () => {
     try {
-      await axios.post('/api/todos', { description })
+      // TODO: Call the api
       setDescription('')
       fetchItems()
     } catch (error) {
@@ -30,25 +30,25 @@ const AddTodoItem: FC<AddTodoItemProps> = ({ fetchItems }) => {
   return (
     <Container>
       <h1>Add Item</h1>
-      <Form.Group as={Row} className="mb-3" controlId="formAddTodoItem">
-        <Form.Label column sm="2">
+      <Form.Group as={Row} className='mb-3' controlId='formAddTodoItem'>
+        <Form.Label column sm='2'>
           Description
         </Form.Label>
-        <Col md="6">
+        <Col md='6'>
           <Form.Control
-            type="text"
-            placeholder="Enter description..."
+            type='text'
+            placeholder='Enter description...'
             value={description}
             onChange={handleDescriptionChange}
           />
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3 offset-md-2" controlId="formAddTodoItem">
-        <Stack direction="horizontal" gap={2}>
-          <Button variant="primary" onClick={handleAdd}>
+      <Form.Group as={Row} className='mb-3 offset-md-2' controlId='formAddTodoItem'>
+        <Stack direction='horizontal' gap={2}>
+          <Button variant='primary' onClick={handleAdd}>
             Add Item
           </Button>
-          <Button variant="secondary" onClick={handleClear}>
+          <Button variant='secondary' onClick={handleClear}>
             Clear
           </Button>
         </Stack>
