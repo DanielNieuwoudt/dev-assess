@@ -10,9 +10,9 @@ export interface IConfig{
 export let config: IConfig;
 (async () => {
 
-  let environment = process.env.ENVIRONMENT_NAME || 'local';
+  let environment = process.env.REACT_APP_ENVIRONMENT_NAME || 'local';
   console.log(`The environment=${environment}`)
-
+  
   const configMap: { [key: string]: () => Promise<any> } = {
     local: () => import('./config.local'),
     development: () => import('./config.development')

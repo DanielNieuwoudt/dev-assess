@@ -8,9 +8,7 @@ interface TodoItemsProps {
 }
 
 const TodoItems: FC<TodoItemsProps> = ({ items, fetchItems }) => {
-  useEffect(() => {
-    fetchItems()
-  }, [fetchItems])
+  useEffect(() => { fetchItems() }, [fetchItems])
 
   const markAsComplete = async (item: TodoItem) => {
     try {
