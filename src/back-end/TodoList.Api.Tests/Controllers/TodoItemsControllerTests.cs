@@ -9,8 +9,8 @@ using TodoList.Api.Controllers;
 using TodoList.Api.Generated;
 using TodoList.Api.Common.Mapping;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
-using TodoList.Application.TodoItems.GetTodoItems;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
+using TodoList.Application.TodoItems.Queries.GetTodoItems;
 using TodoList.Domain.TodoItems.ValueObjects;
 using Xunit;
 

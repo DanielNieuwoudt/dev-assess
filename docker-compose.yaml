@@ -35,6 +35,6 @@ services:
       - "3000:3000"
     environment:
       # These values are VERBATIM, do not include quotes unless they are needed in the actual value
-      - REACT_APP_ENVIRONMENT_NAME=development
+      - REACT_APP_BACKEND_BASE_URL=http://localhost:5000/api
     depends_on:
       - backend

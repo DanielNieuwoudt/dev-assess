@@ -1,13 +1,13 @@
-﻿using FluentAssertions;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
-using System.Diagnostics.CodeAnalysis;
 using Moq;
 using TodoList.Application.Contracts;
-using TodoList.Application.TodoItems.GetTodoItems;
+using TodoList.Application.TodoItems.Queries.GetTodoItems;
 using TodoList.Domain.TodoItems;
 using TodoList.Domain.TodoItems.ValueObjects;
 
-namespace TodoList.Application.Tests.TodoItems.GetTodoItems
+namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItems
 {
     [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class GetTodoItemsHandlerTests

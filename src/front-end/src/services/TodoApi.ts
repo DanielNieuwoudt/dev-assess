@@ -1,30 +1,44 @@
 import { TodoItemsApi, TodoItemsApiInterface, TodoItem } from './generated';
 import { AxiosResponse } from 'axios';
-import { IConfig} from '../config/base';
 import { createApiClient } from '../utils/Agent';
   
 class TodoApi {
-  static async fetchItems(config: IConfig): Promise<TodoItem[]> {
-    try {
-      
-      let todoApiInterface: TodoItemsApiInterface = new TodoItemsApi(undefined, config.backendBaseUrl, createApiClient());
-      let todoItemsResponse: AxiosResponse<TodoItem[]>;
+    static async getTodoItems(): Promise<TodoItem[]> {
 
-      console.log(`Retrieving todo items from ${config.backendBaseUrl}`)
-      
-      todoItemsResponse = await todoApiInterface.getTodoItems();
+        let todoApiInterface: TodoItemsApiInterface = new TodoItemsApi(undefined, this.getBackendUrl(), createApiClient());
+        let response: AxiosResponse<TodoItem[]>;
 
-      if (Array.isArray(todoItemsResponse.data)) {
-        return todoItemsResponse.data;
-      } else {
-        console.error('API response is not an array:', todoItemsResponse.data);
-        return [];
-      }
-    } catch (error) {
-      console.error(error);
-      return [];
+        response = await todoApiInterface
+            .getTodoItems();
+
+        return response.data;
     }
-  }
+
+    static async postTodoItem(todoItem: TodoItem): Promise<TodoItem> {
+
+        let todoApiInterface: TodoItemsApiInterface = new TodoItemsApi(undefined, this.getBackendUrl(), createApiClient());
+        let response: AxiosResponse<TodoItem>;
+
+        response = await todoApiInterface
+            .postTodoItem(todoItem);
+
+        return response.data;
+    }
+
+    static async putTodoItem(id: string, todoItem: TodoItem): Promise<void> {
+
+        let todoApiInterface: TodoItemsApiInterface = new TodoItemsApi(undefined, this.getBackendUrl(), createApiClient());
+        let response: AxiosResponse<void>;
+
+        response = await todoApiInterface
+            .putTodoItem(id, todoItem);
+
+        return response.data;
+    }
+    
+    static getBackendUrl(): string {
+        return window.env ? window.env.REACT_APP_BACKEND_BASE_URL : 'https://localhost:5001/api'
+    }
 }
 
 export default TodoApi
