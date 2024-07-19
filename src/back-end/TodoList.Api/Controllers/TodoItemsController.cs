@@ -5,9 +5,9 @@ using TodoList.Api.Common.Filters.Action;
 using TodoList.Api.Common.Filters.Exception;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
-using TodoList.Application.TodoItems.GetTodoItems;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Api.Generated;
+using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
 namespace TodoList.Api.Controllers
 {

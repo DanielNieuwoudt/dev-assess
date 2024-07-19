@@ -2,20 +2,16 @@ import './App.css'
 import { Image, Alert, Container, Row, Col } from 'react-bootstrap'
 import React, { useState, FC } from 'react';
 import AddTodoItem from './components/AddTodoItem';
-import TodoItems from './components/TodoItems';
-import { TodoItem } from './services/generated';
-import TodoApi from './services/TodoApi';
-import { config } from './config/base';
+import TodoItems from "./components/TodoItems";
 
 const App: FC = () => {
-  const [items, setItems] = useState<TodoItem[]>([])
-
+  
   return (
     <div className='App'>
       <Container>
         <Row>
           <Col>
-            <Image src='clearPointLogo.png' fluid rounded />
+            <Image src='clearPointLogo.png' fluid rounded/>
           </Col>
         </Row>
         <Row>
@@ -24,8 +20,8 @@ const App: FC = () => {
               <Alert.Heading>Todo List App</Alert.Heading>
               Welcome to the ClearPoint frontend technical test. We like to keep things simple, yet clean so your
               task(s) are as follows:
-              <br />
-              <br />
+              <br/>
+              <br/>
               <ol className='list-left'>
                 <li>Add the ability to add (POST) a Todo Item by calling the backend API</li>
                 <li>
@@ -43,13 +39,13 @@ const App: FC = () => {
         </Row>
         <Row>
           <Col>
-            <AddTodoItem fetchItems={ async () => await TodoApi.fetchItems(config) } />
+            <AddTodoItem/>
           </Col>
         </Row>
-        <br />
+        <br/>
         <Row>
           <Col>
-            <TodoItems items={items} fetchItems={ async () => await TodoApi.fetchItems(config) } />
+            <TodoItems />
           </Col>
         </Row>
       </Container>

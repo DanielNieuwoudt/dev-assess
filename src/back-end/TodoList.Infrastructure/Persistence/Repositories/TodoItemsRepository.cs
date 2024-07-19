@@ -49,6 +49,7 @@ namespace TodoList.Infrastructure.Persistence.Repositories
             return await _dbContext
                 .TodoItems
                 .AsNoTracking()
+                .Where(ti => ti.IsCompleted == false)
                 .ToListAsync(cancellationToken);
         }
 

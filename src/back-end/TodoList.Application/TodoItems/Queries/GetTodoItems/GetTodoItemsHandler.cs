@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using TodoList.Application.Contracts;
 using TodoList.Domain.TodoItems;
 
-namespace TodoList.Application.TodoItems.GetTodoItems
+namespace TodoList.Application.TodoItems.Queries.GetTodoItems
 {
     public sealed record GetTodoItemsResult (IEnumerable<TodoItem> TodoItems);
 

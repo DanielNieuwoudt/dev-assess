@@ -163,13 +163,12 @@ F[Cache]
 A --> C
 B --> C
 C --> D
-B --> E
-B -.-> F
+B --> F
+F -.-> E
 
 style F stroke-dasharray: 5, 5
 ```
-
-### Framworks and Libraries
+### Frameworks and Libraries
 
 We have selected the the following libraries for our implementation:
 
@@ -206,9 +205,52 @@ During development, it allows the team to detect breaking changes early in the d
 
 >Our main goal is to catch breaking changes early and ensure that the implementation of our API adheres to the contract, as that is what consumers will expect. 
 
+### Code Generation
+
+We choose to generate code for the C# controller and contest test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Errors.
+
+> See the section __Code Generation for the API Spesification__ later in this document.
+
 ## Front End 
 
+> **Disclaimer:** I have not spent a significant amount of time developing React Applications. In part, this section reflects my time spent learning for this assessment.
+
 ### Application Architecture
+
+React Application architecture typically involves a component-based structure. The UI is divided into reusable, self-contained components, with each component managing its own state and props. 
+
+State management can be handled through hooks or state management libraries like Redux. Components are organised in a hierarchical tree, promoting separation of concerns and modularity. 
+
+Data fetching and side effects are handled with hooks like useEffect or libraries like Axios. This architecture promotes maintainability, scalability, and ease of testing.
+
+### Code Generation
+
+We choose to generate code for the client and models we will use when interacting with the API. 
+
+A strongly typed client and its associated functions make it easy to meet API expectations when posting and getting data.
+
+### Why TypeScript
+
+TypeScript offers numerous benefits that enhance the codebase's development process and quality. 
+
+By introducing static typing, TypeScript catches errors at compile time, reducing runtime errors and making the code more robust. It provides improved code editor support with features like autocompletion, type checking, and intelligent refactoring, which boost developer productivity and efficiency.
+
+TypeScript enhances code readability and maintainability by enforcing clear type definitions, making it easier to understand and modify the code. This is particularly beneficial in large codebases and collaborative projects, as it ensures consistent coding standards and provides better documentation through type annotations.
+
+TypeScript supports modern JavaScript features and transpiles to plain JavaScript, allowing developers to use the latest language features while maintaining compatibility with older environments. 
+
+It integrates seamlessly with existing JavaScript code, making it easy to adopt TypeScript in a project gradually.
+
+### Frameworks and Libraries
+
+We have selected the following libraries for our implementation:
+
+|Framework / Library|Description|
+|-|-|
+| [Axios](https://axios-http.com/docs/intro) | Axios is a promise-based HTTP Client for node.js and the browser. |
+| [TypeScipt](https://www.typescriptlang.org/) | TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale. |
+| [uuid](https://www.npmjs.com/package/uuid) | For the creation of RFC9562 (formally RFC4122) UUIDs |
+
 
 ### End-to-End Tests
 
@@ -403,6 +445,14 @@ After updating the Open API specification, we must regenerate the controller and
 - Execute the following bash script to regenerate the TypeScript Client
 
     `./generate-test-client.sh`
+
+##### TypeScript Client for the Front End
+
+- Navigate to the `/specs/front-end` from the repository's root using a bash terminal.
+
+- Execute the following bash script to regenerate the TypeScript Client
+
+    `./generate-frontend-client.sh`
 
 #### Using EF Core Migrations
 

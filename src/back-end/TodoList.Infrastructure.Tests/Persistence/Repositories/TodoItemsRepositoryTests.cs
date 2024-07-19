@@ -90,7 +90,7 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
         }
 
         [Fact]
-        public async Task Given_TodoItems_When_GetTodoItemsAsync_Then_ReturnsTodoItems()
+        public async Task Given_TodoItems_When_GetTodoItemsAsync_Then_ReturnsNotCompletedTodoItems()
         {
             using var scope = _serviceProvider
                 .CreateScope();
@@ -101,12 +101,31 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
 
             var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
 
-            var result = await repository
-                .GetTodoItemsAsync(CancellationToken.None);
+            var itemOne = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test 1", false, DateTimeOffset.Now,
+                DateTimeOffset.Now);
+            var itemTwo = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test 2", true, DateTimeOffset.Now,
+                DateTimeOffset.Now);
+            
+            dbContext.TodoItems.Add(itemOne);
+            dbContext.TodoItems.Add(itemTwo);
+            
+            await dbContext.SaveChangesAsync();
+
+            var result = (await repository.GetTodoItemsAsync(CancellationToken.None))
+                .ToList();
 
             result
                 .Should()
-                .BeEquivalentTo(new List<TodoItem>());
+                .NotBeNull();
+
+            result
+                .Count()
+                .Should()
+                .Be(1);
+
+            result
+                .Should()
+                .BeEquivalentTo(new List<TodoItem>() { itemOne });
         }
 
         [Fact]
