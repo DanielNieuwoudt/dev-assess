@@ -2,9 +2,8 @@ import axios, { AxiosInstance } from 'axios';
 
 export function createApiClient(): AxiosInstance {
     let agent: AxiosInstance;
-
-    const environment = (process.env.REACT_APP_ENVIRONMENT_NAME || 'local').toLowerCase();
-
+    let environment = window.env ? window.env.REACT_APP_ENVIRONMENT_NAME : 'local';
+    
     if (environment === 'local' || environment === 'development') {
         if (typeof window === 'undefined') {
             //const https = require('https');

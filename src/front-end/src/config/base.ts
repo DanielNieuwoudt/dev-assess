@@ -10,9 +10,8 @@ export interface IConfig{
 export let config: IConfig;
 (async () => {
 
-  let environment = process.env.REACT_APP_ENVIRONMENT_NAME || 'local';
-  console.log(`The environment=${environment}`)
-  
+  let environment = window.env ? window.env.REACT_APP_ENVIRONMENT_NAME : 'local';
+
   const configMap: { [key: string]: () => Promise<any> } = {
     local: () => import('./config.local'),
     development: () => import('./config.development')
@@ -20,4 +19,8 @@ export let config: IConfig;
 
   config = (await configMap[environment]()).config;
 
+  console.log(`Configuration: ${environment}`);
+  console.log(`Configuration: ${config.backendBaseUrl}`);
+  console.log(`Configuration: ${config.isAuthenticationEnabled}`);
+  
 })();

@@ -1,11 +1,12 @@
 import { TodoItemsApi, TodoItemsApiInterface, TodoItem } from './generated';
 import { AxiosResponse } from 'axios';
-import { config } from '../config/base';
+import { IConfig} from '../config/base';
 import { createApiClient } from '../utils/Agent';
   
 class TodoApi {
-  static async fetchItems(): Promise<TodoItem[]> {
+  static async fetchItems(config: IConfig): Promise<TodoItem[]> {
     try {
+      
       let todoApiInterface: TodoItemsApiInterface = new TodoItemsApi(undefined, config.backendBaseUrl, createApiClient());
       let todoItemsResponse: AxiosResponse<TodoItem[]>;
 

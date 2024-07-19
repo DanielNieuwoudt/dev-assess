@@ -1,10 +1,11 @@
 import './App.css'
 import { Image, Alert, Container, Row, Col } from 'react-bootstrap'
-import React, { useState, FC } from 'react'
-import AddTodoItem from './components/AddTodoItem'
-import TodoItems from './components/TodoItems'
+import React, { useState, FC } from 'react';
+import AddTodoItem from './components/AddTodoItem';
+import TodoItems from './components/TodoItems';
 import { TodoItem } from './services/generated';
-import todoApi from './services/TodoApi'
+import TodoApi from './services/TodoApi';
+import { config } from './config/base';
 
 const App: FC = () => {
   const [items, setItems] = useState<TodoItem[]>([])
@@ -42,13 +43,13 @@ const App: FC = () => {
         </Row>
         <Row>
           <Col>
-            <AddTodoItem fetchItems={ async () => await todoApi.fetchItems() } />
+            <AddTodoItem fetchItems={ async () => await TodoApi.fetchItems(config) } />
           </Col>
         </Row>
         <br />
         <Row>
           <Col>
-            <TodoItems items={items} fetchItems={ async () => await todoApi.fetchItems() } />
+            <TodoItems items={items} fetchItems={ async () => await TodoApi.fetchItems(config) } />
           </Col>
         </Row>
       </Container>
