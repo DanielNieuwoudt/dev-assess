@@ -1,26 +1,19 @@
-// src/components/TodoItems.js
-import React, { useEffect } from 'react'
+import { useEffect, FC } from 'react'
 import { Table, Button } from 'react-bootstrap'
-import axios from 'axios'
+import { TodoItem } from '../services/generated';
 
-const TodoItems = ({ items, setItems }) => {
-  const fetchItems = async () => {
+interface TodoItemsProps {
+  items: TodoItem[];
+  fetchItems: () => Promise<TodoItem[]>;
+}
+
+const TodoItems: FC<TodoItemsProps> = ({ items, fetchItems }) => {
+  useEffect(() => { fetchItems() }, [fetchItems])
+
+  const markAsComplete = async (item: TodoItem) => {
     try {
-      // const response = await axios.get('/api/todos')
-      // setItems(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    fetchItems()
-  }, [])
-
-  const markAsComplete = async (item) => {
-    try {
-      // await axios.put(`/api/todos/${item.id}`, { ...item, completed: true })
-      // fetchItems()
+      // TODO: Call the api
+      await fetchItems()
     } catch (error) {
       console.error(error)
     }
@@ -30,7 +23,7 @@ const TodoItems = ({ items, setItems }) => {
     <>
       <h1>
         Showing {items.length} Item(s){' '}
-        <Button variant="primary" className="pull-right" onClick={fetchItems}>
+        <Button variant='primary' className='pull-right' onClick={fetchItems}>
           Refresh
         </Button>
       </h1>
@@ -49,7 +42,7 @@ const TodoItems = ({ items, setItems }) => {
               <td>{item.id}</td>
               <td>{item.description}</td>
               <td>
-                <Button variant="warning" size="sm" onClick={() => markAsComplete(item)}>
+                <Button variant='warning' size='sm' onClick={() => markAsComplete(item)}>
                   Mark as completed
                 </Button>
               </td>

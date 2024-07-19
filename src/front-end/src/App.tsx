@@ -1,40 +1,32 @@
 import './App.css'
 import { Image, Alert, Container, Row, Col } from 'react-bootstrap'
-import React, { useState } from 'react'
-import AddTodoItem from './components/AddTodoItem'
-import TodoItems from './components/TodoItems'
+import React, { useState, FC } from 'react';
+import AddTodoItem from './components/AddTodoItem';
+import TodoItems from './components/TodoItems';
+import { TodoItem } from './services/generated';
+import TodoApi from './services/TodoApi';
+import { config } from './config/base';
 
-const axios = require('axios')
-
-const App = () => {
-  const [items, setItems] = useState([])
-
-  const fetchItems = async () => {
-    try {
-      // const response = await axios.get('/api/todos')
-      // setItems(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+const App: FC = () => {
+  const [items, setItems] = useState<TodoItem[]>([])
 
   return (
-    <div className="App">
+    <div className='App'>
       <Container>
         <Row>
           <Col>
-            <Image src="clearPointLogo.png" fluid rounded />
+            <Image src='clearPointLogo.png' fluid rounded />
           </Col>
         </Row>
         <Row>
           <Col>
-            <Alert variant="success">
+            <Alert variant='success'>
               <Alert.Heading>Todo List App</Alert.Heading>
               Welcome to the ClearPoint frontend technical test. We like to keep things simple, yet clean so your
               task(s) are as follows:
               <br />
               <br />
-              <ol className="list-left">
+              <ol className='list-left'>
                 <li>Add the ability to add (POST) a Todo Item by calling the backend API</li>
                 <li>
                   Display (GET) all the current Todo Items in the below grid and display them in any order you wish
@@ -51,20 +43,20 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-            <AddTodoItem fetchItems={fetchItems} />
+            <AddTodoItem fetchItems={ async () => await TodoApi.fetchItems(config) } />
           </Col>
         </Row>
         <br />
         <Row>
           <Col>
-            <TodoItems items={items} setItems={setItems} />
+            <TodoItems items={items} fetchItems={ async () => await TodoApi.fetchItems(config) } />
           </Col>
         </Row>
       </Container>
-      <footer className="page-footer font-small teal pt-4">
-        <div className="footer-copyright text-center py-3">
+      <footer className='page-footer font-small teal pt-4'>
+        <div className='footer-copyright text-center py-3'>
           © 2021 Copyright:
-          <a href="https://clearpoint.digital" target="_blank" rel="noreferrer">
+          <a href='https://clearpoint.digital' target='_blank' rel='noreferrer'>
             clearpoint.digital
           </a>
         </div>

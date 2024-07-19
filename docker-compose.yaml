@@ -33,5 +33,8 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      # These values are VERBATIM, do not include quotes unless they are needed in the actual value
+      - REACT_APP_ENVIRONMENT_NAME=development
     depends_on:
       - backend

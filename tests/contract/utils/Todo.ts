@@ -1,4 +1,4 @@
-﻿import {TodoItem} from "../generated";
+﻿import {TodoItem} from '../generated';
 
 export function createNewTodo(id: string, description: string): TodoItem {
     return {
