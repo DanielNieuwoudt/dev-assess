@@ -241,6 +241,8 @@ We choose to generate code for the client and models we will use when interactin
 
 A strongly typed client and its associated functions make it easy to meet API expectations when posting and getting data.
 
+> See the section __Code Generation for the API Spesification__ later in this document.
+
 ### Frameworks and Libraries
 
 We have selected the following libraries for our implementation:
@@ -313,6 +315,9 @@ For the best local development and quality assurance experience, we recommended 
 You can clone the repository from https://github.com/DanielNieuwoudt/developer-assessment.git
 
 ## Repository Structure
+
+We use a mono repo structure for our repository, allowing us to consolidate multiple projects into one repository. This approach simplifies dependency management, code sharing, and collaboration while maintaining consistency across projects. 
+It also facilitates unified version control, streamlined builds, and easier refactoring and testing.
 
 Folders in our repository have been structured in the following way:
 
