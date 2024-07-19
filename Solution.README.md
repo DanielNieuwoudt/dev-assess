@@ -207,7 +207,7 @@ During development, it allows the team to detect breaking changes early in the d
 
 ### Code Generation
 
-We choose to generate code for the C# controller and contest test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Errors.
+We choose to generate code for the C# controller and contract test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Errors.
 
 > See the section __Code Generation for the API Spesification__ later in this document.
 
@@ -223,12 +223,6 @@ State management can be handled through hooks or state management libraries like
 
 Data fetching and side effects are handled with hooks like useEffect or libraries like Axios. This architecture promotes maintainability, scalability, and ease of testing.
 
-### Code Generation
-
-We choose to generate code for the client and models we will use when interacting with the API. 
-
-A strongly typed client and its associated functions make it easy to meet API expectations when posting and getting data.
-
 ### Why TypeScript
 
 TypeScript offers numerous benefits that enhance the codebase's development process and quality. 
@@ -240,6 +234,12 @@ TypeScript enhances code readability and maintainability by enforcing clear type
 TypeScript supports modern JavaScript features and transpiles to plain JavaScript, allowing developers to use the latest language features while maintaining compatibility with older environments. 
 
 It integrates seamlessly with existing JavaScript code, making it easy to adopt TypeScript in a project gradually.
+
+### Code Generation
+
+We choose to generate code for the client and models we will use when interacting with the API. 
+
+A strongly typed client and its associated functions make it easy to meet API expectations when posting and getting data.
 
 ### Frameworks and Libraries
 
