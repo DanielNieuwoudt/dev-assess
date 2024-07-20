@@ -149,7 +149,7 @@ Benefits
 - Flexibility that allows us to make updates to the technology stack without affecting or retesting the core business logic.
 - Improves testability as business logic can be tested independently from the UI and Infrastructure.
 
-Visual Representation
+#### Visual Representation
 
 ```mermaid
 graph TD
@@ -163,7 +163,7 @@ F[Cache]
 A --> C
 B --> C
 C --> D
-B --> F
+B -.-> F
 F -.-> E
 
 style F stroke-dasharray: 5, 5
@@ -217,11 +217,33 @@ We choose to generate code for the C# controller and contract test client ensuri
 
 ### Application Architecture
 
-React Application architecture typically involves a component-based structure. The UI is divided into reusable, self-contained components, with each component managing its own state and props. 
+React Application architecture typically involves a component-based structure. The UI is divided into reusable, self-contained components, each managing its state and props. 
 
-State management can be handled through hooks or state management libraries like Redux. Components are organised in a hierarchical tree, promoting separation of concerns and modularity. 
+- **Provider** - We wrap the application in a provider so the components have a shared context and state regarding the items. 
+- **App** - This component is also our landing page and contains the Item and Items components.
+- **Item** - Allows us to add a new todo item. 
+- **Items** - Allows us to view a list of todo items that have not been completed.
 
-Data fetching and side effects are handled with hooks like useEffect or libraries like Axios. This architecture promotes maintainability, scalability, and ease of testing.
+#### Benefits
+
+- Components are organised in a hierarchical tree, promoting separation of concerns and modularity.
+- Data fetching and side effects are handled with hooks like useEffect and the Axios library. 
+- Promotes maintainability, scalability, and ease of testing.
+
+#### Visual Representation
+
+```mermaid
+graph TD
+A[Provider]
+B[App]
+C[Item]
+D[Items]
+
+A --> B
+B --> C
+B --> D
+
+```
 
 ### Why TypeScript
 
