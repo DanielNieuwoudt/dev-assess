@@ -47,7 +47,7 @@ We may use some or all of the elements for a real-world project depending on the
 
 > Although we do not automatically deploy our code as part of this assessment, a local development environment that resembles a production environments has been provided. 
 
-> A workflow for GitHub Actions has been configured to build, run and test our application and API whenever a Oull Request is created.
+> A workflow for GitHub Actions has been configured to build, run and test our application and API whenever a Pull Request is created.
 
 ### Documentation
 - **Types** - Code comments, API documentation, user manuals, architecture diagrams.
@@ -139,6 +139,8 @@ The Todo List API provides two health check endponts:
 | `/health` | Startup health check|
 | `/health/dependency` | Dependency health check that validates the state of the Redis Cache and SQL Server
 
+> The `/health/dependency` endpoint provides a convenient way for us to determine whether the API is ready for us to run contract tests during a `docker compose` locally or in the pipeline.
+
 ### Application Architecture
 
 We prefer the use of Clean Architecture and Domain Driver Design for our ASP.NET Web API, which organises our application into four main layers:
@@ -153,6 +155,8 @@ Benefits
 - Separation of concerns, with each layer having distinct responsibilities, making the code base easier to understand and maintain.
 - Flexibility that allows us to make updates to the technology stack without affecting or retesting the core business logic.
 - Improves testability as business logic can be tested independently from the UI and Infrastructure.
+
+> Side Note: I have added a sprinkle of CQRS, mostly for my own benefit.
 
 #### Visual Representation
 
@@ -169,6 +173,7 @@ A --> C
 B --> C
 C --> D
 B -.-> F
+B --> E
 F -.-> E
 
 style F stroke-dasharray: 5, 5
@@ -199,6 +204,8 @@ In collaboration with other members of the team, we ensure:
 - It provides safety when refactoring, knowing that internal changes do not affect the API interface.
 - Improves visibility and the opportunity to identify breaking changes as part of the Pull Request process.
 - Generate code for controllers and clients 
+
+> A copy of the [todoitems.openapi.yamn](specs/todoitems.openapi.yaml) can be found in the `specs` folder.
 
 ### Contract Tests
 
