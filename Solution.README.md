@@ -272,6 +272,20 @@ TypeScript supports modern JavaScript features and transpiles to plain JavaScrip
 
 It integrates seamlessly with existing JavaScript code, making it easy to adopt TypeScript in a project gradually.
 
+### Static File Hosting
+
+As part of containerising the React Application, I ran into an issue where I could access environment variables during local development but not when the application ran in the container using `serve`.
+
+After researching the issue, I discovered that you cannot access environment variables directly because static files served by `serve` are precompiled and do not get processed by the container at runtime.
+
+This felt somewhat limiting as I wanted to build an immutable artifact that uses environment variables for configuration purposes depending on the environment in which we run the container. 
+
+To resolve this, I settled for a solution I found online: We run a Node Express server and inject the environment variables into the `index.html` page at runtime as a script tag. 
+
+> Side note: I did consider using `.env`, but again, this affects the container's immutability as it needs to be updated at build time.
+
+See the [server.js](src/front-end/server.js) in the `src/front-end` folder.
+
 ### Code Generation
 
 We choose to generate code for the client and models we will use when interacting with the API. 
