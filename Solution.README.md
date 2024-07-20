@@ -207,7 +207,7 @@ During development, it allows the team to detect breaking changes early in the d
 
 ### Code Generation
 
-We choose to generate code for the C# controller and contract test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Errors.
+We choose to generate code for the C# controller and contract test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Problem Details.
 
 > See the section __Code Generation for the API Spesification__ later in this document.
 
@@ -223,6 +223,7 @@ React Application architecture typically involves a component-based structure. T
 - **App** - This component is also our landing page and contains the Item and Items components.
 - **Item** - Allows us to add a new todo item. 
 - **Items** - Allows us to view a list of todo items that have not been completed.
+- **Alerts** - Provides feedback on the actions taken. Allows us to view the Problem Details received from the API.
 
 #### Benefits
 
