@@ -1,19 +1,20 @@
 import { useState, ChangeEvent, FC } from 'react';
 import { Container, Row, Col, Form, Button, Stack } from 'react-bootstrap';
 import { TodoItem } from '../services/generated';
-import TodoApi from "../services/TodoApi";
-import TodoItems from "./TodoItems";
 import { v4 as uuidv4 } from 'uuid';
+import { useTodoContext } from '../contexts/TodoContext';
 
 interface AddTodoItemProps { }
 
 const AddTodoItem: FC<AddTodoItemProps> = () => {
+  const { addItem } = useTodoContext();
   const [description, setDescription] = useState<string>('');
+
   const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
   };
 
-  const handleAdd = async () => {
+  const handleAddItem = async () => {
     try {
       let todoItem: TodoItem = {
         id: uuidv4().toString(),
@@ -21,14 +22,14 @@ const AddTodoItem: FC<AddTodoItemProps> = () => {
         isCompleted: false
       };
 
-      await TodoApi.postTodoItem(todoItem);
+      await addItem(todoItem);
       setDescription('');
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleClear = () => {
+  const handleClearDescription = () => {
     setDescription('');
   };
 
@@ -50,10 +51,10 @@ const AddTodoItem: FC<AddTodoItemProps> = () => {
         </Form.Group>
         <Form.Group as={Row} className='mb-3 offset-md-2' controlId='formAddTodoItem'>
           <Stack direction='horizontal' gap={2}>
-            <Button variant='primary' onClick={handleAdd}>
+            <Button variant='primary' onClick={handleAddItem}>
               Add Item
             </Button>
-            <Button variant='secondary' onClick={handleClear}>
+            <Button variant='secondary' onClick={handleClearDescription}>
               Clear
             </Button>
           </Stack>
