@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, FC, ReactNode } from 'react';
+﻿import { createContext, useContext } from 'react';
 import { TodoItem } from '../services/generated';
 
 interface TodoContextProps {
