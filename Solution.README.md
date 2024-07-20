@@ -280,7 +280,7 @@ After researching the issue, I discovered that you cannot access environment var
 
 This felt somewhat limiting as I wanted to build an immutable artifact that uses environment variables for configuration purposes depending on the environment in which we run the container. 
 
-To resolve this, I settled for a solution I found online: We run a Node Express server and inject the environment variables into the `index.html` page at runtime as a script tag. 
+To resolve this, I settled for a solution I found online e.g. We run a Node Express server and inject the environment variables into the `index.html` page at runtime as a script tag. 
 
 > Side note: I did consider using `.env`, but again, this affects the container's immutability as it needs to be updated at build time.
 
