@@ -1,17 +1,23 @@
-import { FC } from 'react';
-import { Table, Button } from 'react-bootstrap';
-import { useTodoContext } from '../contexts/TodoContext';
+import {FC} from 'react';
+import {Button, Table} from 'react-bootstrap';
+import {useTodoContext} from '../contexts/TodoContext';
+import TodoItemStatus from '../enumerations/TodoItemStatus';
 
 interface TodoItemsProps { }
 
 const TodoItems: FC<TodoItemsProps> = ({ }) => {
-  const { items, markItemAsComplete, fetchItems } = useTodoContext();
+  const { items, fetchItems, markItemAsComplete, setItemStatus } = useTodoContext();
 
+  const refreshItems = async () => {
+      await fetchItems();
+      await setItemStatus(TodoItemStatus.Refreshed);
+  }
+  
   return (
       <>
         <h1>
           Showing {items.filter(item => !item.isCompleted).length} Item(s){' '}
-          <Button variant='primary' className='pull-right' onClick={fetchItems}>
+          <Button variant='primary' className='pull-right' onClick={refreshItems}>
             Refresh
           </Button>
         </h1>

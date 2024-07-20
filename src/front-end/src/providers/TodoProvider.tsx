@@ -1,20 +1,27 @@
-﻿import React, {FC, ReactNode, useState} from 'react';
-import {TodoItem} from '../services/generated';
+﻿import React, {FC, ReactNode, useEffect, useState} from 'react';
+import { TodoItem } from '../services/generated';
 import TodoApi from '../services/TodoApi';
 import TodoContext from '../contexts/TodoContext';
-import TodoItemStatus from "../enumerations/TodoItemStatus";
+import TodoItemStatus from '../enumerations/TodoItemStatus';
+import { mapErrorResponseToTodoItemError } from '../services/TodoApiError';
 
 export const TodoProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [items, setItems] = useState<TodoItem[]>([]);
     const [error, setError] = useState<TodoItemError | null>(null);
     const [status, setStatus] = useState<TodoItemStatus>(TodoItemStatus.None);
+   
     const fetchItems = async () => {
         try {
             const fetchedItems = await TodoApi.getTodoItems();
             setItems(fetchedItems);
             setError(null);
         } catch (error: any) {
-            setError(error.response.data as TodoItemError);
+            setStatus(TodoItemStatus.Error);
+            if (error.response == null ) {
+                setError(null);    
+            } else {
+                setError(mapErrorResponseToTodoItemError(error.response.data));    
+            }
         }
     };
 
@@ -25,7 +32,12 @@ export const TodoProvider: FC<{ children: ReactNode }> = ({ children }) => {
             setError(null);
             setStatus(TodoItemStatus.Added);
         } catch (error: any) {
-            setError(error.response.data as TodoItemError);
+            setStatus(TodoItemStatus.Error);
+            if (error.response == null) {
+                setError(null);
+            } else {
+                setError(mapErrorResponseToTodoItemError(error.response.data));
+            }
         }
     };
 
@@ -40,7 +52,12 @@ export const TodoProvider: FC<{ children: ReactNode }> = ({ children }) => {
                 setStatus(TodoItemStatus.Completed);
             }
         } catch (error: any) {
-            setError(error.response.data as TodoItemError);
+            setStatus(TodoItemStatus.Error);
+            if (error.response == null) {
+                setError(null);
+            } else {
+                setError(mapErrorResponseToTodoItemError(error.response.data));
+            }
         }
     };
 
@@ -51,7 +68,11 @@ export const TodoProvider: FC<{ children: ReactNode }> = ({ children }) => {
     
     const setItemStatus = async (status: TodoItemStatus)=> {
         setStatus(status);
-    } 
+    }
+
+    useEffect(() => {
+        fetchItems();
+    }, []);
     
     return (
         <TodoContext.Provider value={{items, error, status, addItem, clearError, fetchItems, markItemAsComplete, setItemStatus }}>

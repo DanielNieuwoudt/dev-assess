@@ -1,6 +1,6 @@
 ﻿import { createContext, useContext } from 'react';
 import { TodoItem } from '../services/generated';
-import TodoItemStatus from "../enumerations/TodoItemStatus";
+import TodoItemStatus from '../enumerations/TodoItemStatus';
 
 interface TodoContextProps {
     items: TodoItem[];

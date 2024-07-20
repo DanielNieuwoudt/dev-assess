@@ -16,18 +16,13 @@ const TodoItemAdd: FC<TodoItemProps> = () => {
   };
 
   const handleAddItem = async () => {
-    try {
       let todoItem: TodoItem = {
         id: uuidv4().toString(),
         description: description,
         isCompleted: false
       };
-
       await addItem(todoItem);
       setDescription('');
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const handleClearDescription = async () => {
