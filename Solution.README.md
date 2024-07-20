@@ -188,6 +188,7 @@ We have selected the the following libraries for our implementation:
 | [EF Core](https://learn.microsoft.com/en-us/ef/core/) | Entity Framework (EF) Core is a lightweight, extensible, open source and cross-platform version of the popular Entity Framework data access technology. |
 | [Fluent Validation](https://github.com/FluentValidation/FluentValidation) | FluentValidation is a .NET library for building strongly-typed validation rules. |
 | [MediatR](https://github.com/jbogard/MediatR) | Simple mediator implementation in .NET. In-process messaging with no dependencies. |
+| [NSwag](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-8.0&tabs=visual-studio) | With NSwag, you don't need an existing API—you can use third-party APIs that incorporate Swagger and generate a client implementation. |
 
 ### Contract first development
 
@@ -221,7 +222,7 @@ During development, it allows the team to detect breaking changes early in the d
 
 We choose to generate code for the C# controller and contract test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Problem Details.
 
-> See the section __Code Generation for the API Spesification__ later in this document.
+> See [Backend Code Generation](specs/back-end) in the `specs/back-end` folder.
 
 ## Front End 
 
@@ -277,7 +278,7 @@ We choose to generate code for the client and models we will use when interactin
 
 A strongly typed client and its associated functions make it easy to meet API expectations when posting and getting data.
 
-> See the section __Code Generation for the API Spesification__ later in this document.
+> See [Front End Code Generation](specs/front-end) in the `specs/front-end` folder.
 
 ### Frameworks and Libraries
 
