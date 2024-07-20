@@ -7,7 +7,7 @@
 
 >**_We aim to create a platform that empowers team members to collaborate and perform at their best while balancing speed and quality to deliver value to our clients._**
 
-### Approach
+### My Approach
 
 This implementation provides an overview of the engineering practices, principles, tools, and utilities employed by software and quality assurance engineers. Many of these elements are crucial for designing, developing, and testing applications that are maintainable, scalable, secure and ready for production.
 
@@ -16,6 +16,47 @@ This implementation provides an overview of the engineering practices, principle
 Although the implementation is a simplified version of a real-world application, it provides a glimpse into the practices and principles essential for building and operating a production-ready application. 
 
 We may use some or all of the elements for a real-world project depending on the application's complexity, requirements, and constraints.
+
+## Engineering practices and principles
+
+### Agile
+
+- **Frameworks** - Scrum, Kanban, Lean.
+- **Principles** - Iterative development, flexibility, customer collaboration, and response to change.
+
+### Application Architecture and Design Patterns 
+- **Purpose** - Provide proven solutions to common design problems.
+
+### Automated Testing
+- **Types** - Unit tests, contract tests, end-to-end tests.
+- **Benefits** - Detects bugs early, ensures new changes do not break existing functionality, and improves code reliability.
+
+### Code Refactoring
+- **Purpose** -  Improve code structure and readability without changing functionality.
+- **Benefits** - Reduces technical debt, enhances maintainability, and improves performance.
+
+### Code Reviews
+- **Purpose** - Improve code quality, ensure adherence to coding standards, and facilitate knowledge sharing.
+
+- **Process** - Peer review of code changes before they are merged into the main codebase
+
+### Continuous Integration and Continuous Deployment (CI/CD)
+- **CI** - Automatically integrating and testing code changes frequently.
+
+- **CD** - Automatically deploying code changes to dev, test, staging and production environments.
+
+> Although we do not automatically deploy our code as part of this assessment, a local development environment that resembles a production environments has been provided. 
+
+> A workflow for GitHub Actions has been configured to build, run and test our application and API whenever a Oull Request is created.
+
+### Documentation
+- **Types** - Code comments, API documentation, user manuals, architecture diagrams.
+- **Benefits** - Facilitates understanding, maintenance, and onboarding of new developers.
+
+### Version Control
+- **Purpose** - Enables tracking changes, collaborating with team members, and managing different code versions.
+
+## Developer Experience
 
 ### Why is this important
 
@@ -51,42 +92,6 @@ Debugging issues locally in an environment similar to production makes it easier
 
 When tested and validated in an environment that closely resembles production, we have greater confidence in our code, leading to higher-quality software.
 
-## Engineering practices and principles
-
-### Agile
-
-- **Frameworks** - Scrum, Kanban, Lean.
-- **Principles** - Iterative development, flexibility, customer collaboration, and response to change.
-
-### Application Architecture and Design Patterns 
-- **Purpose** - Provide proven solutions to common design problems.
-
-### Automated Testing
-- **Types** - Unit tests, contract tests, end-to-end tests.
-- **Benefits** - Detects bugs early, ensures new changes do not break existing functionality, and improves code reliability.
-
-### Code Refactoring
-- **Purpose** -  Improve code structure and readability without changing functionality.
-- **Benefits** - Reduces technical debt, enhances maintainability, and improves performance.
-
-### Code Reviews
-- **Purpose** - Improve code quality, ensure adherence to coding standards, and facilitate knowledge sharing.
-
-- **Process** - Peer review of code changes before they are merged into the main codebase
-
-### Continuous Integration and Continuous Deployment (CI/CD)
-- **CI** - Automatically integrating and testing code changes frequently.
-
-- **CD** - Automatically deploying code changes to dev, test, staging and production environments.
-
-> Although we do not automatically deploy our code as part of this assessment, a local development environment that resembles other environments has been provided.
-
-### Documentation
-- **Types** - Code comments, API documentation, user manuals, architecture diagrams.
-- **Benefits** - Facilitates understanding, maintenance, and onboarding of new developers.
-
-### Version Control
-- **Purpose** - Enables tracking changes, collaborating with team members, and managing different code versions.
 
 ## Back End
 
