@@ -1,11 +1,16 @@
 ﻿import { createContext, useContext } from 'react';
 import { TodoItem } from '../services/generated';
+import TodoItemStatus from "../enumerations/TodoItemStatus";
 
 interface TodoContextProps {
     items: TodoItem[];
+    error: TodoItemError | null;
+    status: TodoItemStatus;
     addItem: (todoItem: TodoItem) => Promise<void>;
-    markItemAsComplete: (id: string) => Promise<void>;
+    clearError: () => Promise<void>;
     fetchItems: () => Promise<void>;
+    markItemAsComplete: (id: string) => Promise<void>;
+    setItemStatus: (status: TodoItemStatus) => Promise<void>;
 }
 
 const TodoContext = createContext<TodoContextProps | undefined>(undefined);

@@ -3,11 +3,12 @@ import { Container, Row, Col, Form, Button, Stack } from 'react-bootstrap';
 import { TodoItem } from '../services/generated';
 import { v4 as uuidv4 } from 'uuid';
 import { useTodoContext } from '../contexts/TodoContext';
+import  TodoItemAlert from './TodoItemAlert'
 
-interface AddTodoItemProps { }
+interface TodoItemProps { }
 
-const AddTodoItem: FC<AddTodoItemProps> = () => {
-  const { addItem } = useTodoContext();
+const TodoItemAdd: FC<TodoItemProps> = () => {
+  const { clearError, addItem } = useTodoContext();
   const [description, setDescription] = useState<string>('');
 
   const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -29,8 +30,9 @@ const AddTodoItem: FC<AddTodoItemProps> = () => {
     }
   };
 
-  const handleClearDescription = () => {
+  const handleClearDescription = async () => {
     setDescription('');
+    await clearError();
   };
 
   return (
@@ -59,8 +61,11 @@ const AddTodoItem: FC<AddTodoItemProps> = () => {
             </Button>
           </Stack>
         </Form.Group>
+        <Form.Group as={Row} className='mb-3' controlId='formAddTodoItem'>
+          <TodoItemAlert />
+        </Form.Group>
       </Container>
   );
 };
 
-export default AddTodoItem;
+export default TodoItemAdd;
