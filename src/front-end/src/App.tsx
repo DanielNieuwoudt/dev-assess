@@ -3,7 +3,6 @@ import { Image, Alert, Container, Row, Col } from 'react-bootstrap'
 import React, { FC } from 'react';
 import AddTodoItem from './components/AddTodoItem';
 import TodoItems from "./components/TodoItems";
-import { TodoProvider } from './contexts/TodoContext';
 
 const App: FC = () => {
   return (
