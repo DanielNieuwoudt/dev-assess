@@ -236,13 +236,14 @@ React Application architecture typically involves a component-based structure. T
 graph TD
 A[Provider]
 B[App]
-C[Item]
+C[Add Item]
 D[Items]
+E[Alert]
 
 A --> B
 B --> C
 B --> D
-
+C --> E
 ```
 
 ### Why TypeScript
