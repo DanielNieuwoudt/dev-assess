@@ -287,8 +287,10 @@ We have selected the following libraries for our implementation:
 |Framework / Library|Description|
 |-|-|
 | [Axios](https://axios-http.com/docs/intro) | Axios is a promise-based HTTP Client for node.js and the browser. |
+| [React](https://react.dev/) | The library for web and native user interfaces |
+| [React Bootstrap](https://react-bootstrap.github.io/) | The most popular front-end framework, rebuilt for React. |
 | [TypeScipt](https://www.typescriptlang.org/) | TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale. |
-| [uuid](https://www.npmjs.com/package/uuid) | For the creation of RFC9562 (formally RFC4122) UUIDs |
+| [UUID](https://www.npmjs.com/package/uuid) | For the creation of RFC9562 (formally RFC4122) UUIDs |
 
 
 ### End-to-End Tests
@@ -338,7 +340,7 @@ You are free to use an IDE of your choosing. Common IDEs that work with the solu
 
 ### Tools
 
-For the best local development and quality assurance experience, we recommended the following tools:
+For the best local development and quality assurance experience, I recommended the following tools:
 
 | Tool | Description |
 |--|--|
@@ -346,6 +348,14 @@ For the best local development and quality assurance experience, we recommended 
 | [Node Version Manager](https://github.com/nvm-sh/nvm) | Install, manage, and switch between multiple versions of Node.js on your system. |
 | [Redis Insights](https://redis.io/insight/) | Redis Insight lets you visually interact with a Redis Cache. |
 | [SSMS](https://redis.io/insight/) | SQL Server Management Studio (SSMS) is an integrated environment for managing any SQL infrastructure. |
+
+### Online Tools
+
+Other tools that are useful when working with some of the artifacts in this repository:
+
+| Tool | Description |
+|--|--|
+| [Swagger Editor](https://editor.swagger.io/) | Design, describe, and document your API on the first open source editor supporting multiple API specifications and serialization formats. |
 
 ## Cloning the repository
 
@@ -563,13 +573,15 @@ From the `/tests/contract` directory uinsg a bash terminal
 
     `npm run test`
 
-# TODO
+# Things I still want TODO
 
 | Item | Description
 |----------| -----------
-| Serilog | Implement Serilog  |
-| Versioning | Decide on a versioning strategy.  |
-| Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation|
+| Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation for the front end and backend|
+| Cypress Tests | Use cypress to build a simple set of UI Automated tests for the Front End. |
+| Performance Tests | Use K6 to build a simple set of performance test for the API |
+| Serilog | Implement Serilog for logging.  |
+| Versioning | Decide on a versioning strategy and implement it. |
 
 # Cool Finds
 
@@ -577,7 +589,15 @@ Along the way, we encounter tools, libraries, patterns, and practices that we ma
 
 Below is a table of the ones I came across that I found helpful or interesting.
 
+## .NET
+
 | Item | Description
 |----------| -----------
 | [Centralizing .NET Project Configurations](https://blog.ndepend.com/directory-build-props/) | Centralise your package and version management. Useful for solutions with a lot of projects. |
+| [Amichai Mantinband](https://www.youtube.com/@amantinband) | Industry-level tutorials about coding, design patterns, architecture, and the latest and greatest libraries, tricks, and tips you should definitely know about. |
+
+## Documentation
+
+| Item | Description
+|----------| -----------
 | [Mermaid](https://www.mermaidchart.com/) | Easily create complex diagrams from markdown-style code and collaborate with team members in real-time. |
