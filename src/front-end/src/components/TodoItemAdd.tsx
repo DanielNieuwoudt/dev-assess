@@ -32,7 +32,7 @@ const TodoItemAdd: FC<TodoItemProps> = () => {
 
   return (
       <Container>
-        <h1>Add Item</h1>
+        <h1>Add a todo item</h1>
         <Form.Group as={Row} className='mb-3' controlId='formAddTodoItem'>
           <Form.Label column sm='2'>
             Description
@@ -57,7 +57,7 @@ const TodoItemAdd: FC<TodoItemProps> = () => {
           </Stack>
         </Form.Group>
         <Form.Group as={Row} className='mb-3' controlId='formAddTodoItem'>
-          <TodoItemAlert />
+            <TodoItemAlert />          
         </Form.Group>
       </Container>
   );
