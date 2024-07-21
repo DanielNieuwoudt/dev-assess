@@ -593,6 +593,7 @@ From the `/tests/contract` directory uinsg a bash terminal
 |----------| -----------
 | Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation for the front end and backend|
 | Cypress Tests | Use cypress to build a simple set of UI Automated tests for the Front End. |
+| Paging | For those who have pages of things todo :) |
 | Performance Tests | Use K6 to build a simple set of performance test for the API |
 | Serilog | Implement Serilog for logging.  |
 | Versioning | Decide on a versioning strategy and implement it. |
