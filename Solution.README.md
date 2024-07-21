@@ -593,12 +593,13 @@ These are things that I would still want to do for completeness:
 
 | Item | Description
 |----------| -----------
-| Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation for the front end and backend|
-| Cypress Tests | Use cypress to build a simple set of UI Automated tests for the Front End. |
-| Performance Tests | Use K6 to build a simple set of performance test for the API |
-| Paging | For those who have pages of things todo :) |
-| Serilog | Implement Serilog for logging.  |
+| Authentication and Authorisation | Use mock authentication server and implement authentication and authorisation for the front and backend|
+| Cypress Tests | Use Cypress to build a simple set of UI Automated tests for the Front End. |
+| Mock Server | Provide Mockoon mocks or stateful mocks for the Front End |
+| Performance Tests | Use K6 to build a simple set of performance tests for the API |
+| Paging | For those who have pages of things to do :) |
 | Versioning | Decide on a versioning strategy and implement it. |
+
 
 # Cool Finds
 
@@ -611,11 +612,11 @@ Below is a table of the ones I came across that I found helpful or interesting.
 | Item | Description
 |----------| -----------
 | [Centralizing .NET Project Configurations](https://blog.ndepend.com/directory-build-props/) | Centralise your package and version management. Useful for solutions with a lot of projects. |
-| [Amichai Mantinband](https://www.youtube.com/@amantinband) | Industry-level tutorials about coding, design patterns, architecture, and the latest and greatest libraries, tricks, and tips you should definitely know about. |
-| [Mockaco](https://natenho.github.io/Mockaco/) | Get your mock server up and running in no time! |
+| [Amichai Mantinband](https://www.youtube.com/@amantinband) | Industry-level tutorials about coding, design patterns, architecture, and the latest and greatest libraries, tricks, and tips you should know about. |
+| [Mockaco](https://natenho.github.io/Mockaco/) | Get your mock server up and running quickly! |
 
 ## Documentation
 
 | Item | Description
 |----------| -----------
-| [Mermaid](https://www.mermaidchart.com/) | Easily create complex diagrams from markdown-style code and collaborate with team members in real-time. |
+| [Mermaid](https://www.mermaidchart.com/) | Easily create complex diagrams from markdown-style code and collaborate with team members in real time. |
