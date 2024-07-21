@@ -6,7 +6,6 @@ import TodoApi from '../services/TodoApi';
 import { TodoItem } from '../services/generated';
 import TodoItemStatus from '../enumerations/TodoItemStatus';
 
-// Mock the TodoApi
 jest.mock('../services/TodoApi');
 
 const mockedTodoApi = TodoApi as jest.Mocked<typeof TodoApi>;
@@ -19,7 +18,7 @@ const renderWithProvider = (ui: React.ReactElement) => {
     );
 };
 
-describe('Given the TodoProvider When rendering component Then', () => {
+describe('Given TodoProvider When component rendered Then', () => {
     beforeEach(() => {
         mockedTodoApi.getTodoItems.mockClear();
         mockedTodoApi.postTodoItem.mockClear();

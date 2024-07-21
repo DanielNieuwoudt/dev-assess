@@ -3,9 +3,7 @@ import {Button, Table} from 'react-bootstrap';
 import {useTodoContext} from '../contexts/TodoContext';
 import TodoItemStatus from '../enumerations/TodoItemStatus';
 
-interface TodoItemsProps { }
-
-const TodoItems: FC<TodoItemsProps> = ({ }) => {
+const TodoItems: FC = () => {
   const { items, fetchItems, markItemAsComplete, setItemStatus } = useTodoContext();
 
   const refreshItems = async () => {

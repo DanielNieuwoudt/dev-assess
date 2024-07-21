@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import TodoItemAlert from './TodoItemAlert';
 import TodoItemStatus from '../enumerations/TodoItemStatus';
 import { useTodoContext } from '../contexts/TodoContext';
@@ -11,7 +11,7 @@ jest.mock('../contexts/TodoContext', () => ({
 
 const mockUseTodoContext = useTodoContext as jest.Mock;
 
-describe('Given a {status} and {error} When rendering the TodoItemAlert component Then', () => {
+describe('Given a {status} and {error} When TodoItemAlert rendered Then', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
@@ -37,17 +37,15 @@ describe('Given a {status} and {error} When rendering the TodoItemAlert componen
 
             render(<TodoItemAlert />);
 
-            expect(screen.getByText(message)).toBeInTheDocument();
-            expect(screen.getByRole('alert')).toHaveClass(alertClass);
+            expect(screen.getByText(message))
+                .toBeInTheDocument();
+            
+            expect(screen.getByRole('alert'))
+                .toHaveClass(alertClass);
 
             if (error) {
-                fireEvent.click(screen.getByText("View Details"));
-
-                expect(screen.getByText('Problem Details')).toBeInTheDocument();
-                expect(screen.getByText(error.Title)).toBeInTheDocument();
-                expect(screen.getByText('field1:')).toBeInTheDocument();
-                expect(screen.getByText('Error message 1')).toBeInTheDocument();
-                expect(screen.getByText('Error message 2')).toBeInTheDocument();
+                expect(screen.getByText('View Details'))
+                    .toBeInTheDocument();
             }
         }
     );

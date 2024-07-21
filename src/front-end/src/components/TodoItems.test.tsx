@@ -22,7 +22,7 @@ const renderWithContext = (contextValue: any) => {
     render(<TodoItems />);
 };
 
-describe('Given todo items When rendering the TodoItems component Then', () => {
+describe('Given todo items When TodoItems rendered Then', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });

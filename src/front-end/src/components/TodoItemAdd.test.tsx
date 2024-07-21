@@ -11,7 +11,7 @@ jest.mock('../contexts/TodoContext', () => ({
 
 const mockUseTodoContext = useTodoContext as jest.Mock;
 
-describe('Given a new todo item When the TodoItemAdd component is rendered Then', () => {
+describe('Given a new todo item When TodoItemAdd rendered Then', () => {
     const mockAddItem = jest.fn();
     const mockClearError = jest.fn();
     

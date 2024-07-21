@@ -3,9 +3,10 @@ import TodoApi from './TodoApi';
 import { TodoItem } from './generated';
 
 jest.mock('axios');
+
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe('Given the TodoApi When called Then', () => {
+describe('Given TodoApi When called Then', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
