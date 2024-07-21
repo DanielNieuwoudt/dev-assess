@@ -308,9 +308,6 @@ We have selected the following libraries for our implementation:
 | [TypeScipt](https://www.typescriptlang.org/) | TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale. |
 | [UUID](https://www.npmjs.com/package/uuid) | For the creation of RFC9562 (formally RFC4122) UUIDs |
 
-
-### End-to-End Tests
-
 # Getting started
 
 ## Prerequisites
