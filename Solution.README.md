@@ -589,6 +589,8 @@ From the `/tests/contract` directory uinsg a bash terminal
 
 # Things I still want TODO
 
+These are things that I would still want to do for completeness:
+
 | Item | Description
 |----------| -----------
 | Authentication and Authorisation | Use mock authentication server and implement authetication and authorisation for the front end and backend|

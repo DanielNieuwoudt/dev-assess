@@ -22,6 +22,5 @@ namespace TodoList.Application.Common.Exceptions
         public TodoItemDuplicateException(IEnumerable<ValidationFailure> errors) : base(errors)
         {
         }
-            
     }
 }

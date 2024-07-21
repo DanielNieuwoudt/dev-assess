@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using FluentAssertions;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
