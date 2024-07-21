@@ -1,4 +1,4 @@
-﻿import React, { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Accordion, Alert, Button, Modal, Table } from 'react-bootstrap';
 import { useTodoContext } from '../contexts/TodoContext';
 import TodoItemStatus from '../enumerations/TodoItemStatus';

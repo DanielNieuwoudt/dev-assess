@@ -1,4 +1,4 @@
-﻿import React, {FC, ReactNode, useEffect, useState} from 'react';
+import React, {FC, ReactNode, useEffect, useState} from 'react';
 import { TodoItem } from '../services/generated';
 import TodoApi from '../services/TodoApi';
 import TodoContext from '../contexts/TodoContext';

@@ -1,4 +1,4 @@
-﻿import { createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { TodoItem } from '../services/generated';
 import TodoItemStatus from '../enumerations/TodoItemStatus';
 

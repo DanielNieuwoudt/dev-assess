@@ -1,4 +1,4 @@
-﻿class TodoItemStatusMessages {
+class TodoItemStatusMessages {
     static readonly None: string = 'Please enter a description for your todo item.';
     static readonly Added: string = 'Your todo item has been added.';
     static readonly Completed: string = 'Your todo item has been marked as completed.';

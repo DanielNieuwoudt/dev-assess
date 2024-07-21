@@ -1,4 +1,4 @@
-﻿import axios from 'axios';
+import axios from 'axios';
 import TodoApi from './TodoApi';
 import { TodoItem } from './generated';
 

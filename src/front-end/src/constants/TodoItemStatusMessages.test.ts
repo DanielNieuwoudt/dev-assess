@@ -1,4 +1,4 @@
-﻿import TodoItemStatusMessages from './TodoItemStatusMessages';
+import TodoItemStatusMessages from './TodoItemStatusMessages';
 describe('Given TodoItemStatusMessages When used Then', () => {
     const testCases = [
         { status: TodoItemStatusMessages.None, expectedMessage: 'Please enter a description for your todo item.' },

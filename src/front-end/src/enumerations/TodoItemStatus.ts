@@ -1,4 +1,4 @@
-﻿enum TodoItemStatus {
+enum TodoItemStatus {
     None,
     Added = 1,
     Completed = 2,

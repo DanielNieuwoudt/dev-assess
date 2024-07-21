@@ -1,4 +1,4 @@
-﻿interface TodoItemError {
+interface TodoItemError {
     Title: string;
     Type: string;
     Status: number;

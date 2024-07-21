@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import TodoItemAlert from './TodoItemAlert';
 import TodoItemStatus from '../enumerations/TodoItemStatus';

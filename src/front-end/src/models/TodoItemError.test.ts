@@ -1,4 +1,4 @@
-﻿import { mapErrorResponseToTodoItemError } from '../services/TodoApiError';
+import { mapErrorResponseToTodoItemError } from '../services/TodoApiError';
 
 describe('Given response data When mapErrorResponseToTodoItemError Then', () => {
     it('should map the error response to TodoItemError correctly', () => {

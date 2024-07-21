@@ -1,4 +1,4 @@
-﻿export function mapErrorResponseToTodoItemError(responseData: any): TodoItemError {
+export function mapErrorResponseToTodoItemError(responseData: any): TodoItemError {
     return {
         Title: responseData.title,
         Type: responseData.type,
