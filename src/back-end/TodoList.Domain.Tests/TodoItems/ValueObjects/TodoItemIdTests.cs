@@ -10,6 +10,7 @@ namespace TodoList.Domain.Tests.TodoItems.ValueObjects
         [Fact]
         public void Given_TodoItemId_When_EmptyGuid_ThenThrowArgumentException()
         {
+            // ReSharper disable once ObjectCreationAsStatement
             Action action = () => new TodoItemId(Guid.Empty);
 
             action

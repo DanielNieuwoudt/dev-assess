@@ -1,7 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using TodoList.Api.Common.Filters.Action;
-using TodoList.Api.Common.Filters.Exception;
 using TodoList.Api.Common.Middleware;
 using TodoList.Api.Common.Mapping;
 

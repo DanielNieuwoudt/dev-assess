@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using TodoList.Application.Common.Exceptions;
 using TodoList.Application.Contracts;
