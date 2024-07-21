@@ -10,7 +10,7 @@ import TodoProvider from './providers/TodoProvider';
   root.render(
     <React.StrictMode>
         <TodoProvider>
-            <App />      
+            <App />
         </TodoProvider>
     </React.StrictMode>
   )

@@ -1,7 +1,8 @@
-﻿import React, { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Accordion, Alert, Button, Modal, Table } from 'react-bootstrap';
 import { useTodoContext } from '../contexts/TodoContext';
 import TodoItemStatus from '../enumerations/TodoItemStatus';
+import TodoItemStatusMessages from "../constants/TodoItemStatusMessages";
 
 interface TodoItemErrorProps { }
 
@@ -51,6 +52,7 @@ const TodoItemAlert: FC<TodoItemErrorProps> = ({ }) => {
                             <Accordion.Header>More information</Accordion.Header>
                             <Accordion.Body>
                                 <Table striped bordered style={tableStyle}>
+                                    <thead>
                                     <tr>
                                         <td>Type</td><td><a href={error.Type} target="_blank">{error.Type}</a></td>
                                     </tr>                                    
@@ -60,6 +62,7 @@ const TodoItemAlert: FC<TodoItemErrorProps> = ({ }) => {
                                     <tr>
                                         <td>Trace ID</td><td>{error.TraceId}</td>
                                     </tr>
+                                    </thead>
                                 </Table>
                             </Accordion.Body>
                         </Accordion.Item>
@@ -78,15 +81,15 @@ const TodoItemAlert: FC<TodoItemErrorProps> = ({ }) => {
 
     switch (status) {
         case TodoItemStatus.None:
-            return getAlert("Please enter a description for your todo item.", "info", error);
+            return getAlert(TodoItemStatusMessages.None, "info", error);
         case TodoItemStatus.Added:
-            return getAlert("Your todo item has been added.", "success", error);
+            return getAlert(TodoItemStatusMessages.Added, "success", error);
         case TodoItemStatus.Completed:
-            return getAlert("Your todo item has been marked as completed.", "success", error);
+            return getAlert(TodoItemStatusMessages.Completed, "success", error);
         case TodoItemStatus.Error:
-            return getAlert("We encountered a problem with your todo item.", "danger", error);
+            return getAlert(TodoItemStatusMessages.Error, "danger", error);
         case TodoItemStatus.Refreshed:
-            return getAlert("Your todo items have been refreshed.", "info", error);
+            return getAlert(TodoItemStatusMessages.Refreshed, "info", error);
     }
 };
 
