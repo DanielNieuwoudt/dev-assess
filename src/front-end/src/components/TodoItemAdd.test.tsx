@@ -26,7 +26,7 @@ describe('Given a new todo item When the TodoItemAdd component is rendered Then'
         jest.clearAllMocks();
     });
 
-    test('renders the component and initial elements', () => {
+    it('renders the component and initial elements', () => {
         render(<TodoItemAdd />);
 
         expect(screen.getByText('Add Item'))
@@ -37,7 +37,7 @@ describe('Given a new todo item When the TodoItemAdd component is rendered Then'
             .toBeInTheDocument();
     });
 
-    test('adds an item when the {Add Item} button is clicked', async () => {
+    it('adds an item when the {Add Item} button is clicked', async () => {
         render(<TodoItemAdd />);
 
         const descriptionInput = screen
@@ -58,7 +58,7 @@ describe('Given a new todo item When the TodoItemAdd component is rendered Then'
         });
     });
 
-    test('clears the {description} and {error} when the {Clear} button is clicked', async () => {
+    it('clears the {description} and {error} when the {Clear} button is clicked', async () => {
         render(<TodoItemAdd />);
 
         const descriptionInput = screen

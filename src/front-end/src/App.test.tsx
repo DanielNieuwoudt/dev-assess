@@ -10,9 +10,14 @@ describe('Given the App Component When rendered Then', () => {
                 <App />
             </TodoProvider>
         );
-        const logo = screen.getByRole('img');
-        expect(logo).toBeInTheDocument();
-        expect(logo).toHaveAttribute('src', 'clearPointLogo.png');
+        const logo = screen
+            .getByRole('img');
+        
+        expect(logo)
+            .toBeInTheDocument();
+        
+        expect(logo)
+            .toHaveAttribute('src', 'clearPointLogo.png');
     });
 
     it('should render the alert with the heading', () => {
@@ -21,8 +26,12 @@ describe('Given the App Component When rendered Then', () => {
                 <App />
             </TodoProvider>
         );
-        const alertHeading = screen.getByText('Todo List App');
-        expect(alertHeading).toBeInTheDocument();
+        
+        const alertHeading = screen
+            .getByText('Todo List App');
+        
+        expect(alertHeading)
+            .toBeInTheDocument();
     });
 
     it('should render the TodoItemAdd component', () => {
@@ -31,8 +40,12 @@ describe('Given the App Component When rendered Then', () => {
                 <App />
             </TodoProvider>
         );
-        const todoItemAdd = screen.getByText('Add a todo item');
-        expect(todoItemAdd).toBeInTheDocument();
+        
+        const todoItemAdd = screen
+            .getByText('Add a todo item');
+        
+        expect(todoItemAdd)
+            .toBeInTheDocument();
     });
 
     it('should render the TodoItems component', () => {
@@ -41,8 +54,12 @@ describe('Given the App Component When rendered Then', () => {
                 <App />
             </TodoProvider>
         );
-        const todoItems = screen.getByText('Showing 0 Item(s)');
-        expect(todoItems).toBeInTheDocument();
+        
+        const todoItems = screen
+            .getByText('Showing 0 Item(s)');
+        
+        expect(todoItems)
+            .toBeInTheDocument();
     });
 
     it('should render the footer', () => {
@@ -51,11 +68,20 @@ describe('Given the App Component When rendered Then', () => {
                 <App />
             </TodoProvider>
         );
-        const footer = screen.getByText('© 2021 Copyright:');
-        expect(footer).toBeInTheDocument();
+        
+        const footer = screen
+            .getByText('© 2021 Copyright:');
+        
+        expect(footer)
+            .toBeInTheDocument();
 
-        const link = screen.getByRole('link', { name: /clearpoint\.digital/i });
-        expect(link).toBeInTheDocument();
-        expect(link).toHaveAttribute('href', 'https://clearpoint.digital');
+        const link = screen
+            .getByRole('link', { name: /clearpoint\.digital/i });
+        
+        expect(link)
+            .toBeInTheDocument();
+        
+        expect(link)
+            .toHaveAttribute('href', 'https://clearpoint.digital');
     });
 });

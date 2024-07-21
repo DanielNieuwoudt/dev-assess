@@ -27,7 +27,7 @@ describe('Given todo items When rendering the TodoItems component Then', () => {
         jest.clearAllMocks();
     });
 
-    test('displays the correct number of incomplete items', () => {
+    it('displays the correct number of incomplete items', () => {
         
         const context = {
             items: mockItems,
@@ -48,7 +48,7 @@ describe('Given todo items When rendering the TodoItems component Then', () => {
             .toBeInTheDocument();
     });
 
-    test('{refreshItems} function is called when {Refresh} button is clicked', async () => {
+    it('{refreshItems} function is called when {Refresh} button is clicked', async () => {
         
         const context = {
             items: mockItems,
@@ -71,7 +71,7 @@ describe('Given todo items When rendering the TodoItems component Then', () => {
         });
     });
 
-    test('{markItemAsComplete} function is called when {Mark as completed} button is clicked', async () => {
+    it('{markItemAsComplete} function is called when {Mark as completed} button is clicked', async () => {
 
         const context = {
             items: mockItems,
