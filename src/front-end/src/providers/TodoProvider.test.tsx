@@ -19,7 +19,7 @@ const renderWithProvider = (ui: React.ReactElement) => {
     );
 };
 
-describe('Given the TodoProvider When rendering component Then', () => {
+describe('Given TodoProvider When component rendered Then', () => {
     beforeEach(() => {
         mockedTodoApi.getTodoItems.mockClear();
         mockedTodoApi.postTodoItem.mockClear();

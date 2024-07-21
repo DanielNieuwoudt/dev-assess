@@ -1,6 +1,6 @@
 import TodoItemStatus from './TodoItemStatus';
 
-describe('Given a TodoItemStatus Enum When used Then', () => {
+describe('Given a TodoItemStatus enum When used Then', () => {
     it('should have the correct values', () => {
         expect(TodoItemStatus.None).toBe(0);
         expect(TodoItemStatus.Added).toBe(1);
