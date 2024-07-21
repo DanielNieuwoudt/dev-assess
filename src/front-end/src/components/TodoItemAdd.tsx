@@ -5,9 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTodoContext } from '../contexts/TodoContext';
 import  TodoItemAlert from './TodoItemAlert'
 
-interface TodoItemProps { }
-
-const TodoItemAdd: FC<TodoItemProps> = () => {
+const TodoItemAdd: FC = () => {
   const { clearError, addItem } = useTodoContext();
   const [description, setDescription] = useState<string>('');
 

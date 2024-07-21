@@ -253,11 +253,13 @@ B[App]
 C[Add Item]
 D[Items]
 E[Alert]
+F[Details]
 
 A --> B
 B --> C
 B --> D
 C --> E
+E --> F
 ```
 
 ### Why TypeScript

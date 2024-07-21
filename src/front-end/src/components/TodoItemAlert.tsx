@@ -5,19 +5,13 @@ import TodoItemStatus from '../enumerations/TodoItemStatus';
 import TodoItemStatusMessages from "../constants/TodoItemStatusMessages";
 import TodoItemAlertDetails from "./TodoItemAlertDetails";
 
-interface TodoItemErrorProps { }
-
-const TodoItemAlert: FC<TodoItemErrorProps> = ({ }) => {
+const TodoItemAlert: FC = () => {
     const { error, status} = useTodoContext();
     const [showModal, setShowModal] = useState(false);
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
-    const tableStyle = {
-        fontSize: '12px'
-    };
-    
     const getAlert = (message: string, variant: string, error: TodoItemError | null) => {
         return(
         <>

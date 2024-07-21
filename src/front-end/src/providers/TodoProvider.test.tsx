@@ -6,7 +6,6 @@ import TodoApi from '../services/TodoApi';
 import { TodoItem } from '../services/generated';
 import TodoItemStatus from '../enumerations/TodoItemStatus';
 
-// Mock the TodoApi
 jest.mock('../services/TodoApi');
 
 const mockedTodoApi = TodoApi as jest.Mocked<typeof TodoApi>;
