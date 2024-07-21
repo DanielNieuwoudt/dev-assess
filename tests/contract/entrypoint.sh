@@ -14,12 +14,12 @@ while [ $i -lt 30 ] && [ "${WEBAPISTATUS:-9}" -ne 0 ] ; do
 	curl -s "http://backend:5000/health/dependency" | grep -q '\"Status\": \"Healthy'
 	WEBAPISTATUS=$?
 	set -e
-	echo "WebApi status: $WEBAPISTATUS (attempt $i/90)"
-	sleep 3
+	echo "WebApi status: $WEBAPISTATUS (attempt $i)"
+	sleep 5
 done
 
 if [ "${WEBAPISTATUS:-9}" -ne 0 ]; then 
- 	echo "WebApi took more than 90 seconds to start up or one or more databases are not in an ONLINE state"
+ 	echo "WebApi took more than 150 seconds to start up or one or more databases are not in an ONLINE state"
 	exit 1
 fi
 
