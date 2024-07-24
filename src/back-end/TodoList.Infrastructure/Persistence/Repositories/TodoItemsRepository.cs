@@ -25,11 +25,18 @@ namespace TodoList.Infrastructure.Persistence.Repositories
             return todoItem;
         }
 
-        public async Task<bool> FindDuplicateTodoItemAsync(Expression<Func<TodoItem, bool>> expression, CancellationToken cancellationToken)
+        public async Task<bool> FindByIdAsync(TodoItemId todoItemId, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding duplicate todo items for expression.");
+            _logger.LogInformation("Finding todo item with id {Id}.", todoItemId);
 
-            return await _dbContext.TodoItems.AnyAsync(expression, cancellationToken: cancellationToken);
+            return await _dbContext.TodoItems.AnyAsync(ti => ti.Id == todoItemId, cancellationToken);
+        }
+
+        public async Task<bool> FindByDescriptionAsync(string description, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Finding todo item with description {Description}.", description);
+
+            return await _dbContext.TodoItems.AnyAsync(ti => ti.Description == description && ti.IsCompleted == false, cancellationToken);
         }
 
         public async Task<TodoItem?> GetTodoItemAsync(TodoItemId todoItemId, CancellationToken cancellationToken)

@@ -8,7 +8,9 @@ namespace TodoList.Application.Contracts
     {
         Task<TodoItem> CreateTodoItemAsync(TodoItem todoItem, CancellationToken cancellationToken);
 
-        Task<bool> FindDuplicateTodoItemAsync(Expression<Func<TodoItem, bool>> expression, CancellationToken cancellationToken);
+        Task<bool> FindByIdAsync(TodoItemId todoItemId, CancellationToken cancellationToken);
+
+        Task<bool> FindByDescriptionAsync(string description, CancellationToken cancellationToken);
 
         Task<TodoItem?> GetTodoItemAsync(TodoItemId todoItemId, CancellationToken cancellationToken);
 
