@@ -64,249 +64,34 @@ Having a local development environment that closely resembles the production env
 
 Here are some of the benefits:
 
-#### Early Detection of Issues
+### Early Detection of Issues
 
 By mirroring the production environment, we can identify and fix environment-specific issues early in the development cycle, reducing the likelihood of encountering critical problems later.
 
-#### Consistency and Reliability
+### Consistency and Reliability
 
 Consistent environments help ensure that code behaves the same way locally as it does in production. This consistency will reduce the number of environment-related bugs and discrepancies we encounter.
 
-#### Improved Testing
+### Improved Testing
 
 A production-like local environment allows for more accurate and comprehensive testing, including performance and load testing, ensuring that our solution can handle real-world scenarios effectively.
 
-#### Faster Feedback Loop
+### Faster Feedback Loop
 
 We can test changes and receive immediate feedback on our local machines, speeding up the development process and increasing productivity.
 
-#### Reduced Deployment Risks
+### Reduced Deployment Risks
 
 By validating changes in an environment that closely resembles production, we can be more confident that deployments will be smooth and error-free, reducing the risk of deployment failures.
 
-#### Enhanced Debugging
+### Enhanced Debugging
 
 Debugging issues locally in an environment similar to production makes it easier for us to reproduce and diagnose problems, leading to quicker resolution times.
 
-#### Improved Developer Confidence
+### Improved Developer Confidence
 
 When tested and validated in an environment that closely resembles production, we have greater confidence in our code, leading to higher-quality software.
 
-
-## Back End
-
-The following section reminds us of the considerations that need to be made when designing, building, and operating APIs.
-
-### Security
-
-#### Encryption 
-
-SSL will be offloaded to a load balancer or gateway provided by the cloud provider. The client will then securely communicate over HTTPS while the load balancer or gateway forwards the traffic to the backend container over HTTP. 
-
-#### Authentication and Authorisation
-
-JWTs will be used to secure the Todo List Web API by providing a stateless, compact, and self-contained method for authenticating and authorising users, ensuring only valid tokens can access protected resources. 
-
-JWTs embed user information and permissions within the token, improving scalability, reducing server load, and enhancing security.
-
-#### Scalability
-We want to design an API that can handle increasing loads, consider the use of caching and load balancing, and ensure that it can run on scalable infrastructure.
-
-#### Performance
-Aim to optimise response times with efficient code, database indexing, and minimising payload sizes.
-
-#### Reliability
-Ensure high availability with redundant systems, failover mechanisms, retry mechanisms, and robust error handling.
-
-#### Rate Limiting
-Aim to prevent abuse and ensure fair usage by limiting the number of requests a client can make.
-
-#### Monitoring
-Implement logging and monitoring to track usage and detect issues.
-
-#### Versioning
-Consider using versioning to support changes without disrupting existing clients or ensure that changes are always backward compatible.
-
-#### Compliance
-Adhere to relevant legal and industry standards (e.g., GDPR, HIPAA).
-
-### Health Checks
-
-The Todo List API provides two health check endponts:
-
-| Endpoint | Description
-|----------| -----------
-| `/health` | Startup health check|
-| `/health/dependency` | Dependency health check that validates the state of the Redis Cache and SQL Server
-
-> The `/health/dependency` endpoint provides a convenient way for us to determine whether the API is ready for us to run contract tests during a `docker compose` locally or in the pipeline.
-
-### Application Architecture
-
-We prefer the use of Clean Architecture and Domain Driver Design for our ASP.NET Web API, which organises our application into four main layers:
-
-- Presentation - The API is the entry point for communication with the application.
-- Application - Business logic specific to the use cases in our application.
-- Domain - Entities, value objects and aggregates, and domain-specific services.
-- Infrastructure - Implementation details and integration include repositories, database context and external service.
-
-Benefits 
-
-- Separation of concerns, with each layer having distinct responsibilities, making the code base easier to understand and maintain.
-- Flexibility that allows us to make updates to the technology stack without affecting or retesting the core business logic.
-- Improves testability as business logic can be tested independently from the UI and Infrastructure.
-
-> Side Note: I have added a sprinkle of CQRS, mostly for my own benefit.
-
-#### Visual Representation
-
-```mermaid
-graph TD
-A[Presentation]
-B[Infrastructure]
-C[Application]
-D[Domain]
-E[Database]
-F[Cache]
-
-A --> C
-B --> C
-C --> D
-B -.-> F
-B --> E
-F -.-> E
-
-style F stroke-dasharray: 5, 5
-```
-### Frameworks and Libraries
-
-We have selected the the following libraries for our implementation:
-
-|Framework / Library|Description|
-|-|-|
-| [AutoMapper](https://github.com/AutoMapper/AutoMapper) | A convention-based object-object mapper. |
-| [EF Core](https://learn.microsoft.com/en-us/ef/core/) | Entity Framework (EF) Core is a lightweight, extensible, open source and cross-platform version of the popular Entity Framework data access technology. |
-| [Fluent Validation](https://github.com/FluentValidation/FluentValidation) | FluentValidation is a .NET library for building strongly-typed validation rules. |
-| [MediatR](https://github.com/jbogard/MediatR) | Simple mediator implementation in .NET. In-process messaging with no dependencies. |
-| [NSwag](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-8.0&tabs=visual-studio) | With NSwag, you don't need an existing API—you can use third-party APIs that incorporate Swagger and generate a client implementation. |
-
-### Contract first development
-
-We use a contract-first approach when designing and developing the Todo List API. 
-
-In collaboration with other members of the team, we ensure:
-
-- A documented representation of what we will be building. 
-- Allow for early validation that helps identify design issues.
-- Contain the endpoints, methods, request and response formats, and expected error codes.
-- Ensure we reduce inconsistencies between what we have documented and what we are implementing.
-- Engineers in the same or different teams can work in parallel once the contract is defined.
-- The front-end and quality assurance engineers can start development against mock servers.
-- It provides safety when refactoring, knowing that internal changes do not affect the API interface.
-- Improves visibility and the opportunity to identify breaking changes as part of the Pull Request process.
-- Generate code for controllers and clients 
-
-> A copy of the [todoitems.openapi.yamn](specs/todoitems.openapi.yaml) can be found in the `specs` folder.
-
-### Contract Tests
-
-We aim to minimise duplication between contract and unit tests, keeping the test pyramid in mind. 
-
-Contract testing ensures that interactions between the front end and back end adhere to our predefined contract, reducing the risks of integration issues. 
-
-During development, it allows the team to detect breaking changes early in the development cycle, improving reliability and increasing the overall stability of our solution. 
-
->Our main goal is to catch breaking changes early and ensure that the implementation of our API adheres to the contract, as that is what consumers will expect. 
-
-### Code Generation
-
-We choose to generate code for the C# controller and contract test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Problem Details.
-
-> See [Backend Code Generation](specs/back-end) in the `specs/back-end` folder.
-
-## Front End 
-
-> **Disclaimer:** I have not spent a significant amount of time developing React Applications. In part, this section reflects my time spent learning for this assessment.
-
-### Application Architecture
-
-React Application architecture typically involves a component-based structure. The UI is divided into reusable, self-contained components, each managing its state and props. 
-
-- **Provider** - We wrap the application in a provider so the components have a shared context and state regarding the items. 
-- **App** - This component is also our landing page and contains the Item and Items components.
-- **Item** - Allows us to add a new todo item. 
-- **Items** - Allows us to view a list of todo items that have not been completed.
-- **Alerts** - Provides feedback on the actions taken. Allows us to view the Problem Details received from the API.
-
-#### Benefits
-
-- Components are organised in a hierarchical tree, promoting separation of concerns and modularity.
-- Data fetching and side effects are handled with hooks like useEffect and the Axios library. 
-- Promotes maintainability, scalability, and ease of testing.
-
-#### Visual Representation
-
-```mermaid
-graph TD
-A[Provider]
-B[App]
-C[Add Item]
-D[Items]
-E[Alert]
-F[Details]
-
-A --> B
-B --> C
-B --> D
-C --> E
-E --> F
-```
-
-### Why TypeScript
-
-TypeScript offers numerous benefits that enhance the codebase's development process and quality. 
-
-By introducing static typing, TypeScript catches errors at compile time, reducing runtime errors and making the code more robust. It provides improved code editor support with features like autocompletion, type checking, and intelligent refactoring, which boost developer productivity and efficiency.
-
-TypeScript enhances code readability and maintainability by enforcing clear type definitions, making it easier to understand and modify the code. This is particularly beneficial in large codebases and collaborative projects, as it ensures consistent coding standards and provides better documentation through type annotations.
-
-TypeScript supports modern JavaScript features and transpiles to plain JavaScript, allowing developers to use the latest language features while maintaining compatibility with older environments. 
-
-It integrates seamlessly with existing JavaScript code, making it easy to adopt TypeScript in a project gradually.
-
-### Static File Hosting
-
-As part of containerising the React Application, I ran into an issue where I could access environment variables during local development but not when the application ran in the container using `serve`.
-
-After researching the issue, I discovered that you cannot access environment variables directly because static files served by `serve` are precompiled and do not get processed by the container at runtime.
-
-This felt somewhat limiting as I wanted to build an immutable artifact that uses environment variables for configuration purposes depending on the environment in which we run the container. 
-
-To resolve this, I settled for a solution I found online e.g. We run a Node Express server and inject the environment variables into the `index.html` page at runtime as a script tag. 
-
-> Side note: I did consider using `.env`, but again, this affects the container's immutability as it needs to be updated at build time.
-
-See the [server.js](src/front-end/server.js) in the `src/front-end` folder.
-
-### Code Generation
-
-We choose to generate code for the client and models we will use when interacting with the API. 
-
-A strongly typed client and its associated functions make it easy to meet API expectations when posting and getting data.
-
-> See [Front End Code Generation](specs/front-end) in the `specs/front-end` folder.
-
-### Frameworks and Libraries
-
-We have selected the following libraries for our implementation:
-
-|Framework / Library|Description|
-|-|-|
-| [Axios](https://axios-http.com/docs/intro) | Axios is a promise-based HTTP Client for node.js and the browser. |
-| [React](https://react.dev/) | The library for web and native user interfaces |
-| [React Bootstrap](https://react-bootstrap.github.io/) | The most popular front-end framework, rebuilt for React. |
-| [TypeScipt](https://www.typescriptlang.org/) | TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale. |
-| [UUID](https://www.npmjs.com/package/uuid) | For the creation of RFC9562 (formally RFC4122) UUIDs |
 
 # Getting started
 
@@ -464,10 +249,14 @@ Once there, go to:
 
 You can check the health of the backend by using the following endpoints.
 
+The Todo List API provides two health check endponts:
+
 | Endpoint | Description
 |----------| -----------
 | [/health](http://localhost:5000/health) | Startup health check|
 | [/health/dependency](http://localhost:5000/health/dependency) | Dependency health check that validates the state of the Redis Cache and SQL Server
+
+_Side Note_: The `/health/dependency` endpoint provides a convenient way for us to determine whether the API is ready for us to run contract tests during a `docker compose` locally or in the pipeline.
 
 ## See which containers are running after a docker compose
 
@@ -586,7 +375,7 @@ From the `/tests/contract` directory uinsg a bash terminal
 
     `npm run test`
 
-# Things I still want TODO
+## Things I still want TODO
 
 These are things that I would still want to do for completeness:
 
@@ -601,7 +390,7 @@ These are things that I would still want to do for completeness:
 | Versioning | Decide on a versioning strategy and implement it. |
 
 
-# Cool Finds
+## Cool Finds
 
 Along the way, we encounter tools, libraries, patterns, and practices that we may not have the opportunity to explore every day. 
 
