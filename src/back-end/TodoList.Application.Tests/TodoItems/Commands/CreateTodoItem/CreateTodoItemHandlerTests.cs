@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -46,8 +45,13 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
             var todoItem = new TodoItem(new TodoItemId(id), "Description", false, DateTimeOffset.Now, DateTimeOffset.Now);
 
             _repositoryMock
-                .Setup(r => r.FindDuplicateTodoItemAsync(It.IsAny<Expression<Func<TodoItem, bool>>>(), It.IsAny<CancellationToken>()))
+                .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
+
+            _repositoryMock
+                .Setup(r => r.FindByDescriptionAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+            
             _repositoryMock
                 .Setup(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(todoItem);
@@ -71,7 +75,11 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
             var command = new CreateTodoItemCommand(id, "Description", false);
 
             _repositoryMock
-                .Setup(r => r.FindDuplicateTodoItemAsync(ti => ti.Description == command.Description && ti.IsCompleted == false, It.IsAny<CancellationToken>()))
+                .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+
+            _repositoryMock
+                .Setup(r => r.FindByDescriptionAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var handler = new CreateTodoItemHandler(_repositoryMock.Object, _nullLogger);
@@ -92,11 +100,12 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
             var command = new CreateTodoItemCommand(id, "Description", false);
 
             _repositoryMock
-                .Setup(r => r.FindDuplicateTodoItemAsync(
-                    It.Is<Expression<Func<TodoItem, bool>>>(expr =>
-                        MatchesExpression(ti => ti.Id == new TodoItemId(id) && ti.IsCompleted == false, new TodoItemId(id))),
-                    It.IsAny<CancellationToken>()))
+                .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
+
+            _repositoryMock
+                .Setup(r => r.FindByDescriptionAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
 
             var handler = new CreateTodoItemHandler(_repositoryMock.Object, _nullLogger);
 
@@ -107,12 +116,6 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
                 .ThrowAsync<TodoItemDuplicateException>();
 
             _repositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        private bool MatchesExpression(Expression<Func<TodoItem, bool>> expr, TodoItemId expectedId)
-        {
-            var compiledExpr = expr.Compile();
-            return compiledExpr(new TodoItem(expectedId, "Description", false, DateTimeOffset.Now, DateTimeOffset.Now));
         }
     }
 }

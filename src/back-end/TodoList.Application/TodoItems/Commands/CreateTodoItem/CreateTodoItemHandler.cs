@@ -22,8 +22,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
         {
             _logger.LogInformation("Finding duplicate todo items based in id.");
 
-            if ( await _repository.FindDuplicateTodoItemAsync(ti => ti.Id == new TodoItemId(request.Id) && 
-                                                               ti.IsCompleted == false, cancellationToken))
+            if ( await _repository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
             {
                 throw new TodoItemDuplicateException(new List<ValidationFailure>
                 {
@@ -33,8 +32,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
             _logger.LogInformation("Finding duplicate todo items based in description.");
 
-            if ( await _repository.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && 
-                                                               ti.IsCompleted == false, cancellationToken))
+            if ( await _repository.FindByDescriptionAsync(request.Description.Trim(), cancellationToken))
             {
                 throw new TodoItemDuplicateException(new List<ValidationFailure>
                 {

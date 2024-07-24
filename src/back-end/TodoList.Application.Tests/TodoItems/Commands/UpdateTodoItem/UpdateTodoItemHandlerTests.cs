@@ -43,10 +43,6 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
             var request = new UpdateTodoItemCommand(Guid.NewGuid(), "Test", false);
 
             _repositoryMock
-                .Setup(r => r.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && ti.IsCompleted == false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(false);
-
-            _repositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((TodoItem)null!);
 
@@ -65,10 +61,6 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
             var id = Guid.NewGuid();
             var handler = new UpdateTodoItemHandler(_repositoryMock.Object, _nullLogger);
             var request = new UpdateTodoItemCommand(id, "Test", false);
-
-            _repositoryMock
-                .Setup(r => r.FindDuplicateTodoItemAsync(ti => ti.Description == request.Description && ti.IsCompleted == false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(false);
 
             _repositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))

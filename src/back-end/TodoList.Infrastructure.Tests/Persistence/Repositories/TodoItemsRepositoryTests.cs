@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -150,8 +149,8 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
         }
 
         [Theory]
-        [MemberData(nameof(FindDuplicateTodoItemData))]
-        public async Task Given_ExistingTodoItem_When_FindDuplicateTodoItem_Then_ReturnsExpectedResult(TodoItem todoItem, Expression<Func<TodoItem, bool>> expression, bool expectedResult)
+        [MemberData(nameof(FindByIdTodoItemData))]
+        public async Task Given_ExistingTodoItem_When_FindById_Then_ReturnsExpectedResult(Guid id, TodoItem todoItem, bool expectedResult)
         {
             using var scope = _serviceProvider
                 .CreateScope();
@@ -166,32 +165,58 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
             await dbContext.SaveChangesAsync();
 
             var result = await repository
-                .FindDuplicateTodoItemAsync(expression, CancellationToken.None);
+                .FindByIdAsync(new TodoItemId(id), CancellationToken.None);
 
             result
                 .Should()
                 .Be(expectedResult);
         }
 
-        public static IEnumerable<object[]> FindDuplicateTodoItemData =>
-            new List<object[]>
-            {
-                new object[]
-                {   new TodoItem(new TodoItemId(Guid.Parse("9998532a-8761-4e1d-83eb-ba55e478e640")), "Test 1", false, DateTimeOffset.Now, DateTimeOffset.Now),
-                    (Expression<Func<TodoItem, bool>>)(ti => ti.Id == new TodoItemId(Guid.Parse("9998532a-8761-4e1d-83eb-ba55e478e640"))), 
+        public static IEnumerable<object[]> FindByIdTodoItemData =>
+            [
+                [
+                    Guid.Parse("9998532a-8761-4e1d-83eb-ba55e478e640") ,
+                    new TodoItem( new TodoItemId(Guid.Parse("9998532a-8761-4e1d-83eb-ba55e478e640")), "Found - Incomplete", false, DateTimeOffset.Now, DateTimeOffset.Now), 
                     true
-                },
-                new object[]
-                {   new TodoItem(new TodoItemId(Guid.NewGuid()), "Test 2", false, DateTimeOffset.Now, DateTimeOffset.Now),
-                    (Expression<Func<TodoItem, bool>>)(ti => ti.Description == "Test 2"), 
+                ],
+                [
+                    Guid.Parse("08f92c29-3493-493e-aead-92c5e1fbae8a") ,
+                    new TodoItem( new TodoItemId(Guid.Parse("08f92c29-3493-493e-aead-92c5e1fbae8a")), "Found - Complete", true, DateTimeOffset.Now, DateTimeOffset.Now), 
                     true
-                },
-                new object[]
-                {   new TodoItem(new TodoItemId(Guid.NewGuid()), "Test 3", true, DateTimeOffset.Now, DateTimeOffset.Now),
-                    (Expression<Func<TodoItem, bool>>)(ti => ti.Description == "Test 3" && ti.IsCompleted == false), 
+                ],
+                [
+                    Guid.NewGuid(),
+                    new TodoItem(new TodoItemId(Guid.NewGuid()), "Not Found", false, DateTimeOffset.Now, DateTimeOffset.Now), 
                     false
-                }
-            };
+                ]
+            ];
+
+        [Theory]
+        [InlineData("Found", false, true)]
+        [InlineData("NotFound", true, false)]
+        public async Task Given_ExistingTodoItem_When_FindByDescription_Then_ReturnsExpectedResult(string description, bool isComplete, bool expectedResult)
+        {
+            using var scope = _serviceProvider
+                .CreateScope();
+            
+            var dbContext = scope
+                .ServiceProvider
+                .GetRequiredService<TodoListDbContext>();
+
+            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
+
+            dbContext.TodoItems.Add(new TodoItem(new TodoItemId(Guid.Parse("9998532a-8761-4e1d-83eb-ba55e478e640")),
+                description, isComplete, DateTimeOffset.Now, DateTimeOffset.Now));
+            await dbContext.SaveChangesAsync();
+
+            var result = await repository
+                .FindByDescriptionAsync(description, CancellationToken.None);
+
+            result
+                .Should()
+                .Be(expectedResult);
+        }
+
 
         [Fact]
         public async Task Given_TodoItem_When_UpdateTodoItem_Then_ReturnsUpdatedTodoItem()
