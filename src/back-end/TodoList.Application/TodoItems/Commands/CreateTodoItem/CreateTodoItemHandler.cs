@@ -32,7 +32,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
             _logger.LogInformation("Finding duplicate todo items based in description.");
 
-            if ( await _repository.FindByDescriptionAsync(request.Description, cancellationToken))
+            if ( await _repository.FindByDescriptionAsync(request.Description.Trim(), cancellationToken))
             {
                 throw new TodoItemDuplicateException(new List<ValidationFailure>
                 {
