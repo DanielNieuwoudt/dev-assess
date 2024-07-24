@@ -95,6 +95,8 @@ When tested and validated in an environment that closely resembles production, w
 
 # Getting started
 
+> _Note_: All endpoints contained in the documentation assume that you are running a `docker compose up`
+
 ## Prerequisites
 
 To build and run the solution locally, we will need the following prerequisites installed:
