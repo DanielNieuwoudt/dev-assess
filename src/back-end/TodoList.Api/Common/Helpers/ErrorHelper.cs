@@ -16,10 +16,10 @@ namespace TodoList.Api.Common.Helpers
 
             var badRequest = new Generated.BadRequest
             {
-                Title = ErrorMessages.ValidationError,
+                Title = ErrorTitleMessages.ValidationError,
                 Type = ResponseTypes.BadRequest,
                 Status = StatusCodes.Status400BadRequest,
-                Detail = ErrorMessages.PropertyDuplicate,
+                Detail = ErrorDetailMessages.PropertyDuplicate,
                 Errors = duplicateError.errors.ToDictionary(
                     kvp => kvp.Key, 
                     kvp => kvp.Value.ToList()),
@@ -38,8 +38,8 @@ namespace TodoList.Api.Common.Helpers
 
             var notFound = new Generated.NotFound
             {
-                Title = ErrorMessages.NotFound,
-                Detail = ErrorMessages.IdDoesNotExist,
+                Title = ErrorTitleMessages.NotFound,
+                Detail = ErrorDetailMessages.IdDoesNotExist,
                 Type = ResponseTypes.NotFound,
                 Status = StatusCodes.Status404NotFound,
                 TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
@@ -57,10 +57,10 @@ namespace TodoList.Api.Common.Helpers
 
             var badRequest = new Generated.BadRequest
             {
-                Title = ErrorMessages.ValidationError,
+                Title = ErrorTitleMessages.ValidationError,
                 Type = ResponseTypes.BadRequest,
                 Status = StatusCodes.Status400BadRequest,
-                Detail = ErrorMessages.SeeErrors,
+                Detail = ErrorDetailMessages.SeeErrors,
                 Errors = validationError.errors.ToDictionary(
                     kvp => kvp.Key, 
                     kvp => kvp.Value.ToList()),
@@ -79,10 +79,10 @@ namespace TodoList.Api.Common.Helpers
 
             var badRequest = new Generated.BadRequest
             {
-                Title = ErrorMessages.ValidationError,
+                Title = ErrorTitleMessages.ValidationError,
                 Type = ResponseTypes.BadRequest,
                 Status = StatusCodes.Status400BadRequest,
-                Detail = ErrorMessages.IdMismatch,
+                Detail = ErrorDetailMessages.IdMismatch,
                 Errors = new Dictionary<string, List<string>>(),
                 TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
             };

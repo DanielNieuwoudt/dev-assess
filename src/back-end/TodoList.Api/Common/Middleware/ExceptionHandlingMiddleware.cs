@@ -32,10 +32,10 @@ namespace TodoList.Api.Common.Middleware
 
                         var internalServerError = new Generated.InternalServerError
                         {
-                            Title = ErrorMessages.InternalServerError,
+                            Title = ErrorTitleMessages.InternalServerError,
                             Type = ResponseTypes.InternalServerError,
                             Status = StatusCodes.Status500InternalServerError,
-                            Detail = ErrorMessages.ErrorProcessingRequest, // We do not return the exception message as it may contain sensitive information.
+                            Detail = ErrorDetailMessages.ErrorProcessingRequest, // We do not return the exception message as it may contain sensitive information.
                             TraceId = Activity.Current?.Id ?? context.TraceIdentifier
                         };
 
