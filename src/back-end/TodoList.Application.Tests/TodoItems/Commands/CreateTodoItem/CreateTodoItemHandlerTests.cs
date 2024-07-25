@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using TodoList.Application.Common.Exceptions;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Domain.TodoItems;
@@ -37,7 +37,7 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
         }
 
         [Fact]
-        public async Task Given_CreateTodoItemCommand_When_NoDuplicateTodoItemFound_Then_ReturnsCreateTodoItemResult()
+        public async Task Given_CreateTodoItemCommand_When_NoDuplicateTodoItemFound_Then_ReturnsCreateTodoItemResponse()
         {
             var id = Guid.NewGuid();
 
@@ -61,7 +61,11 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
             var result = await handler
                 .Handle(command, CancellationToken.None);
 
-            result.TodoItem
+            result.Value
+                .Should()
+                .NotBeNull();
+
+            result.Value!.TodoItem
                 .Should()
                 .Be(todoItem);
 
@@ -69,10 +73,11 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
         }
 
         [Fact]
-        public async Task Given_CreateTodoItemCommand_When_DuplicateTodoItemFoundByDescription_Then_ThrowsTodoItemDuplicateException()
+        public async Task Given_CreateTodoItemCommand_When_DuplicateTodoItemFoundByDescription_Then_ReturnsDuplicateError()
         {
             var id = Guid.NewGuid();
             var command = new CreateTodoItemCommand(id, "Description", false);
+            var expectedError = new DuplicateError(new Dictionary<string, string[]>());
 
             _repositoryMock
                 .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
@@ -84,20 +89,28 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
 
             var handler = new CreateTodoItemHandler(_repositoryMock.Object, _nullLogger);
 
-            var action = async () => await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
-            await action
+            result.Error
                 .Should()
-                .ThrowAsync<TodoItemDuplicateException>();
+                .NotBeNull();
 
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError, options =>
+                {
+                    return options.Excluding(e => e.errors);
+                });
+     
             _repositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
-        public async Task Given_CreateTodoItemCommand_When_DuplicateTodoItemFoundById_Then_ThrowsTodoItemDuplicateException()
+        public async Task Given_CreateTodoItemCommand_When_DuplicateTodoItemFoundById_Then_ReturnsDuplicateError()
         {
             var id = Guid.NewGuid();
             var command = new CreateTodoItemCommand(id, "Description", false);
+            var expectedError = new DuplicateError(new Dictionary<string, string[]>());
 
             _repositoryMock
                 .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
@@ -109,11 +122,18 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
 
             var handler = new CreateTodoItemHandler(_repositoryMock.Object, _nullLogger);
 
-            var action = async () => await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
-            await action
+            result.Error
                 .Should()
-                .ThrowAsync<TodoItemDuplicateException>();
+                .NotBeNull();
+
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError, options =>
+                {
+                    return options.Excluding(e => e.errors);
+                });
 
             _repositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }

@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using TodoList.Application.Common.Exceptions;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Domain.TodoItems;
@@ -37,20 +37,28 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
         }
 
         [Fact]
-        public async Task Given_PutTodoItem_When_TodoItemNotFound_Then_ThrowsTodoItemNotFoundException()
+        public async Task Given_PutTodoItem_When_TodoItemNotFound_Then_ReturnsNotFoundError()
         {
             var handler = new UpdateTodoItemHandler(_repositoryMock.Object, _nullLogger);
             var request = new UpdateTodoItemCommand(Guid.NewGuid(), "Test", false);
+            var expectedError = new NotFoundError(new Dictionary<string, string[]>());
 
             _repositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((TodoItem)null!);
 
-            var action = async () => await handler.Handle(request, CancellationToken.None);
+            var result = await handler.Handle(request, CancellationToken.None);
             
-            await action
+            result.Error
                 .Should()
-                .ThrowAsync<TodoItemNotFoundException>();
+                .NotBeNull();
+
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError, options =>
+                {
+                    return options.Excluding(e => e.errors);
+                });
 
             _repositoryMock.Verify(r => r.UpdateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }

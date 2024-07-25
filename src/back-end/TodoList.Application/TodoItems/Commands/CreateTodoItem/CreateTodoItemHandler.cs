@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using TodoList.Application.Common.Exceptions;
+using TodoList.Application.Common;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Domain.TodoItems;
 using TodoList.Domain.TodoItems.ValueObjects;
@@ -10,23 +10,23 @@ using TodoList.Domain.TodoItems.ValueObjects;
 namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 {
     [ExcludeFromCodeCoverage(Justification = "Record")]
-    public sealed record CreateTodoItemResult(TodoItem TodoItem);
+    public sealed record CreateTodoItemResponse(TodoItem TodoItem);
 
     public sealed class CreateTodoItemHandler(ITodoItemsRepository repository, ILogger<CreateTodoItemHandler> logger)
-        : IRequestHandler<CreateTodoItemCommand, CreateTodoItemResult>
+        : IRequestHandler<CreateTodoItemCommand, Result<ApplicationError, CreateTodoItemResponse>>
     {
         private readonly ITodoItemsRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         private readonly ILogger<CreateTodoItemHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public async Task<CreateTodoItemResult> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ApplicationError, CreateTodoItemResponse>> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Finding duplicate todo items based in id.");
 
             if ( await _repository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
             {
-                throw new TodoItemDuplicateException(new List<ValidationFailure>
+                return new DuplicateError(new Dictionary<string, string[]>
                 {
-                    new (nameof(request.Id), request.Id.ToString())
+                    { nameof(request.Id), new[] { request.Id.ToString() } }
                 });
             }
 
@@ -34,9 +34,9 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
             if ( await _repository.FindByDescriptionAsync(request.Description.Trim(), cancellationToken))
             {
-                throw new TodoItemDuplicateException(new List<ValidationFailure>
+                return new DuplicateError(new Dictionary<string, string[]>
                 {
-                    new (nameof(request.Description), request.Description)
+                    { nameof(request.Description), new[] { request.Description.Trim() } }
                 });
             }
 
@@ -54,7 +54,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
             _logger.LogInformation("Todo item created.");
 
-            return new CreateTodoItemResult(createdTodoItem);
+            return new CreateTodoItemResponse(createdTodoItem);
         }
     }
 }

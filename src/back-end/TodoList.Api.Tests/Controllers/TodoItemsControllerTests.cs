@@ -70,7 +70,7 @@ namespace TodoList.Api.Tests.Controllers
 
             _senderMock
                 .Setup(x => x.Send(It.IsAny<GetTodoItemQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new GetTodoItemResult(domainTodoItem));
+                .ReturnsAsync(new GetTodoItemResponse(domainTodoItem));
 
             var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
 
@@ -93,7 +93,7 @@ namespace TodoList.Api.Tests.Controllers
         {
             _senderMock
                 .Setup(x => x.Send(It.IsAny<GetTodoItemsQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new GetTodoItemsResult(new List<Domain.TodoItems.TodoItem>()));
+                .ReturnsAsync(new GetTodoItemsResponse(new List<Domain.TodoItems.TodoItem>()));
 
             var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
 
@@ -119,7 +119,7 @@ namespace TodoList.Api.Tests.Controllers
 
             _senderMock
                 .Setup(x => x.Send(It.IsAny<CreateTodoItemCommand>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new CreateTodoItemResult(domainTodoItem));
+                .ReturnsAsync(new CreateTodoItemResponse(domainTodoItem));
 
             var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
-using TodoList.Application.Extensions;
+using TodoList.Application.Common.Extensions;
 
 namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
 {

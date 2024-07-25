@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using TodoList.Api.Common.Filters.Action;
-using TodoList.Api.Common.Filters.Exception;
+using TodoList.Api.Common.Extensions;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Api.Generated;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
 namespace TodoList.Api.Controllers
@@ -22,19 +22,17 @@ namespace TodoList.Api.Controllers
         {
             _logger.LogInformation("Getting all todo items");
 
-            var results = await _sender
+            var result = await _sender
                 .Send(new GetTodoItemsQuery(), cancellationToken);
 
             var todoItems = _mapper
-                .Map<IEnumerable<TodoItem>>(results.TodoItems);
-
+                .Map<IEnumerable<TodoItem>>(result.Value!.TodoItems);
+                
             _logger.LogInformation("Returning all todo items");
 
-            return Ok(todoItems);
+            return Ok(todoItems);                
         }
 
-        [ValidationExceptionFilter]
-        [NotFoundExceptionFilter]
         public override async Task<ActionResult<TodoItem>> GetTodoItem(Guid id, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Getting todo item");
@@ -42,30 +40,55 @@ namespace TodoList.Api.Controllers
             var result = await _sender
                 .Send(new GetTodoItemQuery(id), cancellationToken);
 
+            if (result is { IsError: true })
+            {
+                switch (result.Error)
+                {
+                    case NotFoundError notFoundError:
+                        return notFoundError.NotFoundErrorResult();
+                    case ValidationError validationError:
+                        return validationError.ValidationErrorResult();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
             var todoItem = _mapper
-                .Map<TodoItem>(result.TodoItem);
+                .Map<TodoItem>(result.Value!.TodoItem);
 
             _logger.LogInformation("Returning todo item");
 
             return Ok(todoItem);
         }
-        [ServiceFilter(typeof(ValidateTodoItemIdFilter))]
-        [ValidationExceptionFilter]
-        [NotFoundExceptionFilter]
+
         public override async Task<IActionResult> PutTodoItem(Guid id, TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (id != body.Id)
+                return BadRequest();
+
             _logger.LogInformation("Updating todo item");
 
-            await _sender
+            var result = await _sender
                 .Send(new UpdateTodoItemCommand(body.Id, body.Description, body.IsCompleted), cancellationToken);
+
+            if (result is { IsError: true })
+            {
+                switch (result.Error)
+                {
+                    case NotFoundError notFoundError:
+                        return notFoundError.NotFoundErrorResult();
+                    case ValidationError validationError:
+                        return validationError.ValidationErrorResult();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
 
             _logger.LogInformation("Todo item updated");
 
             return NoContent();          
         }
 
-        [ValidationExceptionFilter]
-        [DuplicateExceptionFilter]
         public override async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Creating todo item");
@@ -73,8 +96,21 @@ namespace TodoList.Api.Controllers
             var result = await _sender
                 .Send(new CreateTodoItemCommand(body.Id, body.Description, body.IsCompleted), cancellationToken);
 
+            if (result is { IsError: true })
+            {
+                switch (result.Error)
+                {
+                    case DuplicateError duplicateError:
+                        return duplicateError.DuplicateErrorResult();
+                    case ValidationError validationError:
+                        return  validationError.ValidationErrorResult();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
             var createdTodoItem = _mapper
-                .Map<TodoItem>(result.TodoItem);
+                .Map<TodoItem>(result.Value!.TodoItem);
        
             _logger.LogInformation("Todo item created");
 

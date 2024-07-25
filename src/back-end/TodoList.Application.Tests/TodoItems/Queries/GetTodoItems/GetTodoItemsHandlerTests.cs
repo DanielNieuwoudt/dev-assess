@@ -53,8 +53,11 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItems
 
             var result = await handler.Handle(new GetTodoItemsQuery(), CancellationToken.None);
 
-            result
-                .TodoItems
+            result.Value
+                .Should()
+                .NotBeNull();
+
+            result.Value!.TodoItems
                 .Should()
                 .BeEquivalentTo(todoItems);
         }

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net.Mime;
 using System.Text.Json;
-using TodoList.Api.Common.Features;
 using TodoList.Api.Common.Constants;
 
 namespace TodoList.Api.Common.Middleware
@@ -15,20 +14,6 @@ namespace TodoList.Api.Common.Middleware
             try
             {
                 await next(context);
-
-                // We use the exception feature to log exceptions that are handled by the exception filters.
-                var exceptionFeature = context.Features.Get<IExceptionContextFeature>();
-                if (exceptionFeature is { ExceptionContext: not null })
-                {
-                    if (exceptionFeature.ExceptionContext.ExceptionHandled)
-                    {
-                        logger.LogWarning(exceptionFeature.ExceptionContext.Exception, exceptionFeature.ExceptionContext.Exception.Message);
-                    }
-                    else
-                    {
-                        logger.LogError(exceptionFeature.ExceptionContext.Exception, exceptionFeature.ExceptionContext.Exception.Message);
-                    }
-                }
             }
             catch (Exception exception)
             {

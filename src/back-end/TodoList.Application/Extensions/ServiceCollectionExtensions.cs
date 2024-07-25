@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using TodoList.Application.Common.Behaviours;
 
-namespace TodoList.Application.Extensions
+namespace TodoList.Application.Common.Extensions
 {
     [ExcludeFromCodeCoverage(Justification = "Wiring")]
     public static class ServiceCollectionExtensions

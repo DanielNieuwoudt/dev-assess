@@ -1,6 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
-using TodoList.Api.Common.Filters.Action;
 using TodoList.Api.Common.Middleware;
 using TodoList.Api.Common.Mapping;
 
@@ -14,14 +13,12 @@ namespace TodoList.Api.Extensions
         public static IServiceCollection AddApiServices(this IServiceCollection services,
             IConfiguration configuration)
         {
-
             services.ConfigureAutoMapper();
-            services.ConfigureHealthChecks(configuration);
-            services.ConfigureCors();
-            services.ConfigureSwagger();
-            services.ConfigureMiddleware();
-            services.ConfigureFilters();
             services.ConfigureControllers();
+            services.ConfigureCors();
+            services.ConfigureHealthChecks(configuration);
+            services.ConfigureMiddleware();
+            services.ConfigureSwagger();
             
             return services;
         }
@@ -43,9 +40,18 @@ namespace TodoList.Api.Extensions
             return services;
         }
 
-        public static IServiceCollection ConfigureFilters(this IServiceCollection services)
+        public static IServiceCollection ConfigureCors(this IServiceCollection services)
         {
-            services.AddScoped<ValidateTodoItemIdFilter>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllHeaders",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
             return services;
         }
@@ -67,19 +73,10 @@ namespace TodoList.Api.Extensions
             
             return services;
         }
-
-        public static IServiceCollection ConfigureCors(this IServiceCollection services)
+        
+        public static IServiceCollection ConfigureMiddleware(this IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllHeaders",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                    });
-            });
+            services.AddTransient<ExceptionHandlingMiddleware>();
 
             return services;
         }
@@ -90,13 +87,6 @@ namespace TodoList.Api.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoList.Api", Version = "v1" });
             });
-
-            return services;
-        }
-
-        public static IServiceCollection ConfigureMiddleware(this IServiceCollection services)
-        {
-            services.AddTransient<ExceptionHandlingMiddleware>();
 
             return services;
         }
