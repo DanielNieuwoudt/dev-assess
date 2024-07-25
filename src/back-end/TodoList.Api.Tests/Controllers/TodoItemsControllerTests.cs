@@ -3,7 +3,6 @@ using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using TodoList.Api.Common.Helpers;
 using TodoList.Api.Controllers;
@@ -25,7 +24,6 @@ namespace TodoList.Api.Tests.Controllers
         private readonly TodoItemsController _todoItemController;
         private readonly Mock<IErrorHelper> _errorHelperMock = new ();
         private readonly Mock<ISender> _senderMock = new();
-        private readonly NullLogger<TodoItemsController> _nullLogger = new();
         private readonly IMapper _mapper;
 
         public TodoItemsControllerTests()
@@ -48,33 +46,23 @@ namespace TodoList.Api.Tests.Controllers
             _errorHelperMock.Setup(x => x.IdMismatchValidationError())
                 .Returns(new BadRequestObjectResult(new BadRequest()));
 
-            _todoItemController = new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object, _nullLogger);
+            _todoItemController = new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object);
         }
 
         [Fact]
         public void Given_NullSender_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(_errorHelperMock.Object, _mapper, null!, _nullLogger);
+            var action = () => new TodoItemsController(_errorHelperMock.Object, _mapper, null!);
 
             action
                 .Should()
                 .Throw<ArgumentNullException>();
         }
-
-        [Fact]
-        public void Given_NullLogger_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
-        {
-            var action = () => new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object, null!);
-
-            action
-                .Should()
-                .Throw<ArgumentNullException>();
-        }
-
+  
         [Fact]
         public void Given_NullMapper_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(_errorHelperMock.Object,null!, _senderMock.Object, _nullLogger);
+            var action = () => new TodoItemsController(_errorHelperMock.Object,null!, _senderMock.Object);
 
             action
                 .Should()
@@ -84,7 +72,7 @@ namespace TodoList.Api.Tests.Controllers
         [Fact]
         public void Given_NullErrorHelper_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(null!,_mapper, _senderMock.Object, _nullLogger);
+            var action = () => new TodoItemsController(null!,_mapper, _senderMock.Object);
 
             action
                 .Should()
