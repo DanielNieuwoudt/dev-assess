@@ -18,6 +18,7 @@ namespace TodoList.Api.Common.Middleware
             catch (Exception exception)
             {
                 // All other exceptions are caught and logged here.
+                // We may need to think of sanitisation of the exception message before logging.
                 _logger.LogError(exception, exception.Message);
 
                 context.Response.ContentType = MediaTypeNames.Application.Json;
@@ -31,10 +32,10 @@ namespace TodoList.Api.Common.Middleware
 
                         var internalServerError = new Generated.InternalServerError
                         {
-                            Title = "An error occurred.",
+                            Title = ErrorMessages.InternalServerError,
                             Type = ResponseTypes.InternalServerError,
                             Status = StatusCodes.Status500InternalServerError,
-                            Detail = "An error occurred processing your request.", // We do not return the exception message as it may contain sensitive information.
+                            Detail = ErrorMessages.ErrorProcessingRequest, // We do not return the exception message as it may contain sensitive information.
                             TraceId = Activity.Current?.Id ?? context.TraceIdentifier
                         };
 

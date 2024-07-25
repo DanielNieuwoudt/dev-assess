@@ -20,7 +20,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
         public async Task<Result<ApplicationError, CreateTodoItemResponse>> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding duplicate todo items based in id.");
+            _logger.LogInformation("Finding duplicate todo items based on id.");
 
             if ( await _repository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
             {
@@ -30,7 +30,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
                 });
             }
 
-            _logger.LogInformation("Finding duplicate todo items based in description.");
+            _logger.LogInformation("Finding duplicate todo items based on description.");
 
             if ( await _repository.FindByDescriptionAsync(request.Description.Trim(), cancellationToken))
             {

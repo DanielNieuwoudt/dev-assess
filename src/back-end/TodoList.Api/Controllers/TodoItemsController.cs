@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using TodoList.Api.Common.Constants;
 using TodoList.Api.Common.Helpers;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
@@ -21,23 +22,17 @@ namespace TodoList.Api.Controllers
 
         public override async Task<ActionResult<ICollection<TodoItem>>> GetTodoItems(CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger.LogInformation("Getting all todo items");
-
             var result = await _sender
                 .Send(new GetTodoItemsQuery(), cancellationToken);
 
             var todoItems = _mapper
                 .Map<IEnumerable<TodoItem>>(result.Value!.TodoItems);
                 
-            _logger.LogInformation("Returning all todo items");
-
             return Ok(todoItems);                
         }
 
         public override async Task<ActionResult<TodoItem>> GetTodoItem(Guid id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger.LogInformation("Getting todo item");
-
             var result = await _sender
                 .Send(new GetTodoItemQuery(id), cancellationToken);
 
@@ -57,8 +52,6 @@ namespace TodoList.Api.Controllers
             var todoItem = _mapper
                 .Map<TodoItem>(result.Value!.TodoItem);
 
-            _logger.LogInformation("Returning todo item");
-
             return Ok(todoItem);
         }
 
@@ -66,11 +59,8 @@ namespace TodoList.Api.Controllers
         {
             if (id != body.Id)
             {
-                return _errorHelper
-                    .CreateValidationError("The 'id' in the path does not match the item 'id'");
+                return _errorHelper.IdMismatchValidationError();
             }
-
-            _logger.LogInformation("Updating todo item");
 
             var result = await _sender
                 .Send(new UpdateTodoItemCommand(body.Id, body.Description, body.IsCompleted), cancellationToken);
@@ -88,15 +78,11 @@ namespace TodoList.Api.Controllers
                 }
             }
 
-            _logger.LogInformation("Todo item updated");
-
             return NoContent();          
         }
 
         public override async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger.LogInformation("Creating todo item");
-
             var result = await _sender
                 .Send(new CreateTodoItemCommand(body.Id, body.Description, body.IsCompleted), cancellationToken);
 
@@ -116,8 +102,6 @@ namespace TodoList.Api.Controllers
             var createdTodoItem = _mapper
                 .Map<TodoItem>(result.Value!.TodoItem);
        
-            _logger.LogInformation("Todo item created");
-
             return CreatedAtAction(nameof(GetTodoItem), new { id = createdTodoItem.Id }, createdTodoItem);
         }
     }
