@@ -305,8 +305,8 @@ namespace TodoList.Api.Tests.Controllers
             };
 
             _senderMock
-                .Setup(x => x.Send(It.IsAny<CreateTodoItemCommand>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationError(new Dictionary<string, string[]>()));
+                .Setup(x => x.Send(It.IsAny<UpdateTodoItemCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new UpdateTodoItemResponse());
 
             var result = await _todoItemController
                 .PutTodoItem(routeId, todoItem);
