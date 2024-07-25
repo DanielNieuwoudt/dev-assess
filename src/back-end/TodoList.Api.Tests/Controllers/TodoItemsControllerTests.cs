@@ -295,7 +295,7 @@ namespace TodoList.Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task Given_PutTodoItem_When_SendUpdateTodoItemCommandReturns_Then_ReturnsNoContentResult()
+        public async Task Given_PutTodoItem_When_SendUpdateTodoItemCommandUpdatesItem_Then_ReturnsNoContentResult()
         {
             var routeId = Guid.Parse("4a28d173-0c27-4d99-80e8-1aedc9d224a8");
             var itemId = Guid.Parse("4a28d173-0c27-4d99-80e8-1aedc9d224a8");
