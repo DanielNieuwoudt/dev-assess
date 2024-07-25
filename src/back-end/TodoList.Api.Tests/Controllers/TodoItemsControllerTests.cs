@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using TodoList.Api.Common.Helpers;
 using TodoList.Api.Controllers;
 using TodoList.Api.Generated;
 using TodoList.Api.Common.Mapping;
@@ -19,6 +20,7 @@ namespace TodoList.Api.Tests.Controllers
     [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class TodoItemsControllerTests
     {
+        private readonly Mock<IErrorHelper> _errorHelperMock = new ();
         private readonly Mock<ISender> _senderMock = new();
         private readonly NullLogger<TodoItemsController> _nullLogger = new();
         private readonly IMapper _mapper;
@@ -35,7 +37,7 @@ namespace TodoList.Api.Tests.Controllers
         [Fact]
         public void Given_NullSender_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(_mapper, null!, _nullLogger);
+            var action = () => new TodoItemsController(_errorHelperMock.Object, _mapper, null!, _nullLogger);
 
             action
                 .Should()
@@ -45,7 +47,7 @@ namespace TodoList.Api.Tests.Controllers
         [Fact]
         public void Given_NullLogger_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(_mapper, _senderMock.Object, null!);
+            var action = () => new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object, null!);
 
             action
                 .Should()
@@ -55,7 +57,17 @@ namespace TodoList.Api.Tests.Controllers
         [Fact]
         public void Given_NullMapper_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsController(null!, _senderMock.Object, _nullLogger);
+            var action = () => new TodoItemsController(_errorHelperMock.Object,null!, _senderMock.Object, _nullLogger);
+
+            action
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
+        
+        [Fact]
+        public void Given_NullErrorHelper_When_TodoItemsControllerInitialised_Then_ThrowsArgumentNullException()
+        {
+            var action = () => new TodoItemsController(null!,_mapper, _senderMock.Object, _nullLogger);
 
             action
                 .Should()
@@ -72,7 +84,7 @@ namespace TodoList.Api.Tests.Controllers
                 .Setup(x => x.Send(It.IsAny<GetTodoItemQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTodoItemResponse(domainTodoItem));
 
-            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
+            var todoItemController = new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object, _nullLogger);
 
             var result = await todoItemController
                 .GetTodoItem(Guid.NewGuid(), CancellationToken.None);
@@ -95,7 +107,7 @@ namespace TodoList.Api.Tests.Controllers
                 .Setup(x => x.Send(It.IsAny<GetTodoItemsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTodoItemsResponse(new List<Domain.TodoItems.TodoItem>()));
 
-            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
+            var todoItemController = new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object, _nullLogger);
 
             var result = await todoItemController
                 .GetTodoItems(CancellationToken.None);
@@ -121,7 +133,7 @@ namespace TodoList.Api.Tests.Controllers
                 .Setup(x => x.Send(It.IsAny<CreateTodoItemCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CreateTodoItemResponse(domainTodoItem));
 
-            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
+            var todoItemController = new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object, _nullLogger);
 
             var result = await todoItemController
                 .PostTodoItem(new TodoItem
@@ -154,7 +166,7 @@ namespace TodoList.Api.Tests.Controllers
                 IsCompleted = false
             };
 
-            var todoItemController = new TodoItemsController(_mapper, _senderMock.Object, _nullLogger);
+            var todoItemController = new TodoItemsController(_errorHelperMock.Object, _mapper, _senderMock.Object, _nullLogger);
 
             var result = await todoItemController
                 .PutTodoItem(routeId, todoItem);

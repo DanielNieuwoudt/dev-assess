@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using TodoList.Api.Common.Extensions;
+using TodoList.Api.Common.Helpers;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
@@ -12,8 +12,9 @@ using TodoList.Application.TodoItems.Queries.GetTodoItems;
 namespace TodoList.Api.Controllers
 {
     [ApiController]
-    public class TodoItemsController(IMapper mapper, ISender sender, ILogger<TodoItemsController> logger) : TodoItemsControllerBase
+    public class TodoItemsController(IErrorHelper errorHelper, IMapper mapper, ISender sender, ILogger<TodoItemsController> logger) : TodoItemsControllerBase
     {
+        private readonly IErrorHelper _errorHelper = errorHelper ?? throw new ArgumentNullException(nameof(errorHelper));
         private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         private readonly ISender _sender = sender ?? throw new ArgumentNullException(nameof(sender));
         private readonly ILogger<TodoItemsController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -45,9 +46,9 @@ namespace TodoList.Api.Controllers
                 switch (result.Error)
                 {
                     case NotFoundError notFoundError:
-                        return notFoundError.NotFoundErrorResult();
+                        return _errorHelper.NotFoundErrorResult(notFoundError);
                     case ValidationError validationError:
-                        return validationError.ValidationErrorResult();
+                        return _errorHelper.ValidationErrorResult(validationError);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -64,7 +65,10 @@ namespace TodoList.Api.Controllers
         public override async Task<IActionResult> PutTodoItem(Guid id, TodoItem body, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id != body.Id)
-                return BadRequest();
+            {
+                return _errorHelper
+                    .CreateValidationError("The 'id' in the path does not match the item 'id'");
+            }
 
             _logger.LogInformation("Updating todo item");
 
@@ -76,9 +80,9 @@ namespace TodoList.Api.Controllers
                 switch (result.Error)
                 {
                     case NotFoundError notFoundError:
-                        return notFoundError.NotFoundErrorResult();
+                        return _errorHelper.NotFoundErrorResult(notFoundError);
                     case ValidationError validationError:
-                        return validationError.ValidationErrorResult();
+                        return _errorHelper.ValidationErrorResult(validationError);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -101,9 +105,9 @@ namespace TodoList.Api.Controllers
                 switch (result.Error)
                 {
                     case DuplicateError duplicateError:
-                        return duplicateError.DuplicateErrorResult();
+                        return _errorHelper.DuplicateErrorResult(duplicateError);
                     case ValidationError validationError:
-                        return  validationError.ValidationErrorResult();
+                        return  _errorHelper.ValidationErrorResult(validationError);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

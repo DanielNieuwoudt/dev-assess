@@ -91,6 +91,12 @@ namespace TodoList.Api.Generated
         public int Status { get; set; } = default!;
 
         /// <summary>
+        /// A human-readable explanation specific to this occurrence of the problem.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("detail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Detail { get; set; } = default!;
+
+        /// <summary>
         /// Collection of validation failures.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]

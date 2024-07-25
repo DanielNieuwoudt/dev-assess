@@ -177,6 +177,9 @@ components:
         status:
           type: integer
           description: The HTTP code.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
         errors:
           type: object
           description: Collection of validation failures.
@@ -192,6 +195,7 @@ components:
         title: "One or more validation errors occurred."
         type: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
         status: "400"
+        detail: "See the errors property for details."
         errors:
           name:
             - "Id"

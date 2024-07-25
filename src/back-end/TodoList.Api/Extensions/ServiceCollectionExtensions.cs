@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
+using TodoList.Api.Common.Helpers;
 using TodoList.Api.Common.Middleware;
 using TodoList.Api.Common.Mapping;
 
@@ -18,6 +19,7 @@ namespace TodoList.Api.Extensions
             services.ConfigureCors();
             services.ConfigureHealthChecks(configuration);
             services.ConfigureMiddleware();
+            services.ConfigureServices();
             services.ConfigureSwagger();
             
             return services;
@@ -77,6 +79,14 @@ namespace TodoList.Api.Extensions
         public static IServiceCollection ConfigureMiddleware(this IServiceCollection services)
         {
             services.AddTransient<ExceptionHandlingMiddleware>();
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureServices(this IServiceCollection services)
+        {
+            services.AddHttpContextAccessor();
+            services.AddScoped<IErrorHelper, ErrorHelper>();
 
             return services;
         }

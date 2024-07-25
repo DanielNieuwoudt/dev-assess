@@ -48,6 +48,12 @@ export interface BadRequest {
      */
     'status'?: number;
     /**
+     * A human-readable explanation specific to this occurrence of the problem.
+     * @type {string}
+     * @memberof BadRequest
+     */
+    'detail'?: string;
+    /**
      * Collection of validation failures.
      * @type {{ [key: string]: Array<string>; }}
      * @memberof BadRequest
