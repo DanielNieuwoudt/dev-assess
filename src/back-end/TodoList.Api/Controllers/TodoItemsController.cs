@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using TodoList.Api.Common.Constants;
 using TodoList.Api.Common.Helpers;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
@@ -38,15 +37,12 @@ namespace TodoList.Api.Controllers
 
             if (result is { IsError: true })
             {
-                switch (result.Error)
+                return result.Error switch
                 {
-                    case NotFoundError notFoundError:
-                        return _errorHelper.NotFoundErrorResult(notFoundError);
-                    case ValidationError validationError:
-                        return _errorHelper.ValidationErrorResult(validationError);
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    NotFoundError notFoundError => _errorHelper.NotFoundErrorResult(notFoundError),
+                    ValidationError validationError => _errorHelper.ValidationErrorResult(validationError),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
 
             var todoItem = _mapper
@@ -67,15 +63,12 @@ namespace TodoList.Api.Controllers
 
             if (result is { IsError: true })
             {
-                switch (result.Error)
+                return result.Error switch
                 {
-                    case NotFoundError notFoundError:
-                        return _errorHelper.NotFoundErrorResult(notFoundError);
-                    case ValidationError validationError:
-                        return _errorHelper.ValidationErrorResult(validationError);
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    NotFoundError notFoundError => _errorHelper.NotFoundErrorResult(notFoundError),
+                    ValidationError validationError => _errorHelper.ValidationErrorResult(validationError),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
 
             return NoContent();          
@@ -88,15 +81,12 @@ namespace TodoList.Api.Controllers
 
             if (result is { IsError: true })
             {
-                switch (result.Error)
+                return result.Error switch
                 {
-                    case DuplicateError duplicateError:
-                        return _errorHelper.DuplicateErrorResult(duplicateError);
-                    case ValidationError validationError:
-                        return  _errorHelper.ValidationErrorResult(validationError);
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    DuplicateError duplicateError => _errorHelper.DuplicateErrorResult(duplicateError),
+                    ValidationError validationError => _errorHelper.ValidationErrorResult(validationError),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
 
             var createdTodoItem = _mapper
