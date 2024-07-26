@@ -41,7 +41,7 @@ namespace TodoList.Application.Tests.Common.Behaviours
     [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class ValidationBehaviorTests
     {
-        [Theory(Skip = "Need to resolve activator for validation behaviour.")]
+        [Theory]
         [InlineData("00000000-0000-0000-0000-000000000000", true)]
         [InlineData("2f5adcb0-e180-4839-a64a-c7f3fb3b449f", false)]
         public async Task GivenRequest_When_Handle_Then_ShouldThrowValidationExceptionIfValidationFails(string id,

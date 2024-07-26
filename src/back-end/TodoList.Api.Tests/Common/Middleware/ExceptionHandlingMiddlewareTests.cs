@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using System.Net.Mime;
 using System.Text.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;

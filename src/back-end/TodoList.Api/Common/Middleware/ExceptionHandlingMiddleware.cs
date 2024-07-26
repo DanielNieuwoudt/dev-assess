@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using System.Text.Json;
+﻿using System.Text.Json;
 using TodoList.Api.Common.Constants;
 
 namespace TodoList.Api.Common.Middleware

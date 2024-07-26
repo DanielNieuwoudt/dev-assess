@@ -3,10 +3,6 @@ using MediatR;
 using TodoList.Application.Common.Errors;
 using TodoList.Application.Common.Extensions;
 using TodoList.Application.TodoItems;
-using TodoList.Application.TodoItems.Commands.CreateTodoItem;
-using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
-using TodoList.Application.TodoItems.Queries.GetTodoItem;
-using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
 namespace TodoList.Application.Common.Behaviours
 {
@@ -30,27 +26,10 @@ namespace TodoList.Application.Common.Behaviours
             if (failures.Any())
             {
                 var validationError = new ValidationError(failures.ToErrorDictionary());
-
-                var responseType = typeof(TResponse);
-                if (responseType == typeof(TodoItemResult<ApplicationError, CreateTodoItemResponse>))
-                {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, CreateTodoItemResponse>(validationError);
-                }
-                if (responseType == typeof(TodoItemResult<ApplicationError, UpdateTodoItemResponse>))
-                {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, UpdateTodoItemResponse>(validationError);
-                }
-                if (responseType == typeof(TodoItemResult<ApplicationError, GetTodoItemResponse>))
-                {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, GetTodoItemResponse>(validationError);
-                }
-                if (responseType == typeof(TodoItemResult<ApplicationError, GetTodoItemsResponse>))
-                {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, GetTodoItemsResponse>(validationError);
-                }
-
-                throw new InvalidOperationException($"Unhandled response type: {responseType.Name}");
+                var genericArguments = typeof(TResponse).GetGenericArguments();
+                var todoItemResultType = typeof(TodoItemResult<,>).MakeGenericType(genericArguments);
                 
+                return (TResponse)Activator.CreateInstance(todoItemResultType, validationError)!;
             }
 
             return await next();
