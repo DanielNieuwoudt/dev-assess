@@ -1,6 +1,8 @@
-﻿using TodoList.Application.Common.Enumerations;
+﻿using System.Diagnostics.CodeAnalysis;
+using TodoList.Application.Common.Enumerations;
 
 namespace TodoList.Application.Common.Errors
 {
-    public record ApplicationError(ErrorReason Reason, IDictionary<string, string[]> errors);
+    [ExcludeFromCodeCoverage(Justification = "Record")]
+    public abstract record ApplicationError(ErrorReason Reason, IDictionary<string, string[]> errors);
 }
