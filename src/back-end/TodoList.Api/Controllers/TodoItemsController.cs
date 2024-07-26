@@ -6,7 +6,7 @@ using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Api.Generated;
-using TodoList.Application.TodoItems.Errors;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
 namespace TodoList.Api.Controllers

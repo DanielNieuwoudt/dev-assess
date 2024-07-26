@@ -2,9 +2,9 @@
 using FluentAssertions;
 using FluentValidation;
 using MediatR;
+using TodoList.Application.Common.Behaviours;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.TodoItems;
-using TodoList.Application.TodoItems.Behaviours;
-using TodoList.Application.TodoItems.Errors;
 
 namespace TodoList.Application.Tests.Common.Behaviours
 {

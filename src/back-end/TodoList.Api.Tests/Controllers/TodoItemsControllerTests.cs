@@ -8,7 +8,7 @@ using TodoList.Api.Common.Helpers;
 using TodoList.Api.Controllers;
 using TodoList.Api.Generated;
 using TodoList.Api.Common.Mapping;
-using TodoList.Application.TodoItems.Errors;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;

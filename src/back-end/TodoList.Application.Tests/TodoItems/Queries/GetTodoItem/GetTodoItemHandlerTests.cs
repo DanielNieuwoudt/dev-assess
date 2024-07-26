@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using TodoList.Application.TodoItems.Errors;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Domain.TodoItems;

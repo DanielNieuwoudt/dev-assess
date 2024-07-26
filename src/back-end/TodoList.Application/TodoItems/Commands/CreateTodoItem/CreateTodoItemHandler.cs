@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using TodoList.Application.TodoItems.Errors;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Domain.TodoItems;
 using TodoList.Domain.TodoItems.ValueObjects;
