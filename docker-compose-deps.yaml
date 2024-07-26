@@ -1,6 +1,3 @@
-include:
-  - docker-compose-auth.yaml
-
 services:
 
   sqlserver:
@@ -20,15 +17,6 @@ services:
     ports:
       - 6379:6379
 
-  mocks:
-    container_name: mockoon
-    image: mockoon/cli
-    command: --data data
-    volumes:
-      - ./mocks/front-end/data.json:/data:ro
-    ports:
-      - 4000:3000
-
   migrations:
     container_name: migrations
     image: migrations
@@ -45,7 +33,5 @@ services:
       - APPLY_MIGRATION=true
       - CONNECTION_STR=Server=sqlserver;Database=todo;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
     depends_on:
-      - authserver
-      - mocks
       - redis
       - sqlserver

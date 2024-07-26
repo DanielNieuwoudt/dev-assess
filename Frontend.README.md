@@ -11,6 +11,8 @@ React Application architecture typically involves a component-based structure. T
 - **Item** - Allows us to add a new todo item. 
 - **Items** - Allows us to view a list of todo items that have not been completed.
 - **Alerts** - Provides feedback on the actions taken. Allows us to view the Problem Details received from the API.
+- **Details** - Provides detailed information regarding the problem.
+
 
 #### Benefits
 

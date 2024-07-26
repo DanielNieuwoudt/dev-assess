@@ -114,7 +114,6 @@ The following dependencies are used in the _form of containers_ to support the d
 | Tool | Description |
 |--|--|
 | [Microsoft SQL Server](https://hub.docker.com/r/microsoft/mssql-server) | Official Microsoft SQL Server container image on Linux for Docker Engine. |
-| [OIDC Mock Server](https://github.com/Soluto/oidc-server-mock) | A project that allows you to run a configurable mock server with OpenId Connect functionality. |
 | [Redis](https://hub.docker.com/_/redis/) | Redis is a data platform used for caching. |
 
 ## Frameworks, Runtimes and SDKs
@@ -144,7 +143,6 @@ For the best local development and quality assurance experience, I recommended t
 
 | Tool | Description |
 |--|--|
-| [Mockoon](https://mockoon.com/) | Mockoon is the easiest and quickest way to design and run mock REST APIs. |
 | [Node Version Manager](https://github.com/nvm-sh/nvm) | Install, manage, and switch between multiple versions of Node.js on your system. |
 | [Redis Insights](https://redis.io/insight/) | Redis Insight lets you visually interact with a Redis Cache. |
 | [SSMS](https://redis.io/insight/) | SQL Server Management Studio (SSMS) is an integrated environment for managing any SQL infrastructure. |
@@ -170,7 +168,6 @@ Folders in our repository have been structured in the following way:
 
 |Folder| Decription |
 |--|--|
-| **mocks** | Mockoon JSON files representing the mocks used by the front. |
 | **specs** | Open API specification that is used to generate the controller and clients. |
 | **src** | Source code for the front and back end.  |
 | **tests** | Contract, end-to-end and performance automated tests. |
@@ -179,7 +176,6 @@ Folders in our repository have been structured in the following way:
 
 | File | Description |
 |--|--|
-| docker-compose-auth.yaml | The separated definition and configuration for the mock authentication server.  |
 | docker-compose-deps.yaml | The separated definition and configuration of development and solution dependencies. |
 | docker-compose-tests.yaml | The full compose which includes and executes the contract tests. |
 | docker-compose.yaml | The full compose includes the authentication server, dependencies, and applications. |
@@ -192,12 +188,10 @@ Port mappings allow us to access the running containers and for the running cont
 
 | Container       | Host Port | Container Port |
 |-----------------|-----------|----------------|
-| Auth Server     | 5010      | 8080           |
 | Back End        | 5000      | 5000           |
 | Front End       | 3000      | 3000           |
 | Redis           | 6379      | 6379           |
 | SQL Server      | 1433      | 1433           |
-| Mockoon         | 4000      | 3000           |
 
 > We recommend stopping your local Microsoft SQL Server installation to avoid port conflicts. You can do this by executing the following command from a command prompt with elevated privileges:
 

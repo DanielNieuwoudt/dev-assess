@@ -20,8 +20,6 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - authserver
-      - mocks
       - migrations
       - redis
       - sqlserver
