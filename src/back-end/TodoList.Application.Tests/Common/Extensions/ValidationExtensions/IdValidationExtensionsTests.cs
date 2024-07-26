@@ -3,38 +3,34 @@ using FluentAssertions;
 using FluentValidation;
 using TodoList.Application.Common.Extensions;
 
-namespace TodoList.Application.Tests.Extensions
+namespace TodoList.Application.Tests.Common.Extensions.ValidationExtensions
 {
     [ExcludeFromCodeCoverage(Justification = "Tests")]
-    public class DescriptionValidationExtensionsTests
+    public class IdValidationExtensionsTests
     {
         private readonly IdValidatorTestsValidator _validator = new();
 
         public class ValidationTarget
         {
-            public string? Description { get; set; }
+            public Guid Id { get; set; }
         }
 
         private class IdValidatorTestsValidator : AbstractValidator<ValidationTarget>
         {
             public IdValidatorTestsValidator()
             {
-                RuleFor(x => x.Description)!
-                    .ValidateDescription();
+                RuleFor(x => x.Id).ValidateId();
             }
         }
 
         [Theory]
-        [InlineData(null, false)]
-        [InlineData("", false)]
-        [InlineData(" ", false)]
-        [InlineData("01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", false)]
-        [InlineData("Description", true)]
-        public void Given_Id_When_IsValid_Then_ValidationResult(string? description, bool expectedValidationResult)
+        [InlineData("00000000-0000-0000-0000-000000000000", false)]
+        [InlineData("a662c676-b165-4fd3-9683-92d4f4460617", true)]
+        public void Given_Id_When_IsValid_Then_ValidationResult(Guid id, bool expectedValidationResult)
         {
             var subject = new ValidationTarget
             {
-                Description = description!
+                Id = id
             };
             _validator.Validate(subject)
                 .IsValid

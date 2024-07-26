@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -10,6 +11,7 @@ using Xunit;
 
 namespace TodoList.Api.Tests.Common.Helpers
 {
+    [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class ErrorHelperTests
     {
         private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock = new ();

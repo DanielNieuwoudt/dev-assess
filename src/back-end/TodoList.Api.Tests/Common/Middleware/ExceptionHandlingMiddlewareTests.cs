@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using System.Net.Mime;
 using System.Text.Json;
 using FluentAssertions;
@@ -17,6 +18,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace TodoList.Api.Tests.Common.Middleware;
 
+[ExcludeFromCodeCoverage(Justification = "Tests")]
 public class ExceptionHandlingMiddlewareTests
 {
     private readonly Mock<ILogger<ExceptionHandlingMiddleware>> _mockLogger = new ();

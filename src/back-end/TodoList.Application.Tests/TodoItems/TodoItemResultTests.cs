@@ -6,6 +6,7 @@ using TodoList.Application.TodoItems;
 
 namespace TodoList.Application.Tests.TodoItems
 {
+    [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class TodoItemResultTests
     {
         [Fact]
