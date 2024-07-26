@@ -123,9 +123,7 @@ The following dependencies are used in the _form of containers_ to support the d
 | Prerequisites | Description |
 |--|--|
 | [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) | .NET is a free, open-source, cross-platform framework. |
-| [NodeJs](https://nodejs.org/en) | Node.js is a free, open-source, cross-platform JavaScript runtime environment. |
-
-**Note:** This solution uses NodeJs version 18.20.3
+| [NodeJs 18.20.3](https://nodejs.org/en) | Node.js is a free, open-source, cross-platform JavaScript runtime environment. |
 
 ## Integrated Development Environments
 
@@ -177,8 +175,8 @@ Folders in our repository have been structured in the following way:
 | File | Description |
 |--|--|
 | docker-compose-deps.yaml | The separated definition and configuration of development and solution dependencies. |
-| docker-compose-tests.yaml | The full compose which includes and executes the contract tests. |
-| docker-compose.yaml | The full compose includes the authentication server, dependencies, and applications. |
+| docker-compose-tests.yaml | Includes the full compose and executes the contract tests. |
+| docker-compose.yaml | The full compose which includes dependencies and the applications. |
 
 ### Port Mappings
 
