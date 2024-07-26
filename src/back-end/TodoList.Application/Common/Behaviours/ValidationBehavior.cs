@@ -32,21 +32,10 @@ namespace TodoList.Application.Common.Behaviours
                 var validationError = new ValidationError(failures.ToErrorDictionary());
 
                 var responseType = typeof(TResponse);
-                if (responseType == typeof(TodoItemResult<ApplicationError, CreateTodoItemResponse>))
+
+                if (responseType.IsGenericType && responseType.GetGenericTypeDefinition() == typeof(TodoItemResult<,>))
                 {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, CreateTodoItemResponse>(validationError);
-                }
-                if (responseType == typeof(TodoItemResult<ApplicationError, UpdateTodoItemResponse>))
-                {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, UpdateTodoItemResponse>(validationError);
-                }
-                if (responseType == typeof(TodoItemResult<ApplicationError, GetTodoItemResponse>))
-                {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, GetTodoItemResponse>(validationError);
-                }
-                if (responseType == typeof(TodoItemResult<ApplicationError, GetTodoItemsResponse>))
-                {
-                    return (TResponse)(object)new TodoItemResult<ApplicationError, GetTodoItemsResponse>(validationError);
+                    return CreateTodoItemResult(validationError, responseType);
                 }
 
                 throw new InvalidOperationException($"Unhandled response type: {responseType.Name}");
@@ -54,6 +43,13 @@ namespace TodoList.Application.Common.Behaviours
             }
 
             return await next();
+        }
+        
+        private TResponse CreateTodoItemResult(ValidationError validationError, Type responseType)
+        {
+            var genericArguments = responseType.GetGenericArguments();
+            var todoItemResultType = typeof(TodoItemResult<,>).MakeGenericType(genericArguments);
+            return (TResponse)Activator.CreateInstance(todoItemResultType, validationError)!;
         }
     }
 }
