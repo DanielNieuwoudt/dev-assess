@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
+using TodoList.Application.Common.Enumerations;
+using TodoList.Application.Common.Errors;
 using TodoList.Application.TodoItems;
-using TodoList.Application.TodoItems.Enumerations;
-using TodoList.Application.TodoItems.Errors;
 
 namespace TodoList.Application.Tests.TodoItems
 {

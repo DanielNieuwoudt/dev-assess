@@ -1,4 +1,4 @@
-﻿namespace TodoList.Application.TodoItems.Enumerations;
+﻿namespace TodoList.Application.Common.Enumerations;
 
 public enum ErrorReason
 {

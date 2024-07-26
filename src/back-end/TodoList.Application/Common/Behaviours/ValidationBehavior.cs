@@ -1,13 +1,14 @@
 ﻿using FluentValidation;
 using MediatR;
-using TodoList.Application.TodoItems.Extensions;
+using TodoList.Application.Common.Errors;
+using TodoList.Application.Common.Extensions;
+using TodoList.Application.TodoItems;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
-using TodoList.Application.TodoItems.Errors;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
-namespace TodoList.Application.TodoItems.Behaviours
+namespace TodoList.Application.Common.Behaviours
 {
     public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse> where TRequest : class, IRequest<TResponse>
     {

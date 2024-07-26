@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using MediatR;
-using TodoList.Application.TodoItems.Errors;
+using TodoList.Application.Common.Errors;
 
 namespace TodoList.Application.TodoItems.Queries.GetTodoItems;
 

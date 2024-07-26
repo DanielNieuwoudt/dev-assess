@@ -2,9 +2,9 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using TodoList.Application.TodoItems.Behaviours;
+using TodoList.Application.Common.Behaviours;
 
-namespace TodoList.Application.TodoItems.Extensions
+namespace TodoList.Application.Extensions
 {
     [ExcludeFromCodeCoverage(Justification = "Wiring")]
     public static class ServiceCollectionExtensions

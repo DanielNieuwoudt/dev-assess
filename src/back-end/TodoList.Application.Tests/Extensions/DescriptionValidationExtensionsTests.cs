@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using FluentValidation;
-using TodoList.Application.TodoItems.Extensions;
+using TodoList.Application.Common.Extensions;
 
 namespace TodoList.Application.Tests.Extensions
 {

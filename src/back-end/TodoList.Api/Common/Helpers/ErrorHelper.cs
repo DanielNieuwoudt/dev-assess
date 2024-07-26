@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoList.Api.Common.Constants;
-using TodoList.Application.TodoItems.Errors;
+using TodoList.Application.Common.Errors;
 
 namespace TodoList.Api.Common.Helpers
 {
