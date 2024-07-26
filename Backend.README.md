@@ -1,6 +1,6 @@
 ## Back End
 
-For the assessment, I decided to explore the following concepts as an opportunity to leverage what I know, learn and improve:
+For the assessment, I decided to explore the following concepts as an opportunity to leverage what I know, learn and improve.
 
 ### Clean Architecture 
 
@@ -46,7 +46,7 @@ style F stroke-dasharray: 5, 5
 
 ### Domain Driver Design
 
-> Our Todo application is not well suited for DDD, as simple domains lead to an anemic domain model. However, it did provide the opportunity to explore how aggregates can be persistent and rehydrated.
+> Our Todo application _is not well suited_ for DDD (simple _CRUD_ would have been sufficient), as simple domains lead to an anemic domain model. However, it did provide the opportunity to explore how aggregates can be persistent and rehydrated.
 
 Generally used in modeling complex domains and consists of the following key concepts:
 

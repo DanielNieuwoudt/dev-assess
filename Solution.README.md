@@ -377,7 +377,7 @@ From the `/tests/contract` directory uinsg a bash terminal
 
     `npm run test`
 
-## Things I still want TODO
+## Things that a real world application may need
 
 These are things that I would still want to do for completeness:
 
