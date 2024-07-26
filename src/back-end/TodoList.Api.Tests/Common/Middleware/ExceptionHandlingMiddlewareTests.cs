@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using TodoList.Api.Common.Constants;
-using TodoList.Api.Common.Features;
 using TodoList.Api.Common.Middleware;
 using TodoList.Api.Generated;
 using Xunit;
@@ -26,42 +25,6 @@ public class ExceptionHandlingMiddlewareTests
     public ExceptionHandlingMiddlewareTests()
     {
         _middleware = new ExceptionHandlingMiddleware(_mockLogger.Object);
-    }
-
-    [Fact]
-    public async Task Given_HandledException_When_InvokeAsync_Then_LogsWarning()
-    {
-        var exceptionContext = CreateExceptionContext(new Exception("Handled exception"));
-        
-        exceptionContext.ExceptionHandled = true;
-        exceptionContext.HttpContext
-            .Features
-            .Set<IExceptionContextFeature>(new ExceptionContextFeature
-            {
-                ExceptionContext = exceptionContext
-            });
-        
-        await _middleware.InvokeAsync(exceptionContext.HttpContext, _ => Task.CompletedTask);
-
-        _mockLogger.Verify(LogsWarning, Times.Once);
-    }
-
-    [Fact]
-    public async Task Given_UnhandledException_When_InvokeAsync_Then_LogsError()
-    {
-        var exceptionContext = CreateExceptionContext(new Exception("Unhandled exception"));
-        
-        exceptionContext.ExceptionHandled = false;
-        exceptionContext.HttpContext
-            .Features
-            .Set<IExceptionContextFeature>(new ExceptionContextFeature
-            {
-                ExceptionContext = exceptionContext
-            });
-        
-        await _middleware.InvokeAsync(exceptionContext.HttpContext, _ => Task.CompletedTask);
-
-        _mockLogger.Verify(LogsError, Times.Once);
     }
 
     [Fact]
@@ -131,18 +94,10 @@ public class ExceptionHandlingMiddlewareTests
         };
     }
 
-    private Expression<Action<ILogger<ExceptionHandlingMiddleware>>> LogsWarning => logger => logger.Log(
-        LogLevel.Warning,
-        It.IsAny<EventId>(),
-        It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Handled exception")),
-        It.IsAny<Exception>(),
-        ((Func<It.IsAnyType, Exception, string>)It.IsAny<object>())!);
-
     private Expression<Action<ILogger<ExceptionHandlingMiddleware>>> LogsError => logger => logger.Log(
         LogLevel.Error,
         It.IsAny<EventId>(),
         It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Unhandled exception")),
         It.IsAny<Exception>(),
         ((Func<It.IsAnyType, Exception, string>)It.IsAny<object>())!);
-
 }

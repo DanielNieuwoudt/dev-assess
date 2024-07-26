@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net.Mime;
 using System.Text.Json;
-using TodoList.Api.Common.Features;
 using TodoList.Api.Common.Constants;
 
 namespace TodoList.Api.Common.Middleware
@@ -15,24 +14,11 @@ namespace TodoList.Api.Common.Middleware
             try
             {
                 await next(context);
-
-                // We use the exception feature to log exceptions that are handled by the exception filters.
-                var exceptionFeature = context.Features.Get<IExceptionContextFeature>();
-                if (exceptionFeature is { ExceptionContext: not null })
-                {
-                    if (exceptionFeature.ExceptionContext.ExceptionHandled)
-                    {
-                        logger.LogWarning(exceptionFeature.ExceptionContext.Exception, exceptionFeature.ExceptionContext.Exception.Message);
-                    }
-                    else
-                    {
-                        logger.LogError(exceptionFeature.ExceptionContext.Exception, exceptionFeature.ExceptionContext.Exception.Message);
-                    }
-                }
             }
             catch (Exception exception)
             {
                 // All other exceptions are caught and logged here.
+                // We may need to think of sanitisation of the exception message before logging.
                 _logger.LogError(exception, exception.Message);
 
                 context.Response.ContentType = MediaTypeNames.Application.Json;
@@ -46,10 +32,10 @@ namespace TodoList.Api.Common.Middleware
 
                         var internalServerError = new Generated.InternalServerError
                         {
-                            Title = "An error occurred.",
+                            Title = ErrorTitleMessages.InternalServerError,
                             Type = ResponseTypes.InternalServerError,
                             Status = StatusCodes.Status500InternalServerError,
-                            Detail = "An error occurred processing your request.", // We do not return the exception message as it may contain sensitive information.
+                            Detail = ErrorDetailMessages.ErrorProcessingRequest, // We do not return the exception message as it may contain sensitive information.
                             TraceId = Activity.Current?.Id ?? context.TraceIdentifier
                         };
 

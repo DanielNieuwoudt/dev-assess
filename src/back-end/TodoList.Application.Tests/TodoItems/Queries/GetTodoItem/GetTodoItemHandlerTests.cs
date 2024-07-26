@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using TodoList.Application.Common.Exceptions;
+using TodoList.Application.TodoItems.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Domain.TodoItems;
@@ -37,7 +37,7 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
         }
 
         [Fact]
-        public async Task Given_GetTodoItemQuery_When_RepositoryTodoItemFound_Then_ReturnsGetTodoItemResult()
+        public async Task Given_GetTodoItemQuery_When_RepositoryTodoItemFound_Then_ReturnsGetTodoItemResponse()
         {
             var query = new GetTodoItemQuery(Guid.NewGuid());
             var todoItem = new TodoItem(new TodoItemId(Guid.NewGuid()), "", false, DateTimeOffset.Now,
@@ -51,16 +51,21 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
 
             var result = await handler
                 .Handle(query, CancellationToken.None);
-            
-            result.TodoItem
+
+            result.Value
+                .Should()
+                .NotBeNull();
+
+            result.Value!.TodoItem
                 .Should()
                 .Be(todoItem);
         }
 
         [Fact]
-        public async Task Given_GetTodoItemQuery_When_RepositoryTodoItemNotFound_Then_ThrowsTodoItemNotFoundException()
+        public async Task Given_GetTodoItemQuery_When_RepositoryTodoItemNotFound_Then_ReturnsNotFoundError()
         {
             var query = new GetTodoItemQuery(Guid.NewGuid());
+            var expectedError = new NotFoundError(new Dictionary<string, string[]>());
 
             repositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
@@ -68,11 +73,18 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
             
             var handler = new GetTodoItemHandler(repositoryMock.Object, _nullLogger);
 
-            var action = async () => await handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(query, CancellationToken.None);
 
-            await action
+            result.Error
                 .Should()
-                .ThrowAsync<TodoItemNotFoundException>();
+                .NotBeNull();
+            
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError, options =>
+                {
+                    return options.Excluding(e => e.errors);
+                });
         }
     }
 }

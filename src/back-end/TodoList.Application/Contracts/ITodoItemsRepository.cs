@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using TodoList.Domain.TodoItems;
+﻿using TodoList.Domain.TodoItems;
 using TodoList.Domain.TodoItems.ValueObjects;
 
 namespace TodoList.Application.Contracts
