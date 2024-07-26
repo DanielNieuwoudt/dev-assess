@@ -5,6 +5,7 @@ describe('Given response data When mapErrorResponseToTodoItemError Then', () => 
         const responseData = {
             title: 'Error Title',
             type: 'ErrorType',
+            detail: 'Error Detail',
             status: 400,
             errors: {
                 field1: ['Error1', 'Error2'],
@@ -16,6 +17,7 @@ describe('Given response data When mapErrorResponseToTodoItemError Then', () => 
         const expectedTodoItemError: TodoItemError = {
             Title: 'Error Title',
             Type: 'ErrorType',
+            Detail: 'Error Detail',
             Status: 400,
             Errors: {
                 field1: ['Error1', 'Error2'],
@@ -40,6 +42,7 @@ describe('Given response data When mapErrorResponseToTodoItemError Then', () => 
         const expectedTodoItemError: TodoItemError = {
             Title: 'Error Title',
             Type: 'ErrorType',
+            Detail: undefined!,
             Status: 400,
             Errors: undefined!,
             TraceId: 'trace-id-1234',
