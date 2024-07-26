@@ -12,7 +12,7 @@ namespace TodoList.Api.Common.Helpers
         public BadRequestObjectResult DuplicateErrorResult(DuplicateError duplicateError)
         {
             ArgumentNullException
-                .ThrowIfNull(_httpContextAccessor.HttpContext);
+                .ThrowIfNull(duplicateError);
 
             var badRequest = new Generated.BadRequest
             {
@@ -23,7 +23,7 @@ namespace TodoList.Api.Common.Helpers
                 Errors = duplicateError.errors.ToDictionary(
                     kvp => kvp.Key, 
                     kvp => kvp.Value.ToList()),
-                TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
+                TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
             _logger.LogWarning("Duplicate error occured: {0}", badRequest);
@@ -34,7 +34,7 @@ namespace TodoList.Api.Common.Helpers
         public NotFoundObjectResult NotFoundErrorResult(NotFoundError notFoundError)
         {
             ArgumentNullException
-                .ThrowIfNull(_httpContextAccessor.HttpContext);
+                .ThrowIfNull(notFoundError);
 
             var notFound = new Generated.NotFound
             {
@@ -42,7 +42,7 @@ namespace TodoList.Api.Common.Helpers
                 Detail = ErrorDetailMessages.IdDoesNotExist,
                 Type = ResponseTypes.NotFound,
                 Status = StatusCodes.Status404NotFound,
-                TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
+                TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
             _logger.LogWarning("Not found error occured: {0}", notFound);
@@ -53,8 +53,8 @@ namespace TodoList.Api.Common.Helpers
         public BadRequestObjectResult ValidationErrorResult(ValidationError validationError)
         {
             ArgumentNullException
-                .ThrowIfNull(_httpContextAccessor.HttpContext);
-
+                .ThrowIfNull(validationError);
+            
             var badRequest = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -64,7 +64,7 @@ namespace TodoList.Api.Common.Helpers
                 Errors = validationError.errors.ToDictionary(
                     kvp => kvp.Key, 
                     kvp => kvp.Value.ToList()),
-                TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
+                TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
             _logger.LogWarning("Validation error occured: {0}", badRequest);
@@ -74,9 +74,6 @@ namespace TodoList.Api.Common.Helpers
 
         public BadRequestObjectResult IdMismatchValidationError()
         {
-            ArgumentNullException
-                .ThrowIfNull(_httpContextAccessor.HttpContext);
-
             var badRequest = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -84,7 +81,7 @@ namespace TodoList.Api.Common.Helpers
                 Status = StatusCodes.Status400BadRequest,
                 Detail = ErrorDetailMessages.IdMismatch,
                 Errors = new Dictionary<string, List<string>>(),
-                TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
+                TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
             _logger.LogWarning("Validation error occured: {0}", badRequest);
