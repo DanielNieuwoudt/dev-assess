@@ -3,10 +3,6 @@ using MediatR;
 using TodoList.Application.Common.Errors;
 using TodoList.Application.Common.Extensions;
 using TodoList.Application.TodoItems;
-using TodoList.Application.TodoItems.Commands.CreateTodoItem;
-using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
-using TodoList.Application.TodoItems.Queries.GetTodoItem;
-using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
 namespace TodoList.Application.Common.Behaviours
 {
@@ -30,26 +26,13 @@ namespace TodoList.Application.Common.Behaviours
             if (failures.Any())
             {
                 var validationError = new ValidationError(failures.ToErrorDictionary());
-
-                var responseType = typeof(TResponse);
-
-                if (responseType.IsGenericType && responseType.GetGenericTypeDefinition() == typeof(TodoItemResult<,>))
-                {
-                    return CreateTodoItemResult(validationError, responseType);
-                }
-
-                throw new InvalidOperationException($"Unhandled response type: {responseType.Name}");
+                var genericArguments = typeof(TResponse).GetGenericArguments();
+                var todoItemResultType = typeof(TodoItemResult<,>).MakeGenericType(genericArguments);
                 
+                return (TResponse)Activator.CreateInstance(todoItemResultType, validationError)!;
             }
 
             return await next();
-        }
-        
-        private TResponse CreateTodoItemResult(ValidationError validationError, Type responseType)
-        {
-            var genericArguments = responseType.GetGenericArguments();
-            var todoItemResultType = typeof(TodoItemResult<,>).MakeGenericType(genericArguments);
-            return (TResponse)Activator.CreateInstance(todoItemResultType, validationError)!;
         }
     }
 }
