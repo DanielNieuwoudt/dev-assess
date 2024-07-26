@@ -25,13 +25,6 @@ namespace TodoList.Api.Tests.Common.Helpers
         public ErrorHelperTests()
         {
             _errorHelper = new ErrorHelper(_httpContextAccessorMock.Object, _nullLogger);
-
-            _httpContextAccessorMock
-                .Setup(x => x.HttpContext)
-                .Returns(new DefaultHttpContext
-                {
-                    TraceIdentifier = "ABC"
-                });
         }
 
         [Fact]
@@ -65,8 +58,22 @@ namespace TodoList.Api.Tests.Common.Helpers
         }
 
         [Fact]
+        public void Given_NullHttpContext_When_DuplicateErrorResult_Then_ThrowsArgumentNullException()
+        {
+            SetHttpContext(true);
+
+            var action = () => _errorHelper.DuplicateErrorResult(new DuplicateError(_errors));
+
+            action
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void Given_DuplicateError_When_DuplicateErrorResult_Then_ReturnsBadRequestObjectResultWithErrorResponse()
         {
+            SetHttpContext(false);
+
             var expectedResponse = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -80,6 +87,12 @@ namespace TodoList.Api.Tests.Common.Helpers
             };
 
             var result = _errorHelper.DuplicateErrorResult(new DuplicateError(_errors));
+
+            _httpContextAccessorMock.Object.HttpContext!
+                .Response
+                .ContentType
+                .Should()
+                .Be(MediaTypes.ApplicationProblemJson);
 
             result
                 .Should()
@@ -108,8 +121,22 @@ namespace TodoList.Api.Tests.Common.Helpers
         }
 
         [Fact]
+        public void Given_NullHttpContext_When_NotFoundErrorResult_Then_ThrowsArgumentNullException()
+        {
+            SetHttpContext(true);
+
+            var action = () => _errorHelper.NotFoundErrorResult(new NotFoundError(_errors));
+
+            action
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void Given_NotFoundError_When_NotFoundErrorResult_Then_ReturnsNotFoundObjectResultWithErrorResponse()
         {
+            SetHttpContext(false);
+
             var expectedResponse = new Generated.NotFound
             {
                 Title = ErrorTitleMessages.NotFound,
@@ -120,6 +147,12 @@ namespace TodoList.Api.Tests.Common.Helpers
             };
 
             var result = _errorHelper.NotFoundErrorResult(new NotFoundError(_errors));
+
+            _httpContextAccessorMock.Object.HttpContext!
+                .Response
+                .ContentType
+                .Should()
+                .Be(MediaTypes.ApplicationProblemJson);
 
             result
                 .Should()
@@ -148,8 +181,22 @@ namespace TodoList.Api.Tests.Common.Helpers
         }
 
         [Fact]
+        public void Given_NullHttpContext_When_ValidationErrorResult_Then_ThrowsArgumentNullException()
+        {
+            SetHttpContext(true);
+
+            var action = () => _errorHelper.ValidationErrorResult(new ValidationError(_errors));
+
+            action
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
+        
+        [Fact]
         public void Given_ValidationError_When_ValidationErrorResult_Then_ReturnsBadRequestObjectResultWithErrorResponse()
         {
+            SetHttpContext(false);
+
             var expectedResponse = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -163,6 +210,12 @@ namespace TodoList.Api.Tests.Common.Helpers
             };
 
             var result = _errorHelper.ValidationErrorResult(new ValidationError(_errors));
+
+            _httpContextAccessorMock.Object.HttpContext!
+                .Response
+                .ContentType
+                .Should()
+                .Be(MediaTypes.ApplicationProblemJson);
 
             result
                 .Should()
@@ -181,8 +234,22 @@ namespace TodoList.Api.Tests.Common.Helpers
         }
 
         [Fact]
+        public void Given_NullHttpContext_When_IdMismatchValidationError_Then_ThrowsArgumentNullException()
+        {
+            SetHttpContext(true);
+
+            var action = () => _errorHelper.IdMismatchValidationError();
+
+            action
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void Given_IdMismatch_When_IdMismatchValidationError_Then_ReturnsBadRequestObjectResultWithErrorResponse()
         {
+            SetHttpContext(false);
+
             var expectedResponse = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -194,6 +261,12 @@ namespace TodoList.Api.Tests.Common.Helpers
             };
 
             var result = _errorHelper.IdMismatchValidationError();
+
+            _httpContextAccessorMock.Object.HttpContext!
+                .Response
+                .ContentType
+                .Should()
+                .Be(MediaTypes.ApplicationProblemJson);
 
             result
                 .Should()
@@ -209,6 +282,19 @@ namespace TodoList.Api.Tests.Common.Helpers
             badRequest
                 .Should()
                 .BeEquivalentTo(expectedResponse);
+        }
+
+        private void SetHttpContext(bool isNull)
+        {
+            _httpContextAccessorMock.Reset();
+            _httpContextAccessorMock
+                .Setup(x => x.HttpContext)
+                .Returns(isNull
+                    ? default
+                    : new DefaultHttpContext
+                    {
+                        TraceIdentifier = "ABC"
+                    });
         }
     }
 }

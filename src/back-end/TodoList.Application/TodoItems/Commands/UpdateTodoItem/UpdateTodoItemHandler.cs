@@ -17,7 +17,7 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
 
         public async Task<TodoItemResult<ApplicationError, UpdateTodoItemResponse>> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Getting todo item.");
+            _logger.LogInformation("Getting todo item with Id: {Id}", request.Id);
             var todoItem = await _readRepository.GetTodoItemAsync(new TodoItemId(request.Id), cancellationToken);
             if (todoItem is null)
             {
@@ -27,7 +27,7 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
                 });
             }
 
-            _logger.LogInformation("Updating todo item.");
+            _logger.LogInformation("Updating todo item with Id: {Id}", request.Id);
             if (request.IsCompleted)
                 todoItem.MarkAsCompleted();
             else
@@ -38,7 +38,7 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
             
             await _writeRepository.UpdateTodoItemAsync(todoItem, cancellationToken);
 
-            _logger.LogInformation("Todo item updated.");
+            _logger.LogInformation("Todo item updated with Id: {Id}", todoItem.Id.Value);
 
             return new UpdateTodoItemResponse();
         }

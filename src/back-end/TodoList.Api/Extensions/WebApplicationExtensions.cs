@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Serilog;
+using System.Diagnostics.CodeAnalysis;
 using TodoList.Api.Common.Middleware;
 using TodoList.Api.Startup;
 
@@ -22,17 +23,16 @@ namespace TodoList.Api.Extensions
 
             app.UseCors("AllowAllHeaders");
 
-            //TODO: Security Headers Middleware
             
             app.UseMiddleware<ExceptionHandlingMiddleware>();
-            
+            app.UseSerilogRequestLogging();
+
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
             app.MapHealthCheckEndpoints();
-            app.MapAlwaysOn();
         }
     }
 }

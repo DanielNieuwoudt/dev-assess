@@ -200,7 +200,7 @@ components:
           name:
             - "Id"
             - "Id can not be empty"
-        traceId: "00-abc123456789def-ghi987654321jkl-01"
+        traceId: "0HN5D5B7P895B:00000009"
     NotFound:
       type: object
       properties:
@@ -224,7 +224,7 @@ components:
         title: "The specified resource was not found."
         type: "https://tools.ietf.org/html/rfc7231#section-6.5.4"
         status: "404"
-        traceId: "00-abc123456789def-ghi987654321jkl-01"          
+        traceId: "0HN5D5B7P895B:00000009"          
     InternalServerError:
       type: object
       properties:
@@ -248,7 +248,7 @@ components:
         title: "An error occurred while processing your request."
         type: "https://tools.ietf.org/html/rfc7231#section-6.6.1"
         status: "500"
-        traceId: "00-abc123456789def-ghi987654321jkl-01"          
+        traceId: "0HN5D5B7P895B:00000009"          
     TodoItem:
       type: object
       properties:
