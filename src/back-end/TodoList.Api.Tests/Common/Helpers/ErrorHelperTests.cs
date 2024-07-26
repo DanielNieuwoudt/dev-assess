@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using TodoList.Api.Common.Constants;
 using TodoList.Api.Common.Helpers;
-using TodoList.Application.Common.Errors;
+using TodoList.Application.TodoItems.Errors;
 using Xunit;
 
 namespace TodoList.Api.Tests.Common.Helpers

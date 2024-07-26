@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using TodoList.Application.Common;
-using TodoList.Application.Common.Errors;
+using TodoList.Application.TodoItems.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Domain.TodoItems;
 
@@ -9,7 +8,7 @@ namespace TodoList.Application.TodoItems.Queries.GetTodoItems
 {
     public sealed record GetTodoItemsResponse (IEnumerable<TodoItem> TodoItems);
 
-    public sealed class GetTodoItemsHandler(ITodoItemsRepository repository, ILogger<GetTodoItemsHandler> logger) : IRequestHandler<GetTodoItemsQuery, Result<ApplicationError, GetTodoItemsResponse>>
+    public sealed class GetTodoItemsHandler(ITodoItemsRepository repository, ILogger<GetTodoItemsHandler> logger) : IRequestHandler<GetTodoItemsQuery, TodoItemResult<ApplicationError, GetTodoItemsResponse>>
     {
         private readonly ITodoItemsRepository _repository =
             repository ?? throw new ArgumentNullException(nameof(repository));
@@ -17,7 +16,7 @@ namespace TodoList.Application.TodoItems.Queries.GetTodoItems
         private readonly ILogger<GetTodoItemsHandler> _logger =
             logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public async Task<Result<ApplicationError, GetTodoItemsResponse>> Handle(GetTodoItemsQuery request, CancellationToken cancellationToken)
+        public async Task<TodoItemResult<ApplicationError, GetTodoItemsResponse>> Handle(GetTodoItemsQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Getting todo items.");
 

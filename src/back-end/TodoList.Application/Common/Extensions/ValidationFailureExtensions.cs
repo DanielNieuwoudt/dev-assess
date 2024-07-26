@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace TodoList.Application.Common.Extensions
+namespace TodoList.Application.TodoItems.Extensions
 {
     public static class ValidationFailureExtensions
     {

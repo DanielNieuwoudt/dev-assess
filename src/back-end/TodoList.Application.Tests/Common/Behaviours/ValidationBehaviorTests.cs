@@ -2,16 +2,16 @@
 using FluentAssertions;
 using FluentValidation;
 using MediatR;
-using TodoList.Application.Common;
-using TodoList.Application.Common.Behaviours;
-using TodoList.Application.Common.Errors;
+using TodoList.Application.TodoItems;
+using TodoList.Application.TodoItems.Behaviours;
+using TodoList.Application.TodoItems.Errors;
 
 namespace TodoList.Application.Tests.Common.Behaviours
 {
     [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class TestBehaviour
     {
-        public class TestRequest(Guid id) : IRequest<Result<ApplicationError, TestResponse>>
+        public class TestRequest(Guid id) : IRequest<TodoItemResult<ApplicationError, TestResponse>>
         {
             public Guid Id = id;
         }
@@ -29,9 +29,9 @@ namespace TodoList.Application.Tests.Common.Behaviours
             }
         }
 
-        public class Handler : IRequestHandler<TestRequest, Result<ApplicationError, TestResponse>>
+        public class Handler : IRequestHandler<TestRequest, TodoItemResult<ApplicationError, TestResponse>>
         {
-            public async Task<Result<ApplicationError, TestResponse>> Handle(TestRequest testRequest, CancellationToken cancellationToken)
+            public async Task<TodoItemResult<ApplicationError, TestResponse>> Handle(TestRequest testRequest, CancellationToken cancellationToken)
             {
                 return await Task.FromResult(new TestResponse());
             }
@@ -53,19 +53,19 @@ namespace TodoList.Application.Tests.Common.Behaviours
             };
 
             var validationBehavior =
-                new ValidationBehavior<TestBehaviour.TestRequest, Result<ApplicationError, TestBehaviour.TestResponse>>(
+                new ValidationBehavior<TestBehaviour.TestRequest, TodoItemResult<ApplicationError, TestBehaviour.TestResponse>>(
                     validators);
 
-            Func<Task<Result<ApplicationError, TestBehaviour.TestResponse>>> response = async () =>
+            Func<Task<TodoItemResult<ApplicationError, TestBehaviour.TestResponse>>> response = async () =>
             {
                 return await validationBehavior
                     .Handle(new TestBehaviour.TestRequest(Guid.Parse(id)), Next,
                         CancellationToken.None);
 
-                Task<Result<ApplicationError, TestBehaviour.TestResponse>> Next()
+                Task<TodoItemResult<ApplicationError, TestBehaviour.TestResponse>> Next()
                 {
                     return Task.FromResult(
-                        new Result<ApplicationError, TestBehaviour.TestResponse>(new TestBehaviour.TestResponse()));
+                        new TodoItemResult<ApplicationError, TestBehaviour.TestResponse>(new TestBehaviour.TestResponse()));
                 }
             };
 

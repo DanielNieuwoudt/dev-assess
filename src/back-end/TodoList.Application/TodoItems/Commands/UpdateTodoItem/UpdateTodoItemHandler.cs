@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using TodoList.Application.Common;
-using TodoList.Application.Common.Errors;
+using TodoList.Application.TodoItems.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Domain.TodoItems.ValueObjects;
 
@@ -10,12 +9,12 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
     public sealed record UpdateTodoItemResponse;
 
     public sealed class UpdateTodoItemHandler(ITodoItemsRepository repository, ILogger<UpdateTodoItemHandler> logger)
-        : IRequestHandler<UpdateTodoItemCommand, Result<ApplicationError, UpdateTodoItemResponse>>
+        : IRequestHandler<UpdateTodoItemCommand, TodoItemResult<ApplicationError, UpdateTodoItemResponse>>
     {
         private readonly ITodoItemsRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         private readonly ILogger<UpdateTodoItemHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public async Task<Result<ApplicationError, UpdateTodoItemResponse>> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
+        public async Task<TodoItemResult<ApplicationError, UpdateTodoItemResponse>> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Getting todo item.");
             var todoItem = await _repository.GetTodoItemAsync(new TodoItemId(request.Id), cancellationToken);

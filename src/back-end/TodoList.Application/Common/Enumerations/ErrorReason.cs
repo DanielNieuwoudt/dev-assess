@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace TodoList.Application.Common.Enumerations;
+﻿namespace TodoList.Application.TodoItems.Enumerations;
 
 public enum ErrorReason
 {

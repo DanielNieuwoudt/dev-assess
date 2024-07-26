@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TodoList.Application.Common.Errors;
+using TodoList.Application.TodoItems.Errors;
 
 namespace TodoList.Api.Common.Helpers;
 

@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using TodoList.Api.Extensions;
-using TodoList.Application.Common.Extensions;
+using TodoList.Application.TodoItems.Extensions;
 using TodoList.Infrastructure.Extensions;
 
 // Create host

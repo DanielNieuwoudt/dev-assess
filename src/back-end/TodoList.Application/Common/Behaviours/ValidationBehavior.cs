@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using MediatR;
-using TodoList.Application.Common.Errors;
-using TodoList.Application.Common.Extensions;
+using TodoList.Application.TodoItems.Extensions;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
+using TodoList.Application.TodoItems.Errors;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
-namespace TodoList.Application.Common.Behaviours
+namespace TodoList.Application.TodoItems.Behaviours
 {
     public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse> where TRequest : class, IRequest<TResponse>
     {
@@ -31,21 +31,21 @@ namespace TodoList.Application.Common.Behaviours
                 var validationError = new ValidationError(failures.ToErrorDictionary());
 
                 var responseType = typeof(TResponse);
-                if (responseType == typeof(Result<ApplicationError, CreateTodoItemResponse>))
+                if (responseType == typeof(TodoItemResult<ApplicationError, CreateTodoItemResponse>))
                 {
-                    return (TResponse)(object)new Result<ApplicationError, CreateTodoItemResponse>(validationError);
+                    return (TResponse)(object)new TodoItemResult<ApplicationError, CreateTodoItemResponse>(validationError);
                 }
-                if (responseType == typeof(Result<ApplicationError, UpdateTodoItemResponse>))
+                if (responseType == typeof(TodoItemResult<ApplicationError, UpdateTodoItemResponse>))
                 {
-                    return (TResponse)(object)new Result<ApplicationError, UpdateTodoItemResponse>(validationError);
+                    return (TResponse)(object)new TodoItemResult<ApplicationError, UpdateTodoItemResponse>(validationError);
                 }
-                if (responseType == typeof(Result<ApplicationError, GetTodoItemResponse>))
+                if (responseType == typeof(TodoItemResult<ApplicationError, GetTodoItemResponse>))
                 {
-                    return (TResponse)(object)new Result<ApplicationError, GetTodoItemResponse>(validationError);
+                    return (TResponse)(object)new TodoItemResult<ApplicationError, GetTodoItemResponse>(validationError);
                 }
-                if (responseType == typeof(Result<ApplicationError, GetTodoItemsResponse>))
+                if (responseType == typeof(TodoItemResult<ApplicationError, GetTodoItemsResponse>))
                 {
-                    return (TResponse)(object)new Result<ApplicationError, GetTodoItemsResponse>(validationError);
+                    return (TResponse)(object)new TodoItemResult<ApplicationError, GetTodoItemsResponse>(validationError);
                 }
 
                 throw new InvalidOperationException($"Unhandled response type: {responseType.Name}");

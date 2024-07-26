@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using System.Diagnostics.CodeAnalysis;
-using TodoList.Application.Common.Extensions;
+using TodoList.Application.TodoItems.Extensions;
 
 namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 {

@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using TodoList.Application.Common;
-using TodoList.Application.Common.Errors;
+using TodoList.Application.TodoItems.Errors;
 using TodoList.Application.Contracts;
 using TodoList.Domain.TodoItems;
 using TodoList.Domain.TodoItems.ValueObjects;
@@ -13,12 +12,12 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
     public sealed record CreateTodoItemResponse(TodoItem TodoItem);
 
     public sealed class CreateTodoItemHandler(ITodoItemsRepository repository, ILogger<CreateTodoItemHandler> logger)
-        : IRequestHandler<CreateTodoItemCommand, Result<ApplicationError, CreateTodoItemResponse>>
+        : IRequestHandler<CreateTodoItemCommand, TodoItemResult<ApplicationError, CreateTodoItemResponse>>
     {
         private readonly ITodoItemsRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         private readonly ILogger<CreateTodoItemHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public async Task<Result<ApplicationError, CreateTodoItemResponse>> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
+        public async Task<TodoItemResult<ApplicationError, CreateTodoItemResponse>> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Finding duplicate todo items based on id.");
 
