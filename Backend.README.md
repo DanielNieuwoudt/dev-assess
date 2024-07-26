@@ -1,21 +1,27 @@
 ## Back End
 
-### Application Architecture
+For the assessment, I decided to explore the following concepts as an opportunity to leverage what I know, learn and improve:
 
-We prefer the use of Clean Architecture and Domain Driver Design for our ASP.NET Web API, which organises our application into four main layers:
+### Clean Architecture 
+
+Focusing on the following key principles related to clean architecture:
+
+#### Separation of Concerns
+
+Separate our solution into the following layers:
 
 - Presentation - The API is the entry point for communication with the application.
 - Application - Business logic specific to the use cases in our application.
 - Domain - Entities, value objects and aggregates, and domain-specific services.
 - Infrastructure - Implementation details and integration include repositories, database context and external service.
 
-Benefits 
+#### Dependency Rule
 
-- Separation of concerns, with each layer having distinct responsibilities, making the code base easier to understand and maintain.
-- Flexibility that allows us to make updates to the technology stack without affecting or retesting the core business logic.
-- Improves testability as business logic can be tested independently from the UI and Infrastructure.
+Inner layers should not depend on outer layers. The direction of dependency should always be towards the Application.
 
-> _Side Note_: I have added a sprinkle of CQRS, mostly for my own benefit.
+#### Independent of Frameworks
+
+Avoid being tied to any specific framework. Frameworks should be tools, not the foundation of your system.
 
 #### Visual Representation
 
@@ -37,9 +43,44 @@ F -.-> E
 
 style F stroke-dasharray: 5, 5
 ```
+
+### Domain Driver Design
+
+> Our Todo application is not well suited for DDD, as simple domains lead to an anemic domain model. However, it did provide the opportunity to explore how aggregates can be persistent and rehydrated.
+
+Generally used in modeling complex domains and consists of the following key concepts:
+
+#### Ubiquitous Language
+
+Develop a common language shared by both domain experts and developers.
+
+#### Entities and Value Objects
+
+Entities have an identity and lifecycle, while value objects are immutable and only defined by their attributes.
+
+#### Aggregates and Aggregate Roots:
+
+Aggregates are clusters of domain objects that can be treated as a single unit. The aggregate root is the only member that outside objects can reference.
+
+#### Repositories:
+
+Mechanisms for accessing persisting and rehydrating aggregates.
+
+### Command Query Responsibility Segregation
+
+Implement a simplified version of CQRS separating  read and write operations based on the following key principles:
+
+#### Command Model
+
+Handles create, update, and delete operations (writes).
+
+#### Query Model
+
+Handles read operations.
+
 ### Frameworks and Libraries
 
-We have selected the the following libraries for our implementation:
+We have selected the following libraries for our implementation:
 
 |Framework / Library|Description|
 |-|-|
@@ -79,11 +120,11 @@ During development, it allows the team to detect breaking changes early in the d
 
 ### Code Generation
 
-We choose to generate code for the C# controller and contract test client ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Problem Details.
+We generate code for the C# controller and contract test client, ensuring we meet the consumer's expectations when returning responses containing the Todo Items or Problem Details.
 
 > See [Backend Code Generation](specs/back-end) in the `specs/back-end` folder.
 
-The following section reminds us of the considerations that need to be made when designing, building, and operating APIs.
+The following section reminds us of the considerations that must be made when designing, building, and operating APIs.
 
 ## Other considerations
 

@@ -1,11 +1,11 @@
 
 # Welcome to the Todo List 
 
-## Goal
+## Goal Statement
 
-### Statement
-
->**_We aim to create a platform that empowers team members to collaborate and perform at their best while balancing speed and quality to deliver value to our clients._**
+- To meet the criteria for the assessment, which includes the front and back end.
+- Creating a local development environment that is representative of a real-world scenario.
+- Employ the principles, practices and tools that allow for iterative development and maximise confidence while refactoring.
 
 ### My Approach
 
