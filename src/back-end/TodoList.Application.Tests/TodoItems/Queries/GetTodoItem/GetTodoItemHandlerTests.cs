@@ -13,7 +13,7 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
     [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class GetTodoItemHandlerTests
     {
-        private readonly Mock<ITodoItemsRepository> repositoryMock = new ();
+        private readonly Mock<ITodoItemsReadRepository> _readRepositoryMock = new ();
         private readonly NullLogger<GetTodoItemHandler> _nullLogger = new ();
 
         [Fact]
@@ -29,7 +29,7 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
         [Fact]
         public void GivenNullLogger_When_GetTodoItemHandlerInitialised_Then_ThrowArgumentNullException()
         {
-            var act = () => new GetTodoItemHandler(repositoryMock.Object, null!);
+            var act = () => new GetTodoItemHandler(_readRepositoryMock.Object, null!);
 
             act
                 .Should()
@@ -43,11 +43,11 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
             var todoItem = new TodoItem(new TodoItemId(Guid.NewGuid()), "", false, DateTimeOffset.Now,
                 DateTimeOffset.Now);
 
-            repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(todoItem);
             
-            var handler = new GetTodoItemHandler(repositoryMock.Object, _nullLogger);
+            var handler = new GetTodoItemHandler(_readRepositoryMock.Object, _nullLogger);
 
             var result = await handler
                 .Handle(query, CancellationToken.None);
@@ -67,11 +67,11 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
             var query = new GetTodoItemQuery(Guid.NewGuid());
             var expectedError = new NotFoundError(new Dictionary<string, string[]>());
 
-            repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((TodoItem)null!);
             
-            var handler = new GetTodoItemHandler(repositoryMock.Object, _nullLogger);
+            var handler = new GetTodoItemHandler(_readRepositoryMock.Object, _nullLogger);
 
             var result = await handler.Handle(query, CancellationToken.None);
 

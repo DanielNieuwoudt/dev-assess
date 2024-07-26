@@ -19,7 +19,8 @@ namespace TodoList.Infrastructure.Extensions
                     b => b.MigrationsAssembly(typeof(TodoListDbContext).Assembly.FullName));
             });
 
-            services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
+            services.AddScoped<ITodoItemsReadRepository, TodoItemsReadRepository>();
+            services.AddScoped<ITodoItemsWriteRepository, TodoItemsWriteRepository>();
 
             return services;
         }

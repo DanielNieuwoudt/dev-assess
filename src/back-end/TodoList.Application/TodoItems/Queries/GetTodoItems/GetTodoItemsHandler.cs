@@ -8,19 +8,16 @@ namespace TodoList.Application.TodoItems.Queries.GetTodoItems
 {
     public sealed record GetTodoItemsResponse (IEnumerable<TodoItem> TodoItems);
 
-    public sealed class GetTodoItemsHandler(ITodoItemsRepository repository, ILogger<GetTodoItemsHandler> logger) : IRequestHandler<GetTodoItemsQuery, TodoItemResult<ApplicationError, GetTodoItemsResponse>>
+    public sealed class GetTodoItemsHandler(ITodoItemsReadRepository readRepository, ILogger<GetTodoItemsHandler> logger) : IRequestHandler<GetTodoItemsQuery, TodoItemResult<ApplicationError, GetTodoItemsResponse>>
     {
-        private readonly ITodoItemsRepository _repository =
-            repository ?? throw new ArgumentNullException(nameof(repository));
-
-        private readonly ILogger<GetTodoItemsHandler> _logger =
-            logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly ITodoItemsReadRepository _readRepository = readRepository ?? throw new ArgumentNullException(nameof(readRepository));
+        private readonly ILogger<GetTodoItemsHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         public async Task<TodoItemResult<ApplicationError, GetTodoItemsResponse>> Handle(GetTodoItemsQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Getting todo items.");
 
-            var todoItems = await _repository.GetTodoItemsAsync(cancellationToken);
+            var todoItems = await _readRepository.GetTodoItemsAsync(cancellationToken);
 
             _logger.LogInformation("Returning todo items.");
 

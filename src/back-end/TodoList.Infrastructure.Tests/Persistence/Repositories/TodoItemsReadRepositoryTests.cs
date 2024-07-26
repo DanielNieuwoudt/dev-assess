@@ -11,15 +11,15 @@ using TodoList.Infrastructure.Persistence.Repositories;
 namespace TodoList.Infrastructure.Tests.Persistence.Repositories
 {
     [ExcludeFromCodeCoverage(Justification = "Tests")]
-    public class TodoItemsRepositoryTests : IDisposable
+    public class TodoItemsReadRepositoryTests : IDisposable
     {
         private readonly IServiceCollection _serviceCollection = new ServiceCollection();
         private readonly IServiceProvider _serviceProvider;
 
-        public TodoItemsRepositoryTests()
+        public TodoItemsReadRepositoryTests()
         {
             _serviceCollection
-                .AddDbContext<TodoListDbContext>(opt => opt.UseInMemoryDatabase("TodoInMemoryDb"));
+                .AddDbContext<TodoListDbContext>(opt => opt.UseInMemoryDatabase("TodoReadInMemoryDb"));
 
             _serviceProvider = _serviceCollection.BuildServiceProvider();
         }
@@ -27,7 +27,7 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
         [Fact]
         public void Given_NullDbContext_When_TodoItemsRepositoryInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsRepository(null!, new NullLogger<TodoItemsRepository>());
+            var action = () => new TodoItemsReadRepository(null!, new NullLogger<TodoItemsReadRepository>());
 
             action
                 .Should()
@@ -37,7 +37,7 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
         [Fact]
         public void Given_NullLogger_When_TodoItemsRepositoryInitialised_Then_ThrowsArgumentNullException()
         {
-            var action = () => new TodoItemsRepository(_serviceProvider.GetRequiredService<TodoListDbContext>(), null!);
+            var action = () => new TodoItemsReadRepository(_serviceProvider.GetRequiredService<TodoListDbContext>(), null!);
 
             action
                 .Should()
@@ -54,13 +54,13 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
                 .ServiceProvider
                 .GetRequiredService<TodoListDbContext>();
 
-            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
+            var readRepository = new TodoItemsReadRepository(dbContext, new NullLogger<TodoItemsReadRepository>());
             var todoItem = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test", false, DateTimeOffset.Now, DateTimeOffset.Now);
 
             dbContext.TodoItems.Add(todoItem);
             await dbContext.SaveChangesAsync();
 
-            var result = await repository
+            var result = await readRepository
                 .GetTodoItemAsync(todoItem.Id, CancellationToken.None);
 
             result
@@ -78,9 +78,9 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
                 .ServiceProvider
                 .GetRequiredService<TodoListDbContext>();
 
-            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
+            var readRepository = new TodoItemsReadRepository(dbContext, new NullLogger<TodoItemsReadRepository>());
 
-            var result = await repository
+            var result = await readRepository
                 .GetTodoItemAsync(new TodoItemId(Guid.NewGuid()), CancellationToken.None);
 
             result
@@ -98,7 +98,7 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
                 .ServiceProvider
                 .GetRequiredService<TodoListDbContext>();
 
-            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
+            var readRepository = new TodoItemsReadRepository(dbContext, new NullLogger<TodoItemsReadRepository>());
 
             var itemOne = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test 1", false, DateTimeOffset.Now,
                 DateTimeOffset.Now);
@@ -110,7 +110,7 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
             
             await dbContext.SaveChangesAsync();
 
-            var result = (await repository.GetTodoItemsAsync(CancellationToken.None))
+            var result = (await readRepository.GetTodoItemsAsync(CancellationToken.None))
                 .ToList();
 
             result
@@ -127,27 +127,6 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
                 .BeEquivalentTo(new List<TodoItem>() { itemOne });
         }
 
-        [Fact]
-        public async Task Given_TodoItem_When_CreateTodoItem_Then_ReturnsCreatedTodoItem()
-        {
-            using var scope = _serviceProvider
-                .CreateScope();
-            
-            var dbContext = scope
-                .ServiceProvider
-                .GetRequiredService<TodoListDbContext>();
-
-            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
-            var todoItem = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test", false, DateTimeOffset.Now, DateTimeOffset.Now);
-
-            var result = await repository
-                .CreateTodoItemAsync(todoItem, CancellationToken.None);
-
-            result
-                .Should()
-                .BeEquivalentTo(todoItem);
-        }
-
         [Theory]
         [MemberData(nameof(FindByIdTodoItemData))]
         public async Task Given_ExistingTodoItem_When_FindById_Then_ReturnsExpectedResult(Guid id, TodoItem todoItem, bool expectedResult)
@@ -159,12 +138,12 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
                 .ServiceProvider
                 .GetRequiredService<TodoListDbContext>();
 
-            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
+            var readRepository = new TodoItemsReadRepository(dbContext, new NullLogger<TodoItemsReadRepository>());
             
             dbContext.TodoItems.Add(todoItem);
             await dbContext.SaveChangesAsync();
 
-            var result = await repository
+            var result = await readRepository
                 .FindByIdAsync(new TodoItemId(id), CancellationToken.None);
 
             result
@@ -203,47 +182,18 @@ namespace TodoList.Infrastructure.Tests.Persistence.Repositories
                 .ServiceProvider
                 .GetRequiredService<TodoListDbContext>();
 
-            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
+            var readRepository = new TodoItemsReadRepository(dbContext, new NullLogger<TodoItemsReadRepository>());
 
             dbContext.TodoItems.Add(new TodoItem(new TodoItemId(Guid.Parse("9998532a-8761-4e1d-83eb-ba55e478e640")),
                 description, isComplete, DateTimeOffset.Now, DateTimeOffset.Now));
             await dbContext.SaveChangesAsync();
 
-            var result = await repository
+            var result = await readRepository
                 .FindByDescriptionAsync(description, CancellationToken.None);
 
             result
                 .Should()
                 .Be(expectedResult);
-        }
-
-
-        [Fact]
-        public async Task Given_TodoItem_When_UpdateTodoItem_Then_ReturnsUpdatedTodoItem()
-        {
-            using var scope = _serviceProvider
-                .CreateScope();
-            
-            var dbContext = scope
-                .ServiceProvider
-                .GetRequiredService<TodoListDbContext>();
-
-            var repository = new TodoItemsRepository(dbContext, new NullLogger<TodoItemsRepository>());
-            var todoItem = new TodoItem(new TodoItemId(Guid.NewGuid()), "Test", false, DateTimeOffset.Now, DateTimeOffset.Now);
-
-            dbContext.TodoItems.Add(todoItem);
-            await dbContext.SaveChangesAsync();
-
-            todoItem.MarkAsCompleted();
-            await repository
-                .UpdateTodoItemAsync(todoItem, CancellationToken.None);
-
-            var result = await repository
-                .GetTodoItemAsync(todoItem.Id, CancellationToken.None);
-
-            result
-                .Should()
-                .BeEquivalentTo(todoItem);
         }
 
         public void Dispose()

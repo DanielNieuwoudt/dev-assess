@@ -11,17 +11,18 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
     [ExcludeFromCodeCoverage(Justification = "Record")]
     public sealed record CreateTodoItemResponse(TodoItem TodoItem);
 
-    public sealed class CreateTodoItemHandler(ITodoItemsRepository repository, ILogger<CreateTodoItemHandler> logger)
+    public sealed class CreateTodoItemHandler(ITodoItemsReadRepository readRepository, ITodoItemsWriteRepository writeRepository, ILogger<CreateTodoItemHandler> logger)
         : IRequestHandler<CreateTodoItemCommand, TodoItemResult<ApplicationError, CreateTodoItemResponse>>
     {
-        private readonly ITodoItemsRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        private readonly ITodoItemsReadRepository _readRepository = readRepository ?? throw new ArgumentNullException(nameof(readRepository));
+        private readonly ITodoItemsWriteRepository _writeRepository = writeRepository ?? throw new ArgumentNullException(nameof(writeRepository));
         private readonly ILogger<CreateTodoItemHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         public async Task<TodoItemResult<ApplicationError, CreateTodoItemResponse>> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Finding duplicate todo items based on id.");
 
-            if ( await _repository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
+            if ( await _readRepository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
             {
                 return new DuplicateError(new Dictionary<string, string[]>
                 {
@@ -31,7 +32,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
             _logger.LogInformation("Finding duplicate todo items based on description.");
 
-            if ( await _repository.FindByDescriptionAsync(request.Description.Trim(), cancellationToken))
+            if ( await _readRepository.FindByDescriptionAsync(request.Description.Trim(), cancellationToken))
             {
                 return new DuplicateError(new Dictionary<string, string[]>
                 {
@@ -48,7 +49,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
                 DateTimeOffset.Now, 
                 DateTimeOffset.Now);
             
-            var createdTodoItem = await _repository
+            var createdTodoItem = await _writeRepository
                 .CreateTodoItemAsync(todoItemToCreate, cancellationToken);
 
             _logger.LogInformation("Todo item created.");
