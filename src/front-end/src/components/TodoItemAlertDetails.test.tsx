@@ -4,9 +4,9 @@ import TodoItemAlertDetails from './TodoItemAlertDetails';
 
 const mockError: TodoItemError = {
     Title: 'Sample Error',
+    Detail: 'Sample Error Detail',
     Errors: {
-        field1: ['Error message 1', 'Error message 2'],
-        field2: ['Error message 3'],
+        field1: ['Error message 1']
     },
     Type: 'https://example.com/error',
     Status: 400,
@@ -28,17 +28,10 @@ describe('Given error When TodoItemAlertDetails rendered Then ', () => {
 
         expect(screen.getByText('Sample Error'))
             .toBeInTheDocument();
-
+        expect(screen.getByText('Sample Error Detail'))
+            .toBeInTheDocument();
         
-        expect(screen.getByText('field1:'))
-            .toBeInTheDocument();
-        expect(screen.getByText('Error message 1'))
-            .toBeInTheDocument();
-        expect(screen.getByText('Error message 2'))
-            .toBeInTheDocument();
-        expect(screen.getByText('field2:'))
-            .toBeInTheDocument();
-        expect(screen.getByText('Error message 3'))
+        expect(screen.getByText('field1 - Error message 1'))
             .toBeInTheDocument();
 
         expect(screen.getByText('https://example.com/error'))

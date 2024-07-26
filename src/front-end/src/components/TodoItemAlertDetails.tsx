@@ -18,19 +18,30 @@ const TodoItemAlertDetails: FC<TodoItemAlertDetailsProps> = ({ showModal, handle
                 <Modal.Title>Problem Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h6>{error.Title}</h6>
-                <ul>
-                    {Object.entries(error.Errors).map(([field, messages]) => (
-                        <li key={field}>
-                            <strong>{field}:</strong>
-                            <ul>
-                                {messages.map((message, index) => (
-                                    <li key={index}>{message}</li>
-                                ))}
-                            </ul>
-                        </li>
-                    ))}
-                </ul>
+                <Table striped bordered style={tableStyle}>
+                    <thead>
+                    <tr>
+                        <td>Title</td>
+                        <td>{error.Title}</td>
+                    </tr>
+                    <tr>
+                        <td>Detail</td>
+                        <td>{error.Detail}</td>
+                    </tr>
+                    <tr>
+                        <td>Errors</td>
+                        <td>
+                            {Object.entries(error.Errors).map(([field, messages]) => (
+                                <div key={field}>
+                                    {messages.map((message, index) => (
+                                        <div key={index}>{field} - {message}</div>
+                                    ))}
+                                </div>
+                            ))}
+                        </td>
+                    </tr>
+                    </thead>
+                </Table>
                 <Accordion flush>
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>More information</Accordion.Header>
