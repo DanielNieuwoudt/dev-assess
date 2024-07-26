@@ -4,7 +4,7 @@
 
 ### Application Architecture
 
-React Application architecture typically involves a component-based structure. The UI is divided into reusable, self-contained components, each managing its state and props. 
+React Application architecture typically involves a component-based structure. The UI is divided into reusable, self-contained components, sharing context and state via the provider. 
 
 - **Provider** - We wrap the application in a provider so the components have a shared context and state regarding the items. 
 - **App** - This component is also our landing page and contains the Item and Items components.
