@@ -13,23 +13,36 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
     [ExcludeFromCodeCoverage(Justification = "Tests")]
     public class CreateTodoItemHandlerTests
     {
-        private readonly Mock<ITodoItemsRepository> _repositoryMock = new ();
+        private readonly Mock<ITodoItemsReadRepository> _readRepositoryMock = new ();
+        private readonly Mock<ITodoItemsWriteRepository> _writeRepositoryMock = new ();
         private readonly NullLogger<CreateTodoItemHandler> _nullLogger = new ();
 
         [Fact]
-        public void Given_NullRepository_When_CreateTodoItemHandlerInitialised_ThenThrowsArgumentNullException()
+        public void Given_NullReadRepository_When_CreateTodoItemHandlerInitialised_ThenThrowsArgumentNullException()
         {
-            var action = () => new CreateTodoItemHandler(null!, _nullLogger);
+            var action = () => new CreateTodoItemHandler(null!, _writeRepositoryMock.Object, _nullLogger);
 
             action
                 .Should()
                 .Throw<ArgumentNullException>();
         }
 
+        
+        [Fact]
+        public void Given_NullWriteRepository_When_CreateTodoItemHandlerInitialised_ThenThrowsArgumentNullException()
+        {
+            var action = () => new CreateTodoItemHandler(_readRepositoryMock.Object, null!, _nullLogger);
+
+            action
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
+
+
         [Fact]
         public void Given_NullLogger_When_CreateTodoItemHandlerInitialised_ThenThrowsArgumentNullException()
         {
-            var action = () => new CreateTodoItemHandler(_repositoryMock.Object, null!);
+            var action = () => new CreateTodoItemHandler(_readRepositoryMock.Object, _writeRepositoryMock.Object, null!);
 
             action
                 .Should()
@@ -44,19 +57,19 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
             var command = new CreateTodoItemCommand(id, "Description", false);
             var todoItem = new TodoItem(new TodoItemId(id), "Description", false, DateTimeOffset.Now, DateTimeOffset.Now);
 
-            _repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
-            _repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.FindByDescriptionAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
             
-            _repositoryMock
+            _writeRepositoryMock
                 .Setup(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(todoItem);
 
-            var handler = new CreateTodoItemHandler(_repositoryMock.Object, _nullLogger);
+            var handler = new CreateTodoItemHandler(_readRepositoryMock.Object, _writeRepositoryMock.Object, _nullLogger);
 
             var result = await handler
                 .Handle(command, CancellationToken.None);
@@ -69,7 +82,7 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
                 .Should()
                 .Be(todoItem);
 
-            _repositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Once);
+            _writeRepositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -79,15 +92,15 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
             var command = new CreateTodoItemCommand(id, "Description", false);
             var expectedError = new DuplicateError(new Dictionary<string, string[]>());
 
-            _repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
-            _repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.FindByDescriptionAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
-            var handler = new CreateTodoItemHandler(_repositoryMock.Object, _nullLogger);
+            var handler = new CreateTodoItemHandler(_readRepositoryMock.Object, _writeRepositoryMock.Object, _nullLogger);
 
             var result = await handler.Handle(command, CancellationToken.None);
 
@@ -102,7 +115,7 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
                     return options.Excluding(e => e.errors);
                 });
      
-            _repositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
+            _writeRepositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -112,15 +125,15 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
             var command = new CreateTodoItemCommand(id, "Description", false);
             var expectedError = new DuplicateError(new Dictionary<string, string[]>());
 
-            _repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
-            _repositoryMock
+            _readRepositoryMock
                 .Setup(r => r.FindByDescriptionAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
-            var handler = new CreateTodoItemHandler(_repositoryMock.Object, _nullLogger);
+            var handler = new CreateTodoItemHandler(_readRepositoryMock.Object, _writeRepositoryMock.Object, _nullLogger);
 
             var result = await handler.Handle(command, CancellationToken.None);
 
@@ -135,7 +148,7 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
                     return options.Excluding(e => e.errors);
                 });
 
-            _repositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
+            _writeRepositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

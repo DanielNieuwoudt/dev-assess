@@ -6,23 +6,11 @@ using TodoList.Domain.TodoItems.ValueObjects;
 
 namespace TodoList.Infrastructure.Persistence.Repositories
 {
-    public sealed class TodoItemsRepository(TodoListDbContext dbContext, ILogger<TodoItemsRepository> logger)
-        : ITodoItemsRepository
+    public sealed class TodoItemsReadRepository(TodoListDbContext dbContext, ILogger<TodoItemsReadRepository> logger)
+        : ITodoItemsReadRepository
     {
         private readonly TodoListDbContext _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        private readonly ILogger<TodoItemsRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-        public async Task<TodoItem> CreateTodoItemAsync(TodoItem todoItem, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Creating todo item with id {Id}.", todoItem.Id);
-
-            await _dbContext.TodoItems.AddAsync(todoItem, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            _logger.LogInformation("Created todo item with id {Id}.", todoItem.Id);
-
-            return todoItem;
-        }
+        private readonly ILogger<TodoItemsReadRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         public async Task<bool> FindByIdAsync(TodoItemId todoItemId, CancellationToken cancellationToken)
         {
@@ -57,17 +45,6 @@ namespace TodoList.Infrastructure.Persistence.Repositories
                 .AsNoTracking()
                 .Where(ti => ti.IsCompleted == false)
                 .ToListAsync(cancellationToken);
-        }
-
-        public async Task UpdateTodoItemAsync(TodoItem todoItem, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Updating todo item with id {Id}.", todoItem.Id);
-
-            _dbContext.Entry(todoItem).State = EntityState.Modified;
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            _logger.LogInformation("Updated todo item with id {Id}.", todoItem.Id);
         }
     }
 }
