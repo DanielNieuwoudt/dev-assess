@@ -14,21 +14,21 @@ namespace TodoList.Infrastructure.Persistence.Repositories
 
         public async Task<bool> FindByIdAsync(TodoItemId todoItemId, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding todo item with id {Id}.", todoItemId);
+            _logger.LogInformation("Finding todo item with Id: {Id}", todoItemId.Value);
 
             return await _dbContext.TodoItems.AnyAsync(ti => ti.Id == todoItemId, cancellationToken);
         }
 
         public async Task<bool> FindByDescriptionAsync(string description, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding todo item with description {Description}.", description);
+            _logger.LogInformation("Finding todo item with Description: {Description}", description);
 
             return await _dbContext.TodoItems.AnyAsync(ti => ti.Description == description && ti.IsCompleted == false, cancellationToken);
         }
 
         public async Task<TodoItem?> GetTodoItemAsync(TodoItemId todoItemId, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Retrieving todo item with id {Id}.", todoItemId);
+            _logger.LogInformation("Retrieving todo item with Id: {Id}", todoItemId.Value);
 
             return await _dbContext
                 .TodoItems

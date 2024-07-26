@@ -17,19 +17,20 @@ namespace TodoList.Application.TodoItems.Queries.GetTodoItem
 
         public async Task<TodoItemResult<ApplicationError, GetTodoItemResponse>> Handle(GetTodoItemQuery request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Getting todo item with id {Id}", request.Id);
+            _logger.LogInformation("Getting todo item with Id: {Id}", request.Id);
 
             var todoItem = await _readRepository.GetTodoItemAsync(new TodoItemId(request.Id), cancellationToken);
 
             if (todoItem == null)
             {
+                _logger.LogWarning("Todo item was not found with Id: {Id}", request.Id);
                 return new NotFoundError(new Dictionary<string, string[]>
                 {
                     { nameof(request.Id), new[] { request.Id.ToString() } }
                 });
             }
 
-            _logger.LogInformation("Returning todo item with id {Id}", todoItem.Id.Value);
+            _logger.LogInformation("Returning todo item with Id: {Id}", todoItem.Id.Value);
 
             return new GetTodoItemResponse(todoItem);
         }

@@ -20,27 +20,29 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
 
         public async Task<TodoItemResult<ApplicationError, CreateTodoItemResponse>> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Finding duplicate todo items based on id.");
+            _logger.LogInformation("Finding duplicate todo items based on Id: {Id}", request.Id);
 
             if ( await _readRepository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
             {
+                _logger.LogWarning("Todo item already exists with Id: {Id}", request.Id);
+
                 return new DuplicateError(new Dictionary<string, string[]>
                 {
                     { nameof(request.Id), new[] { request.Id.ToString() } }
                 });
             }
 
-            _logger.LogInformation("Finding duplicate todo items based on description.");
+            _logger.LogInformation("Finding duplicate todo items based on Description: {Description}", request.Description.Trim());
 
             if ( await _readRepository.FindByDescriptionAsync(request.Description.Trim(), cancellationToken))
             {
+                _logger.LogWarning("Todo item already exists with Description: {Description}", request.Description.Trim());
+
                 return new DuplicateError(new Dictionary<string, string[]>
                 {
                     { nameof(request.Description), new[] { request.Description.Trim() } }
                 });
             }
-
-            _logger.LogInformation("Creating todo item.");
 
             var todoItemId = new TodoItemId(request.Id);
             var todoItemToCreate = new TodoItem(todoItemId, 
@@ -48,11 +50,13 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
                 request.isCompleted, 
                 DateTimeOffset.Now, 
                 DateTimeOffset.Now);
-            
+
+            _logger.LogInformation("Creating todo item with Id: {Id}", todoItemId.Value);
+
             var createdTodoItem = await _writeRepository
                 .CreateTodoItemAsync(todoItemToCreate, cancellationToken);
 
-            _logger.LogInformation("Todo item created.");
+            _logger.LogInformation("Todo item created with Id: {Id}", createdTodoItem.Id.Value);
 
             return new CreateTodoItemResponse(createdTodoItem);
         }

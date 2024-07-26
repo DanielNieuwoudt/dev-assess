@@ -14,6 +14,12 @@ namespace TodoList.Api.Common.Helpers
             ArgumentNullException
                 .ThrowIfNull(duplicateError);
 
+            ArgumentNullException
+                .ThrowIfNull(_httpContextAccessor.HttpContext);
+
+            _httpContextAccessor.HttpContext.Response
+                .ContentType = MediaTypes.ApplicationProblemJson;
+
             var badRequest = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -26,7 +32,7 @@ namespace TodoList.Api.Common.Helpers
                 TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
-            _logger.LogWarning("Duplicate error occured: {0}", badRequest);
+            _logger.LogWarning("Duplicate error occured for request. TraceId: {TraceId}", badRequest.TraceId);
 
             return new BadRequestObjectResult(badRequest);
         }
@@ -36,16 +42,22 @@ namespace TodoList.Api.Common.Helpers
             ArgumentNullException
                 .ThrowIfNull(notFoundError);
 
+            ArgumentNullException
+                .ThrowIfNull(_httpContextAccessor.HttpContext);
+
+            _httpContextAccessor.HttpContext.Response
+                .ContentType = MediaTypes.ApplicationProblemJson;
+
             var notFound = new Generated.NotFound
             {
                 Title = ErrorTitleMessages.NotFound,
                 Detail = ErrorDetailMessages.IdDoesNotExist,
                 Type = ResponseTypes.NotFound,
                 Status = StatusCodes.Status404NotFound,
-                TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
+                TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
             };
 
-            _logger.LogWarning("Not found error occured: {0}", notFound);
+            _logger.LogWarning("Not found error occured for request. TraceId: {TraceId}", notFound.TraceId);
 
             return new NotFoundObjectResult(notFound);
         }
@@ -55,6 +67,12 @@ namespace TodoList.Api.Common.Helpers
             ArgumentNullException
                 .ThrowIfNull(validationError);
             
+            ArgumentNullException
+                .ThrowIfNull(_httpContextAccessor.HttpContext);
+
+            _httpContextAccessor.HttpContext.Response
+                .ContentType = MediaTypes.ApplicationProblemJson;
+
             var badRequest = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -67,13 +85,19 @@ namespace TodoList.Api.Common.Helpers
                 TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
-            _logger.LogWarning("Validation error occured: {0}", badRequest);
+            _logger.LogWarning("Validation error occured for request. TraceId: {TraceId}", badRequest.TraceId);
 
             return new BadRequestObjectResult(badRequest);
         }
 
         public BadRequestObjectResult IdMismatchValidationError()
         {
+            ArgumentNullException
+                .ThrowIfNull(_httpContextAccessor.HttpContext);
+
+            _httpContextAccessor.HttpContext.Response
+                .ContentType = MediaTypes.ApplicationProblemJson;
+
             var badRequest = new Generated.BadRequest
             {
                 Title = ErrorTitleMessages.ValidationError,
@@ -84,7 +108,7 @@ namespace TodoList.Api.Common.Helpers
                 TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
-            _logger.LogWarning("Validation error occured: {0}", badRequest);
+            _logger.LogWarning("Validation error occured  for request. TraceId: {TraceId}", badRequest.TraceId);
 
             return new BadRequestObjectResult(badRequest);
         }

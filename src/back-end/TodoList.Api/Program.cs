@@ -1,10 +1,18 @@
 using System.Diagnostics.CodeAnalysis;
 using TodoList.Api.Extensions;
+using TodoList.Api.Startup;
 using TodoList.Application.Extensions;
 using TodoList.Infrastructure.Extensions;
 
 // Create host
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.AddServerHeader = false;
+});
+
+// Configure Serilog
+builder.Host.ConfigureSerilog();
 
 // Add the API related services to the container.
 builder.Services.AddApiServices(builder.Configuration);
@@ -18,7 +26,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Build app
 var app = builder.Build();
 
-// Configure the 
+// Configure the API
 app.ConfigureApi(builder.Configuration, builder.Environment);
 
 // Run app

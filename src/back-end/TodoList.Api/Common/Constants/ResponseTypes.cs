@@ -2,7 +2,7 @@
 
 namespace TodoList.Api.Common.Constants
 {
-    [ExcludeFromCodeCoverage(Justification = "Non Functional Constants")]
+    [ExcludeFromCodeCoverage(Justification = "Constant by definition")]
     public class ResponseTypes
     {
         public const string BadRequest = "https://tools.ietf.org/html/rfc7231#section-6.5.1";

@@ -48,25 +48,5 @@ namespace TodoList.Api.Startup
                     )
             }, options, context.RequestAborted);
         }
-
-        /// Prevent 404 on the application root URL. Azure Web Apps with Always On enabled invoke the root of the application every 5 minutes
-        /// to keep your web app awake. If you run an API-only app you likely have nothing listening to /, which results in a 404 response
-        /// that shows up in monitoring. This endpoint returns 200 with content Ok only for the always on check.
-        [ExcludeFromCodeCoverage(Justification = "Wiring")]
-        public static WebApplication MapAlwaysOn(this WebApplication app)
-        {
-            app.MapGet("/", async context =>
-            {
-                if (context.Request.Headers.UserAgent != "AlwaysOn")
-                {
-                    context.Response.StatusCode = 404;
-                    return;
-                }
-
-                await context.Response.WriteAsync("Ok", context.RequestAborted);
-            });
-
-            return app;
-        }
     }
 }
