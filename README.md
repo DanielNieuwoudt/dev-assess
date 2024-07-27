@@ -4,6 +4,8 @@ Thank you for taking the time to review my solution to your assessment.
 
 Having been involved in many interviews with candidates, I have always appreciated it when someone approached the assessment in a way that resulted in an informative or beneficial conversation or review.
 
+I hope you enjoy reviewing it as much as I did putting it together!
+
 > _Side Note_: I have been verbose with my documentation, hoping to provide insight into my goals, decisions, and thought process. 
 
 # Documentation included in this repository
