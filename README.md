@@ -10,7 +10,15 @@ I hope you enjoy reviewing it as much as I did putting it together!
 
 # Documentation included in this repository
 
-This repository includes the following files, designed to provide a comprehensive understanding of the assessment and its solution.
+This repository includes the following files, designed to provide a comprehensive understanding of the assessment and an overview of the solution.
+
+I would recommend reading the documentation in the following order:
+
+- Solution
+- Backend
+- Frontend
+
+# Files and descriptions
 
 | File | Decription  |
 |------|-------------|

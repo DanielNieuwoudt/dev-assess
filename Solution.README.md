@@ -9,7 +9,16 @@
 
 ### My Approach
 
-This implementation provides an overview of the engineering practices, principles, tools, and utilities employed by software and quality assurance engineers. Many of these elements are crucial for designing, developing, and testing applications that are maintainable, scalable, secure and ready for production.
+My approach to the assessment includes using many of the real-world practices, principles, tools, and utilities that software and quality assurance engineers would use when implementing an actual application. 
+
+Some of the highlights have been:
+- Iterative development of the back end and front end
+- Providing a local development environment makes building, testing, and running the solution easier.
+- Creating an initial version of the contract and contract tests that capture the API's behaviour before making changes.
+- Using familiar patterns to solve common design problems. 
+- Providing a high degree of unit test coverage for both the front and back end.
+- Integrating and testing code changes frequently as part of pull requests.
+- Continuously refactoring the code to improve quality
 
 ### In practice
 
