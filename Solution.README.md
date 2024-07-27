@@ -170,6 +170,8 @@ Folders in our repository have been structured in the following way:
 | **src** | Source code for the front and back end.  |
 | **tests** | Contract, end-to-end and performance automated tests. |
 
+> I did not get around to providing performance or end-to-end tests but would typically use [K6](https://k6.io/) for performance and [Cypress](https://www.cypress.io/) for automated UI tests respectively.
+
 ### Docker compose files
 
 | File | Description |
