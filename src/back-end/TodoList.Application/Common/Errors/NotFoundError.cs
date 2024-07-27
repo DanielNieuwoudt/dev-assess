@@ -4,4 +4,4 @@ using TodoList.Application.Common.Enumerations;
 namespace TodoList.Application.Common.Errors;
 
 [ExcludeFromCodeCoverage(Justification = "Record")]
-public sealed record NotFoundError(IDictionary<string, string[]> errors) : ApplicationError(ErrorReason.NotFound, errors);
+public sealed class NotFoundError(string Property, string Message) : ApplicationError(ErrorReason.NotFound, Property, Message);

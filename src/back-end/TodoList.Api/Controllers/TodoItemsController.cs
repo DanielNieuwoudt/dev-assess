@@ -6,7 +6,7 @@ using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
 using TodoList.Application.TodoItems.Queries.GetTodoItem;
 using TodoList.Api.Generated;
-using TodoList.Application.Common.Errors;
+using TodoList.Application.Common.Enumerations;
 using TodoList.Application.TodoItems.Queries.GetTodoItems;
 
 namespace TodoList.Api.Controllers
@@ -43,12 +43,12 @@ namespace TodoList.Api.Controllers
 
             _logger.LogInformation("Evaluating result from operation. isError: {isError}", result.IsError);
 
-            if (result is { IsError: true })
+            if (result is { IsError: true, Error: not null } )
             {
-                return result.Error switch
+                return result.Error.Reason switch
                 {
-                    NotFoundError notFoundError => _errorHelper.NotFoundErrorResult(notFoundError),
-                    ValidationError validationError => _errorHelper.ValidationErrorResult(validationError),
+                    ErrorReason.NotFound => _errorHelper.NotFoundErrorResult(result.Error),
+                    ErrorReason.Validation => _errorHelper.ValidationErrorResult(result.Error),
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
@@ -77,12 +77,12 @@ namespace TodoList.Api.Controllers
 
             _logger.LogInformation("Evaluating result from operation. isError: {isError}", result.IsError);
 
-            if (result is { IsError: true })
+            if (result is { IsError: true, Error: not null  })
             {
-                return result.Error switch
+                return result.Error.Reason switch
                 {
-                    NotFoundError notFoundError => _errorHelper.NotFoundErrorResult(notFoundError),
-                    ValidationError validationError => _errorHelper.ValidationErrorResult(validationError),
+                    ErrorReason.NotFound => _errorHelper.NotFoundErrorResult(result.Error),
+                    ErrorReason.Validation => _errorHelper.ValidationErrorResult(result.Error),
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
@@ -101,12 +101,12 @@ namespace TodoList.Api.Controllers
 
             _logger.LogInformation("Evaluating result from operation. isError: {isError}", result.IsError);
 
-            if (result is { IsError: true })
+            if (result is { IsError: true, Error: not null  })
             {
-                return result.Error switch
+                return result.Error.Reason switch
                 {
-                    DuplicateError duplicateError => _errorHelper.DuplicateErrorResult(duplicateError),
-                    ValidationError validationError => _errorHelper.ValidationErrorResult(validationError),
+                    ErrorReason.Duplicate => _errorHelper.DuplicateErrorResult(result.Error),
+                    ErrorReason.Validation => _errorHelper.ValidationErrorResult(result.Error),
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }

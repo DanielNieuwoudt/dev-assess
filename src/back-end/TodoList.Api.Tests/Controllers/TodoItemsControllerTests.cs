@@ -152,7 +152,7 @@ namespace TodoList.Api.Tests.Controllers
         {
             _senderMock
                 .Setup(x => x.Send(It.IsAny<GetTodoItemQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new NotFoundError(new Dictionary<string, string[]>()));
+                .ReturnsAsync(new NotFoundError("property", "message"));
 
             var result = await _todoItemController
                 .GetTodoItem(Guid.Empty, CancellationToken.None);
@@ -237,7 +237,7 @@ namespace TodoList.Api.Tests.Controllers
         {
             _senderMock
                 .Setup(x => x.Send(It.IsAny<CreateTodoItemCommand>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new DuplicateError(new Dictionary<string, string[]>()));
+                .ReturnsAsync(new DuplicateError("property", "message"));
 
             var result = await _todoItemController
                 .PostTodoItem(new TodoItem
@@ -331,7 +331,7 @@ namespace TodoList.Api.Tests.Controllers
 
             _senderMock
                 .Setup(x => x.Send(It.IsAny<UpdateTodoItemCommand>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new NotFoundError(new Dictionary<string, string[]>()));
+                .ReturnsAsync(new NotFoundError("property", "message"));
 
             var result = await _todoItemController
                 .PutTodoItem(routeId, todoItem);

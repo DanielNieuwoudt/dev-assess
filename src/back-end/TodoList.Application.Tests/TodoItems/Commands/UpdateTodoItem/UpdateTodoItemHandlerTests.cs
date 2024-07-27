@@ -50,9 +50,10 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
         [Fact]
         public async Task Given_PutTodoItem_When_TodoItemNotFound_Then_ReturnsNotFoundError()
         {
+            var id = Guid.NewGuid();
             var handler = new UpdateTodoItemHandler(_readRepositoryMock.Object, _writeRepositoryMock.Object, _nullLogger);
-            var request = new UpdateTodoItemCommand(Guid.NewGuid(), "Test", false);
-            var expectedError = new NotFoundError(new Dictionary<string, string[]>());
+            var request = new UpdateTodoItemCommand(id, "Test", false);
+            var expectedError = new NotFoundError("Id", id.ToString());
 
             _readRepositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
@@ -66,10 +67,11 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
 
             result.Error
                 .Should()
-                .BeEquivalentTo(expectedError, options =>
-                {
-                    return options.Excluding(e => e.errors);
-                });
+                .BeOfType<NotFoundError>();
+
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError);
 
             _writeRepositoryMock.Verify(r => r.UpdateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }
@@ -85,7 +87,8 @@ namespace TodoList.Application.Tests.TodoItems.Commands.UpdateTodoItem
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new TodoItem(new TodoItemId(id), "Test", false, DateTimeOffset.Now, DateTimeOffset.Now));
 
-            await handler.Handle(request, CancellationToken.None);
+            await handler
+                .Handle(request, CancellationToken.None);
             
             _writeRepositoryMock.Verify(r => r.UpdateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Once);
         }

@@ -4,4 +4,13 @@ using TodoList.Application.Common.Enumerations;
 namespace TodoList.Application.Common.Errors;
 
 [ExcludeFromCodeCoverage(Justification = "Record")]
-public sealed record ValidationError(IDictionary<string, string[]> errors) : ApplicationError(ErrorReason.Validation, errors);
+public sealed class ValidationError : ApplicationError
+{
+    public ValidationError(string property, string message) : base(ErrorReason.Validation, property, message)
+    {
+    }
+
+    public ValidationError(IDictionary<string, string[]> errors) : base(ErrorReason.Validation, errors)
+    {
+    }
+}

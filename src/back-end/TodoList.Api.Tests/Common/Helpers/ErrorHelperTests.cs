@@ -19,7 +19,7 @@ namespace TodoList.Api.Tests.Common.Helpers
         private readonly ErrorHelper _errorHelper;
         private readonly IDictionary<string, string[]> _errors = new Dictionary<string, string[]>
         {
-            { "error", new [] { "description "} }
+            { "property", new [] { "message"} }
         };
 
         public ErrorHelperTests()
@@ -62,7 +62,7 @@ namespace TodoList.Api.Tests.Common.Helpers
         {
             SetHttpContext(true);
 
-            var action = () => _errorHelper.DuplicateErrorResult(new DuplicateError(_errors));
+            var action = () => _errorHelper.DuplicateErrorResult(new DuplicateError("property", "message"));
 
             action
                 .Should()
@@ -86,7 +86,7 @@ namespace TodoList.Api.Tests.Common.Helpers
                 TraceId = "ABC"
             };
 
-            var result = _errorHelper.DuplicateErrorResult(new DuplicateError(_errors));
+            var result = _errorHelper.DuplicateErrorResult(new DuplicateError("property", "message"));
 
             _httpContextAccessorMock.Object.HttpContext!
                 .Response
@@ -125,7 +125,7 @@ namespace TodoList.Api.Tests.Common.Helpers
         {
             SetHttpContext(true);
 
-            var action = () => _errorHelper.NotFoundErrorResult(new NotFoundError(_errors));
+            var action = () => _errorHelper.NotFoundErrorResult(new NotFoundError("property", "message"));
 
             action
                 .Should()
@@ -146,7 +146,7 @@ namespace TodoList.Api.Tests.Common.Helpers
                 TraceId = "ABC"
             };
 
-            var result = _errorHelper.NotFoundErrorResult(new NotFoundError(_errors));
+            var result = _errorHelper.NotFoundErrorResult(new NotFoundError("property", "message"));
 
             _httpContextAccessorMock.Object.HttpContext!
                 .Response

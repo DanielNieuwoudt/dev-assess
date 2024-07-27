@@ -57,9 +57,15 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItems
                 .Should()
                 .NotBeNull();
 
+            result.Value
+                .Should()
+                .BeOfType<GetTodoItemsResponse>();
+
             result.Value!.TodoItems
                 .Should()
                 .BeEquivalentTo(todoItems);
+
+            _readRepositoryMock.Verify(x => x.GetTodoItemsAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

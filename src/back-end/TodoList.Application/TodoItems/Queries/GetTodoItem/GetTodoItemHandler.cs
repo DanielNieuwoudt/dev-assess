@@ -20,14 +20,11 @@ namespace TodoList.Application.TodoItems.Queries.GetTodoItem
             _logger.LogInformation("Getting todo item with Id: {Id}", request.Id);
 
             var todoItem = await _readRepository.GetTodoItemAsync(new TodoItemId(request.Id), cancellationToken);
-
             if (todoItem == null)
             {
                 _logger.LogWarning("Todo item was not found with Id: {Id}", request.Id);
-                return new NotFoundError(new Dictionary<string, string[]>
-                {
-                    { nameof(request.Id), new[] { request.Id.ToString() } }
-                });
+
+                return new NotFoundError(nameof(request.Id), request.Id.ToString());
             }
 
             _logger.LogInformation("Returning todo item with Id: {Id}", todoItem.Id.Value);
