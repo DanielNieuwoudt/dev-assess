@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoList.Api.Common.Constants;
+using TodoList.Application.Common.Enumerations;
 using TodoList.Application.Common.Errors;
 
 namespace TodoList.Api.Common.Helpers
@@ -9,10 +10,10 @@ namespace TodoList.Api.Common.Helpers
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         private readonly ILogger<ErrorHelper> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public BadRequestObjectResult DuplicateErrorResult(DuplicateError duplicateError)
+        public BadRequestObjectResult DuplicateErrorResult(ApplicationError applicationError)
         {
             ArgumentNullException
-                .ThrowIfNull(duplicateError);
+                .ThrowIfNull(applicationError);
 
             ArgumentNullException
                 .ThrowIfNull(_httpContextAccessor.HttpContext);
@@ -26,21 +27,22 @@ namespace TodoList.Api.Common.Helpers
                 Type = ResponseTypes.BadRequest,
                 Status = StatusCodes.Status400BadRequest,
                 Detail = ErrorDetailMessages.PropertyDuplicate,
-                Errors = duplicateError.errors.ToDictionary(
+                Errors = applicationError.Errors.ToDictionary(
                     kvp => kvp.Key, 
                     kvp => kvp.Value.ToList()),
                 TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
-            _logger.LogWarning("Duplicate error occured for request. TraceId: {TraceId}", badRequest.TraceId);
+            _logger.LogWarning("An error occured for the request. Reason: {Reason} TraceId: {TraceId}",
+                applicationError.Reason, badRequest.TraceId);
 
             return new BadRequestObjectResult(badRequest);
         }
 
-        public NotFoundObjectResult NotFoundErrorResult(NotFoundError notFoundError)
+        public NotFoundObjectResult NotFoundErrorResult(ApplicationError applicationError)
         {
             ArgumentNullException
-                .ThrowIfNull(notFoundError);
+                .ThrowIfNull(applicationError);
 
             ArgumentNullException
                 .ThrowIfNull(_httpContextAccessor.HttpContext);
@@ -57,15 +59,16 @@ namespace TodoList.Api.Common.Helpers
                 TraceId = _httpContextAccessor.HttpContext.TraceIdentifier
             };
 
-            _logger.LogWarning("Not found error occured for request. TraceId: {TraceId}", notFound.TraceId);
+            _logger.LogWarning("An error occured for the request. Reason: {Reason} TraceId: {TraceId}",
+                applicationError.Reason, notFound.TraceId);
 
             return new NotFoundObjectResult(notFound);
         }
         
-        public BadRequestObjectResult ValidationErrorResult(ValidationError validationError)
+        public BadRequestObjectResult ValidationErrorResult(ApplicationError applicationError)
         {
             ArgumentNullException
-                .ThrowIfNull(validationError);
+                .ThrowIfNull(applicationError);
             
             ArgumentNullException
                 .ThrowIfNull(_httpContextAccessor.HttpContext);
@@ -79,13 +82,14 @@ namespace TodoList.Api.Common.Helpers
                 Type = ResponseTypes.BadRequest,
                 Status = StatusCodes.Status400BadRequest,
                 Detail = ErrorDetailMessages.SeeErrors,
-                Errors = validationError.errors.ToDictionary(
+                Errors = applicationError.Errors.ToDictionary(
                     kvp => kvp.Key, 
                     kvp => kvp.Value.ToList()),
                 TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
-            _logger.LogWarning("Validation error occured for request. TraceId: {TraceId}", badRequest.TraceId);
+            _logger.LogWarning("An error occured for the request. Reason: {Reason} TraceId: {TraceId}",
+                applicationError.Reason, badRequest.TraceId);
 
             return new BadRequestObjectResult(badRequest);
         }
@@ -108,7 +112,8 @@ namespace TodoList.Api.Common.Helpers
                 TraceId = _httpContextAccessor.HttpContext!.TraceIdentifier
             };
 
-            _logger.LogWarning("Validation error occured  for request. TraceId: {TraceId}", badRequest.TraceId);
+            _logger.LogWarning("An error occured for the request. Reason: {Reason} TraceId: {TraceId}",
+                ErrorReason.Validation, badRequest.TraceId);
 
             return new BadRequestObjectResult(badRequest);
         }

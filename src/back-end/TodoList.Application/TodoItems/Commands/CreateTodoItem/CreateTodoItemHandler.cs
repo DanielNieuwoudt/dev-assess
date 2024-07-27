@@ -22,14 +22,11 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
         {
             _logger.LogInformation("Finding duplicate todo items based on Id: {Id}", request.Id);
 
-            if ( await _readRepository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
+            if (await _readRepository.FindByIdAsync(new TodoItemId(request.Id), cancellationToken))
             {
                 _logger.LogWarning("Todo item already exists with Id: {Id}", request.Id);
 
-                return new DuplicateError(new Dictionary<string, string[]>
-                {
-                    { nameof(request.Id), new[] { request.Id.ToString() } }
-                });
+                return new DuplicateError(nameof(request.Id), request.Id.ToString());
             }
 
             _logger.LogInformation("Finding duplicate todo items based on Description: {Description}", request.Description.Trim());
@@ -38,10 +35,7 @@ namespace TodoList.Application.TodoItems.Commands.CreateTodoItem
             {
                 _logger.LogWarning("Todo item already exists with Description: {Description}", request.Description.Trim());
 
-                return new DuplicateError(new Dictionary<string, string[]>
-                {
-                    { nameof(request.Description), new[] { request.Description.Trim() } }
-                });
+                return new DuplicateError(nameof(request.Description), request.Description.Trim());
             }
 
             var todoItemId = new TodoItemId(request.Id);

@@ -21,10 +21,7 @@ namespace TodoList.Application.TodoItems.Commands.UpdateTodoItem
             var todoItem = await _readRepository.GetTodoItemAsync(new TodoItemId(request.Id), cancellationToken);
             if (todoItem is null)
             {
-                return new NotFoundError(new Dictionary<string, string[]> 
-                {
-                    { nameof(request.Id), new [] { request.Id.ToString() } }
-                });
+                return new NotFoundError(nameof(request.Id), request.Id.ToString());
             }
 
             _logger.LogInformation("Updating todo item with Id: {Id}", request.Id);

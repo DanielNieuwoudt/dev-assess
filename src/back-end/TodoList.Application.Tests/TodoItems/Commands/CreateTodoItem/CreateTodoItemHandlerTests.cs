@@ -78,6 +78,10 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
                 .Should()
                 .NotBeNull();
 
+            result.Value
+                .Should()
+                .BeOfType<CreateTodoItemResponse>();
+
             result.Value!.TodoItem
                 .Should()
                 .Be(todoItem);
@@ -90,7 +94,7 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
         {
             var id = Guid.NewGuid();
             var command = new CreateTodoItemCommand(id, "Description", false);
-            var expectedError = new DuplicateError(new Dictionary<string, string[]>());
+            var expectedError = new DuplicateError("Description", "Description");
 
             _readRepositoryMock
                 .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
@@ -110,10 +114,11 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
 
             result.Error
                 .Should()
-                .BeEquivalentTo(expectedError, options =>
-                {
-                    return options.Excluding(e => e.errors);
-                });
+                .BeOfType<DuplicateError>();
+
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError);
      
             _writeRepositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }
@@ -123,7 +128,7 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
         {
             var id = Guid.NewGuid();
             var command = new CreateTodoItemCommand(id, "Description", false);
-            var expectedError = new DuplicateError(new Dictionary<string, string[]>());
+            var expectedError = new DuplicateError("Id", id.ToString());
 
             _readRepositoryMock
                 .Setup(r => r.FindByIdAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
@@ -143,10 +148,11 @@ namespace TodoList.Application.Tests.TodoItems.Commands.CreateTodoItem
 
             result.Error
                 .Should()
-                .BeEquivalentTo(expectedError, options =>
-                {
-                    return options.Excluding(e => e.errors);
-                });
+                .BeOfType<DuplicateError>();
+
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError);
 
             _writeRepositoryMock.Verify(r => r.CreateTodoItemAsync(It.IsAny<TodoItem>(), It.IsAny<CancellationToken>()), Times.Never);
         }

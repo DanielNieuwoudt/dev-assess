@@ -56,16 +56,23 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
                 .Should()
                 .NotBeNull();
 
+            result.Value
+                .Should()
+                .BeOfType<GetTodoItemResponse>();
+
             result.Value!.TodoItem
                 .Should()
                 .Be(todoItem);
+
+            _readRepositoryMock.Verify(x => x.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
         public async Task Given_GetTodoItemQuery_When_RepositoryTodoItemNotFound_Then_ReturnsNotFoundError()
         {
-            var query = new GetTodoItemQuery(Guid.NewGuid());
-            var expectedError = new NotFoundError(new Dictionary<string, string[]>());
+            var id = Guid.NewGuid();
+            var query = new GetTodoItemQuery(id);
+            var expectedError = new NotFoundError("Id", id.ToString());
 
             _readRepositoryMock
                 .Setup(r => r.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()))
@@ -81,10 +88,13 @@ namespace TodoList.Application.Tests.TodoItems.Queries.GetTodoItem
             
             result.Error
                 .Should()
-                .BeEquivalentTo(expectedError, options =>
-                {
-                    return options.Excluding(e => e.errors);
-                });
+                .BeOfType<NotFoundError>();
+
+            result.Error
+                .Should()
+                .BeEquivalentTo(expectedError);
+
+            _readRepositoryMock.Verify(x => x.GetTodoItemAsync(It.IsAny<TodoItemId>(), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

@@ -5,8 +5,8 @@ namespace TodoList.Api.Common.Helpers;
 
 public interface IErrorHelper
 {
-    BadRequestObjectResult DuplicateErrorResult(DuplicateError duplicateError);
+    BadRequestObjectResult DuplicateErrorResult(ApplicationError applicationError);
     BadRequestObjectResult IdMismatchValidationError();
-    NotFoundObjectResult NotFoundErrorResult(NotFoundError notFoundError);
-    BadRequestObjectResult ValidationErrorResult(ValidationError validationError);
+    NotFoundObjectResult NotFoundErrorResult(ApplicationError applicationError);
+    BadRequestObjectResult ValidationErrorResult(ApplicationError applicationError);
 }

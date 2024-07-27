@@ -105,5 +105,5 @@ namespace TodoList.Application.Tests.TodoItems
 
 
     [ExcludeFromCodeCoverage(Justification = "Tests")]
-    public record TestError(IDictionary<string, string[]> errors) : ApplicationError(ErrorReason.Duplicate, errors);
+    public class TestError(IDictionary<string, string[]> errors) : ApplicationError(ErrorReason.Duplicate, errors);
 }

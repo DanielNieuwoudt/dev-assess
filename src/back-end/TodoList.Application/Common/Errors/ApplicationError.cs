@@ -1,8 +1,27 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using TodoList.Application.Common.Enumerations;
+﻿using TodoList.Application.Common.Enumerations;
 
 namespace TodoList.Application.Common.Errors
 {
-    [ExcludeFromCodeCoverage(Justification = "Record")]
-    public abstract record ApplicationError(ErrorReason Reason, IDictionary<string, string[]> errors);
+    public abstract class ApplicationError
+    {
+        protected ApplicationError(ErrorReason reason, string property, string message)
+        {
+            Errors = new Dictionary<string, string[]>
+            {
+                { property, new[] { message } }
+            };
+            Reason = reason;
+
+        }
+        
+        protected ApplicationError(ErrorReason reason, IDictionary<string, string[]> errors)
+        {
+            Errors = errors;
+            Reason = reason;
+        }
+
+        public IDictionary<string, string[]> Errors { get; }
+
+        public ErrorReason Reason { get; }
+    };
 }
