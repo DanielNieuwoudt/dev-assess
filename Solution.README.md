@@ -164,7 +164,7 @@ Other tools that are useful when working with some of the artifacts in this repo
 
 ## Cloning the repository
 
-You can clone the repository from https://github.com/DanielNieuwoudt/developer-assessment.git
+You can clone the repository from https://github.com/DanielNieuwoudt/dev-assess.git
 
 ## Repository Structure
 
